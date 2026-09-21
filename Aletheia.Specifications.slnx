@@ -31,6 +31,11 @@
     <File Path="discussions/read-me-first.docx" />
   </Folder>
   <Folder Name="/docs/" />
+  <Folder Name="/docs/ai-software-development/">
+    <File Path="docs/ai-software-development/AGENTS.md" />
+    <File Path="docs/ai-software-development/AI COE 4-Stage_Adaptive_AI_Workflow.png" />
+    <File Path="docs/ai-software-development/AI COE Operating Framework v3.docx" />
+  </Folder>
   <Folder Name="/docs/concepts/" />
   <Folder Name="/docs/diagrams/" />
   <Folder Name="/examples/" />
