@@ -1,0 +1,961 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aletheia.dev/schemas/isl/r3/isl-r3-enterprise.schema.json",
+  "title": "ALETHEIA Specification Language (ISL) r3 Enterprise Integration Records Schema",
+  "description": "Validating schema for the enterprise project, program, and portfolio (PPM) control records defined by ISL v0.3. It covers the platform-produced records (cost ledger, schedule baseline, approval-queue metrics, service-transition handoff, benefits linkage) and the structured organizational attestation (org conformance declaration). Shared primitives and enums are referenced from the common schema.",
+  "oneOf": [
+    { "$ref": "#/$defs/PortfolioInventoryDocument" },
+    { "$ref": "#/$defs/CostLedgerDocument" },
+    { "$ref": "#/$defs/ScheduleBaselineDocument" },
+    { "$ref": "#/$defs/BenefitsPlanDocument" },
+    { "$ref": "#/$defs/BenefitsRealizationDocument" },
+    { "$ref": "#/$defs/ServiceTransitionHandoffDocument" },
+    { "$ref": "#/$defs/ApprovalQueueMetricsDocument" },
+    { "$ref": "#/$defs/CoderHandoffDocument" },
+    { "$ref": "#/$defs/OrganizationalConformanceDeclaration" }
+  ],
+  "$defs": {
+    "CommonHeaderProperties": {
+      "properties": {
+        "release": {
+          "const": "r3"
+        },
+        "source": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "generated-at": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        }
+      }
+    },
+    "PortfolioInventoryDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document-kind",
+        "release",
+        "portfolio-id",
+        "generated-at",
+        "system-projects"
+      ],
+      "properties": {
+        "document-kind": {
+          "const": "portfolio-inventory"
+        },
+        "portfolio-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "system-projects": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/PortfolioSystemProject"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/$defs/CommonHeaderProperties"
+        }
+      ]
+    },
+    "PortfolioSystemProject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "system-project-id",
+        "name",
+        "sponsor",
+        "risk-tier",
+        "readiness-level",
+        "status"
+      ],
+      "properties": {
+        "system-project-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "name": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "sponsor": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "risk-tier": {
+          "$ref": "isl-r3-common.schema.json#/$defs/RiskTier"
+        },
+        "readiness-level": {
+          "$ref": "isl-r3-common.schema.json#/$defs/ReadinessLevel"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "initializing",
+            "planning",
+            "constructing",
+            "in-deployment",
+            "operational",
+            "retired"
+          ]
+        },
+        "program-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+          }
+        }
+      }
+    },
+    "CostLedgerDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document-kind",
+        "release",
+        "cost-ledger-id",
+        "specification-id",
+        "specification-version",
+        "cost-basis",
+        "budget",
+        "as-of",
+        "entries"
+      ],
+      "properties": {
+        "document-kind": {
+          "const": "cost-ledger"
+        },
+        "cost-ledger-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "specification-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "specification-version": {
+          "$ref": "isl-r3-common.schema.json#/$defs/SemVer"
+        },
+        "cost-basis": {
+          "$ref": "#/$defs/CostBasis"
+        },
+        "budget": {
+          "$ref": "#/$defs/CostAmount"
+        },
+        "as-of": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        },
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/CostLedgerEntry"
+          }
+        },
+        "totals": {
+          "$ref": "#/$defs/CostTotals"
+        }
+      }
+    },
+    "CostBasis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "currency",
+        "costing-method",
+        "effort-unit"
+      ],
+      "properties": {
+        "currency": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "costing-method": {
+          "type": "string",
+          "enum": [
+            "rate-per-effort-unit",
+            "fixed-task-cost",
+            "blended-rate"
+          ]
+        },
+        "effort-unit": {
+          "type": "string",
+          "enum": [
+            "hour",
+            "point",
+            "task"
+          ]
+        },
+        "rate-per-effort-unit": {
+          "type": "number",
+          "minimum": 0
+        },
+        "rate-source": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "effective-from": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        }
+      }
+    },
+    "CostAmount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "amount",
+        "currency"
+      ],
+      "properties": {
+        "amount": {
+          "type": "number",
+          "minimum": 0
+        },
+        "currency": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "CostLedgerEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entry-id",
+        "task-id",
+        "effort",
+        "cost",
+        "recorded-at"
+      ],
+      "properties": {
+        "entry-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "task-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "boundary-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "effort": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cost": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cost-source": {
+          "type": "string",
+          "enum": [
+            "estimated",
+            "actual"
+          ]
+        },
+        "recorded-at": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        }
+      }
+    },
+    "CostTotals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "planned-cost",
+        "actual-cost",
+        "cost-variance",
+        "cost-performance-index"
+      ],
+      "properties": {
+        "planned-cost": {
+          "type": "number",
+          "minimum": 0
+        },
+        "actual-cost": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cost-variance": {
+          "type": "number"
+        },
+        "cost-performance-index": {
+          "type": "number"
+        },
+        "estimate-at-completion": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "ScheduleBaselineDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document-kind",
+        "release",
+        "baseline-id",
+        "specification-id",
+        "specification-version",
+        "construction-plan-id",
+        "calendar",
+        "baseline-at",
+        "tasks",
+        "milestones"
+      ],
+      "properties": {
+        "document-kind": {
+          "const": "schedule-baseline"
+        },
+        "baseline-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "specification-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "specification-version": {
+          "$ref": "isl-r3-common.schema.json#/$defs/SemVer"
+        },
+        "construction-plan-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "calendar": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "baseline-at": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        },
+        "tasks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/ScheduleTask"
+          }
+        },
+        "milestones": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/ScheduleMilestone"
+          }
+        },
+        "critical-path-days": {
+          "type": "number",
+          "minimum": 0
+        },
+        "total-duration-days": {
+          "type": "number",
+          "minimum": 0
+        },
+        "progress": {
+          "$ref": "#/$defs/ScheduleProgress"
+        }
+      }
+    },
+    "ScheduleTask": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task-id",
+        "estimated-duration-days",
+        "planned-start",
+        "planned-end"
+      ],
+      "properties": {
+        "task-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "estimated-duration-days": {
+          "type": "number",
+          "minimum": 0
+        },
+        "planned-start": {
+          "type": "string",
+          "format": "date"
+        },
+        "planned-end": {
+          "type": "string",
+          "format": "date"
+        },
+        "actual-start": {
+          "type": "string",
+          "format": "date"
+        },
+        "actual-end": {
+          "type": "string",
+          "format": "date"
+        },
+        "on-critical-path": {
+          "type": "boolean"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+          }
+        }
+      }
+    },
+    "ScheduleMilestone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "milestone-id",
+        "milestone-name",
+        "gate",
+        "planned-date"
+      ],
+      "properties": {
+        "milestone-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "milestone-name": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "gate": {
+          "$ref": "isl-r3-common.schema.json#/$defs/ReadinessLevel"
+        },
+        "planned-date": {
+          "type": "string",
+          "format": "date"
+        },
+        "actual-date": {
+          "type": "string",
+          "format": "date"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "reached",
+            "missed",
+            "waived"
+          ]
+        }
+      }
+    },
+    "ScheduleProgress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "as-of",
+        "schedule-variance-days",
+        "schedule-performance-index"
+      ],
+      "properties": {
+        "as-of": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        },
+        "earned-value-days": {
+          "type": "number",
+          "minimum": 0
+        },
+        "planned-value-days": {
+          "type": "number",
+          "minimum": 0
+        },
+        "schedule-variance-days": {
+          "type": "number"
+        },
+        "schedule-performance-index": {
+          "type": "number"
+        },
+        "forecast-completion": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "BenefitsPlanDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document-kind",
+        "release",
+        "benefits-plan-id",
+        "specification-id",
+        "specification-version",
+        "objectives"
+      ],
+      "properties": {
+        "document-kind": {
+          "const": "benefits-plan"
+        },
+        "benefits-plan-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "specification-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "specification-version": {
+          "$ref": "isl-r3-common.schema.json#/$defs/SemVer"
+        },
+        "objectives": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/BenefitObjective"
+          }
+        }
+      }
+    },
+    "BenefitObjective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "objective-id",
+        "benefit-description",
+        "measure-kpi",
+        "target-value",
+        "realization-window",
+        "owner"
+      ],
+      "properties": {
+        "objective-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "benefit-description": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "measure-kpi": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "target-value": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "realization-window": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "start",
+            "end"
+          ],
+          "properties": {
+            "start": {
+              "type": "string",
+              "format": "date"
+            },
+            "end": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        },
+        "owner": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "BenefitsRealizationDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document-kind",
+        "release",
+        "realization-id",
+        "benefits-plan-id",
+        "objective-id",
+        "measured-at",
+        "actual-value",
+        "target-value",
+        "achieved"
+      ],
+      "properties": {
+        "document-kind": {
+          "const": "benefits-realization"
+        },
+        "realization-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "benefits-plan-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "objective-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "measured-at": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        },
+        "actual-value": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "target-value": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "achieved": {
+          "type": "boolean"
+        },
+        "evidence-ref": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "reviewed-by": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "ServiceTransitionHandoffDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document-kind",
+        "release",
+        "handoff-id",
+        "specification-id",
+        "specification-version",
+        "deployment-authorization-id",
+        "artifacts",
+        "service-owner",
+        "assumptions"
+      ],
+      "properties": {
+        "document-kind": {
+          "const": "service-transition-handoff"
+        },
+        "handoff-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "specification-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "specification-version": {
+          "$ref": "isl-r3-common.schema.json#/$defs/SemVer"
+        },
+        "deployment-authorization-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/HandoffArtifact"
+          }
+        },
+        "runbook-ref": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "configuration-ref": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "identity-handover-ref": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "rollback-plan-ref": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+          }
+        },
+        "service-owner": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "HandoffArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact-id",
+        "artifact-type",
+        "location",
+        "hash"
+      ],
+      "properties": {
+        "artifact-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "artifact-type": {
+          "type": "string",
+          "enum": [
+            "source",
+            "config",
+            "schema",
+            "infrastructure",
+            "contract",
+            "test",
+            "documentation",
+            "script",
+            "package",
+            "deployment",
+            "evidence",
+            "metadata"
+          ]
+        },
+        "location": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "hash": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "ApprovalQueueMetricsDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document-kind",
+        "release",
+        "as-of",
+        "by-role",
+        "stale-gates"
+      ],
+      "properties": {
+        "document-kind": {
+          "const": "approval-queue-metrics"
+        },
+        "as-of": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        },
+        "by-role": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/RoleQueueLoad"
+          }
+        },
+        "stale-gates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StaleGate"
+          }
+        }
+      }
+    },
+    "RoleQueueLoad": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "pending-count",
+        "oldest-pending-at"
+      ],
+      "properties": {
+        "role": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "pending-count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "oldest-pending-at": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        },
+        "max-pending-age-days": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "StaleGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gate-id",
+        "gate-type",
+        "role",
+        "opened-at"
+      ],
+      "properties": {
+        "gate-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "gate-type": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "role": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "opened-at": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "escalated",
+            "overdue"
+          ]
+        }
+      }
+    },
+    "CoderHandoffDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document-kind",
+        "release",
+        "handoff-id",
+        "task-id",
+        "ai-coder-id",
+        "blocker",
+        "human-action",
+        "recorded-at"
+      ],
+      "properties": {
+        "document-kind": {
+          "const": "coder-handoff"
+        },
+        "handoff-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "task-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "ai-coder-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "senior-developer-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "blocker": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "description"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "unknown-situation",
+                "missing-skill",
+                "ambiguous-requirement",
+                "repeated-failure",
+                "policy-block",
+                "other"
+              ]
+            },
+            "description": {
+              "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+            },
+            "attempts": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "human-action": {
+          "type": "string",
+          "enum": [
+            "unblocked",
+            "took-over"
+          ]
+        },
+        "human-effort": {
+          "type": "number",
+          "minimum": 0
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "resumed",
+            "completed-by-human",
+            "re-scoped",
+            "escalated"
+          ]
+        },
+        "recorded-at": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        }
+      }
+    },
+    "OrganizationalConformanceDeclaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document-kind",
+        "release",
+        "declaration-id",
+        "declaration-version",
+        "attested-by",
+        "role",
+        "attested-at",
+        "organization",
+        "domains"
+      ],
+      "properties": {
+        "document-kind": {
+          "const": "org-conformance-declaration"
+        },
+        "declaration-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "declaration-version": {
+          "$ref": "isl-r3-common.schema.json#/$defs/SemVer"
+        },
+        "attested-by": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "role": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "attested-at": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        },
+        "organization": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "program-or-portfolio-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "domains": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/DomainAttestation"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "superseded",
+            "revoked"
+          ]
+        },
+        "expires-at": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        }
+      }
+    },
+    "DomainAttestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirement-id",
+        "domain",
+        "status",
+        "evidence-ref"
+      ],
+      "properties": {
+        "requirement-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "domain": {
+          "type": "string",
+          "enum": [
+            "Platform",
+            "Specification",
+            "Organization"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "implemented",
+            "declared",
+            "waived",
+            "not-applicable"
+          ]
+        },
+        "evidence-ref": {
+          "type": "array",
+          "items": {
+            "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+          }
+        },
+        "notes": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        }
+      }
+    }
+  }
+}

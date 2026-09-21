@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Knowledge Unit",
+  "type": "object",
+  "required": [
+    "id",
+    "type",
+    "content",
+    "metadata"
+  ],
+  "properties": {
+
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the knowledge unit"
+    },
+
+    "type": {
+      "type": "string",
+      "enum": [
+        "rule",
+        "constraint",
+        "workflow",
+        "policy",
+        "definition"
+      ]
+    },
+
+    "content": {
+      "type": "string",
+      "description": "Normalized content of the knowledge unit"
+    },
+
+    "metadata": {
+      "type": "object",
+      "required": ["priority", "domain"],
+      "properties": {
+        "priority": {
+          "type": "string",
+          "enum": ["mandatory", "recommended", "optional"]
+        },
+        "domain": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "dependencies": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+
+    "version": {
+      "type": "string"
+    }
+  }
+}

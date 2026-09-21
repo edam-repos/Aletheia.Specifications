@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Execution Step",
+  "type": "object",
+  "required": [
+    "step_id",
+    "name",
+    "type",
+    "inputs",
+    "outputs",
+    "required_rules",
+    "validation"
+  ],
+  "properties": {
+
+    "step_id": { "type": "string" },
+
+    "name": { "type": "string" },
+
+    "type": {
+      "type": "string",
+      "enum": [
+        "transformation",
+        "validation",
+        "decision",
+        "execution",
+        "aggregation"
+      ]
+    },
+
+    "description": { "type": "string" },
+
+    "inputs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+
+    "outputs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+
+    "required_rules": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+
+    "depends_on": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+
+    "execution_mode": {
+      "type": "string",
+      "enum": ["auto", "manual", "hybrid"]
+    },
+
+    "capability_ref": {
+      "type": "string",
+      "description": "Reference to abstract capability used in this step"
+    },
+
+    "validation": {
+      "$ref": "#/definitions/validation"
+    },
+
+    "checkpoint_ref": {
+      "type": "string"
+    },
+
+    "rollback_point": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+
+  "definitions": {
+    "validation": {
+      "type": "object",
+      "properties": {
+        "rules": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "strict": { "type": "boolean" }
+      }
+    }
+  }
+}

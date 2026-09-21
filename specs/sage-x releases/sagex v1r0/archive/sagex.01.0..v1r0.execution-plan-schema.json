@@ -1,0 +1,222 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SAGE-X Execution Plan",
+  "type": "object",
+  "required": [
+    "plan_id",
+    "version",
+    "created_at",
+    "spec_version",
+    "steps",
+    "dependency_graph",
+    "checkpoints",
+    "execution_modes"
+  ],
+  "properties": {
+
+    "plan_id": {
+      "type": "string",
+      "description": "Unique identifier for the execution plan"
+    },
+
+    "version": {
+      "type": "string",
+      "description": "Version of the execution plan schema"
+    },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of plan creation"
+    },
+
+    "spec_version": {
+      "type": "string",
+      "description": "Reference to the specification version used"
+    },
+
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the plan"
+    },
+
+    "steps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/executionStep"
+      }
+    },
+
+    "dependency_graph": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/dependency"
+      },
+      "description": "Defines dependencies between steps"
+    },
+
+    "checkpoints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/checkpoint"
+      }
+    },
+
+    "execution_modes": {
+      "type": "object",
+      "properties": {
+        "autonomous": { "type": "boolean" },
+        "guided": { "type": "boolean" },
+        "hybrid": { "type": "boolean" }
+      }
+    },
+
+    "governance": {
+      "$ref": "#/definitions/governance"
+    }
+  },
+
+  "definitions": {
+
+    "executionStep": {
+      "type": "object",
+      "required": [
+        "step_id",
+        "name",
+        "type",
+        "inputs",
+        "outputs",
+        "required_rules",
+        "validation"
+      ],
+      "properties": {
+
+        "step_id": {
+          "type": "string"
+        },
+
+        "name": {
+          "type": "string"
+        },
+
+        "type": {
+          "type": "string",
+          "enum": [
+            "transformation",
+            "validation",
+            "decision",
+            "execution",
+            "aggregation"
+          ]
+        },
+
+        "description": {
+          "type": "string"
+        },
+
+        "inputs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+
+        "outputs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+
+        "required_rules": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+
+        "depends_on": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+
+        "execution": {
+          "type": "object",
+          "properties": {
+            "model": { "type": "string" },
+            "tool": { "type": "string" },
+            "mode": {
+              "type": "string",
+              "enum": ["auto", "manual", "hybrid"]
+            }
+          }
+        },
+
+        "validation": {
+          "$ref": "#/definitions/validation"
+        },
+
+        "checkpoint_ref": {
+          "type": "string"
+        },
+
+        "rollback_point": {
+          "type": "boolean",
+          "default": false
+        }
+
+      }
+    },
+
+    "dependency": {
+      "type": "object",
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "string" },
+        "to": { "type": "string" }
+      }
+    },
+
+    "checkpoint": {
+      "type": "object",
+      "required": ["checkpoint_id", "step_id"],
+      "properties": {
+        "checkpoint_id": { "type": "string" },
+        "step_id": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": [
+            "pre_step",
+            "post_step",
+            "validation",
+            "approval"
+          ]
+        },
+        "recoverable": {
+          "type": "boolean"
+        }
+      }
+    },
+
+    "validation": {
+      "type": "object",
+      "properties": {
+        "rules": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "strict": {
+          "type": "boolean"
+        }
+      }
+    },
+
+    "governance": {
+      "type": "object",
+      "properties": {
+        "approval_required": {
+          "type": "boolean"
+        },
+        "approval_roles": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+
+  }
+}

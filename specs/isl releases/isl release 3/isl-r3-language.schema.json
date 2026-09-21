@@ -1,0 +1,1015 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aletheia.dev/schemas/isl/r3/isl-r3-language.schema.json",
+  "title": "ALETHEIA Specification Language (ISL) r3 Language Schema",
+  "description": "Machine-readable schema for ISL r3 authored specifications and r3 enterprise conformance evidence sets. The canonical semantic model is defined once in the canonical schema and referenced here via $ref.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/AuthoredSpecification"
+    },
+    {
+      "$ref": "isl-r3-canonical.schema.json"
+    },
+    {
+      "$ref": "#/$defs/Release3ConformanceEvidenceSet"
+    }
+  ],
+  "$defs": {
+    "AuthoredSpecification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document-kind",
+        "release",
+        "isl-version",
+        "conformance-profile",
+        "metadata",
+        "system-identity",
+        "r3-controls",
+        "business-objectives",
+        "actors",
+        "functional-requirements",
+        "non-functional-requirements",
+        "data-model",
+        "service-boundaries",
+        "security-policies",
+        "operational-expectations",
+        "validation",
+        "change-history"
+      ],
+      "properties": {
+        "document-kind": {
+          "const": "authored-specification"
+        },
+        "release": {
+          "const": "r3"
+        },
+        "isl-version": {
+          "type": "string",
+          "pattern": "^(ISL )?r3(\\b.*)?$"
+        },
+        "conformance-profile": {
+          "$ref": "isl-r3-common.schema.json#/$defs/ConformanceProfile"
+        },
+        "metadata": {
+          "$ref": "#/$defs/SpecificationMetadata"
+        },
+        "system-identity": {
+          "$ref": "#/$defs/SystemIdentity"
+        },
+        "r3-controls": {
+          "$ref": "#/$defs/R3ControlDeclaration"
+        },
+        "business-objectives": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Objective"
+          }
+        },
+        "scope": {
+          "$ref": "#/$defs/Scope"
+        },
+        "actors": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Actor"
+          }
+        },
+        "stakeholders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Stakeholder"
+          }
+        },
+        "functional-requirements": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Requirement"
+          }
+        },
+        "non-functional-requirements": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Requirement"
+          }
+        },
+        "data-model": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DataEntity"
+          }
+        },
+        "service-boundaries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/ServiceBoundary"
+          }
+        },
+        "workflows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Workflow"
+          }
+        },
+        "security-policies": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Policy"
+          }
+        },
+        "operational-expectations": {
+          "$ref": "#/$defs/OperationalExpectations"
+        },
+        "validation": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/ValidationCriterion"
+          }
+        },
+        "reusable-assets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AuthoredReusableAsset"
+          }
+        },
+        "construction-boundaries": {
+          "type": "array",
+          "items": {
+            "$ref": "isl-r3-canonical.schema.json#/$defs/ConstructionBoundary"
+          }
+        },
+        "connection-contexts": {
+          "type": "array",
+          "items": {
+            "$ref": "isl-r3-canonical.schema.json#/$defs/ConnectionContext"
+          }
+        },
+        "governance": {
+          "$ref": "#/$defs/GovernanceConfiguration"
+        },
+        "change-history": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/ChangeRecord"
+          }
+        },
+        "extensions": {
+          "$ref": "isl-r3-common.schema.json#/$defs/ExtensionObject"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "r3-controls": {
+                "properties": {
+                  "reuse-enabled": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "reuse-enabled"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "reusable-assets"
+            ],
+            "properties": {
+              "reusable-assets": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "r3-controls": {
+                "properties": {
+                  "boundary-scoped-construction": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "boundary-scoped-construction"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "construction-boundaries"
+            ],
+            "properties": {
+              "construction-boundaries": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "r3-controls": {
+                "properties": {
+                  "cross-boundary-context-transfer": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "cross-boundary-context-transfer"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "connection-contexts"
+            ],
+            "properties": {
+              "connection-contexts": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "SpecificationMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "specification-id",
+        "title",
+        "version",
+        "owner"
+      ],
+      "properties": {
+        "specification-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "title": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "version": {
+          "$ref": "isl-r3-common.schema.json#/$defs/SemVer"
+        },
+        "owner": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "authors": {
+          "type": "array",
+          "items": {
+            "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+          }
+        },
+        "created-at": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        },
+        "updated-at": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        },
+        "risk-tier": {
+          "$ref": "isl-r3-common.schema.json#/$defs/RiskTier"
+        }
+      }
+    },
+    "SystemIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "system-id",
+        "name",
+        "version",
+        "domain",
+        "owner",
+        "description",
+        "readiness-level"
+      ],
+      "properties": {
+        "system-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "name": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "version": {
+          "$ref": "isl-r3-common.schema.json#/$defs/SemVer"
+        },
+        "domain": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "owner": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "description": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "readiness-level": {
+          "$ref": "isl-r3-common.schema.json#/$defs/ReadinessLevel"
+        },
+        "external-context": {
+          "type": "array",
+          "items": {
+            "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+          }
+        }
+      }
+    },
+    "R3ControlDeclaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reuse-enabled",
+        "boundary-scoped-construction",
+        "cross-boundary-context-transfer",
+        "context-minimization-required",
+        "duplication-detection-required"
+      ],
+      "properties": {
+        "reuse-enabled": {
+          "type": "boolean"
+        },
+        "boundary-scoped-construction": {
+          "type": "boolean"
+        },
+        "cross-boundary-context-transfer": {
+          "type": "boolean"
+        },
+        "context-minimization-required": {
+          "type": "boolean"
+        },
+        "duplication-detection-required": {
+          "type": "boolean"
+        },
+        "model-profile": {
+          "type": "string",
+          "enum": [
+            "local",
+            "cloud",
+            "hybrid",
+            "unspecified"
+          ]
+        }
+      }
+    },
+    "Objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "objective-id",
+        "statement",
+        "priority"
+      ],
+      "properties": {
+        "objective-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "statement": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "must",
+            "should",
+            "could",
+            "wont"
+          ]
+        },
+        "success-measures": {
+          "type": "array",
+          "items": {
+            "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+          }
+        }
+      }
+    },
+    "Scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "in-scope": {
+          "type": "array",
+          "items": {
+            "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+          }
+        },
+        "out-of-scope": {
+          "type": "array",
+          "items": {
+            "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+          }
+        }
+      }
+    },
+    "Actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actor-id",
+        "name",
+        "role"
+      ],
+      "properties": {
+        "actor-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "name": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "role": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+          }
+        }
+      }
+    },
+    "Stakeholder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stakeholder-id",
+        "name",
+        "interest"
+      ],
+      "properties": {
+        "stakeholder-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "name": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "interest": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "Requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirement-id",
+        "type",
+        "statement",
+        "priority",
+        "validation-ids"
+      ],
+      "properties": {
+        "requirement-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "business",
+            "functional",
+            "non-functional",
+            "security",
+            "operational",
+            "constraint"
+          ]
+        },
+        "statement": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "must",
+            "should",
+            "could",
+            "wont"
+          ]
+        },
+        "source-objective-ids": {
+          "$ref": "isl-r3-common.schema.json#/$defs/ReferenceArray"
+        },
+        "policy-ids": {
+          "$ref": "isl-r3-common.schema.json#/$defs/ReferenceArray"
+        },
+        "validation-ids": {
+          "$ref": "isl-r3-common.schema.json#/$defs/ReferenceArray"
+        }
+      }
+    },
+    "DataEntity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entity-id",
+        "name",
+        "description",
+        "attributes"
+      ],
+      "properties": {
+        "entity-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "name": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "description": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DataAttribute"
+          }
+        },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DataRelationship"
+          }
+        }
+      }
+    },
+    "DataAttribute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type",
+        "required"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "type": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "sensitivity-classification": {
+          "$ref": "isl-r3-common.schema.json#/$defs/SensitivityClassification"
+        }
+      }
+    },
+    "DataRelationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relationship-id",
+        "target-entity-id",
+        "cardinality"
+      ],
+      "properties": {
+        "relationship-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "target-entity-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "cardinality": {
+          "type": "string",
+          "enum": [
+            "one-to-one",
+            "one-to-many",
+            "many-to-one",
+            "many-to-many"
+          ]
+        }
+      }
+    },
+    "ServiceBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "service-id",
+        "name",
+        "responsibility",
+        "interface-ids"
+      ],
+      "properties": {
+        "service-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "name": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "responsibility": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "interface-ids": {
+          "$ref": "isl-r3-common.schema.json#/$defs/ReferenceArray"
+        },
+        "data-entity-ids": {
+          "$ref": "isl-r3-common.schema.json#/$defs/ReferenceArray"
+        }
+      }
+    },
+    "Workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workflow-id",
+        "name",
+        "steps"
+      ],
+      "properties": {
+        "workflow-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "name": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/WorkflowStep"
+          }
+        },
+        "exception-paths": {
+          "type": "array",
+          "items": {
+            "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+          }
+        }
+      }
+    },
+    "WorkflowStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "step-id",
+        "description"
+      ],
+      "properties": {
+        "step-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "description": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "actor-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "requirement-ids": {
+          "$ref": "isl-r3-common.schema.json#/$defs/ReferenceArray"
+        }
+      }
+    },
+    "Policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy-id",
+        "name",
+        "rule",
+        "enforcement-level"
+      ],
+      "properties": {
+        "policy-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "name": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "rule": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "enforcement-level": {
+          "type": "string",
+          "enum": [
+            "advisory",
+            "warning",
+            "blocking"
+          ]
+        }
+      }
+    },
+    "OperationalExpectations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deployment-profile",
+        "availability",
+        "observability"
+      ],
+      "properties": {
+        "deployment-profile": {
+          "type": "string",
+          "enum": [
+            "local-standalone",
+            "team-shared",
+            "enterprise-datacenter",
+            "distributed-cluster",
+            "hybrid-integrated",
+            "regulated-enterprise",
+            "multi-tenant-platform"
+          ]
+        },
+        "availability": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "observability": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "recovery": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "ValidationCriterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "validation-id",
+        "description",
+        "method",
+        "required"
+      ],
+      "properties": {
+        "validation-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "description": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "method": {
+          "type": "string",
+          "enum": [
+            "test",
+            "static-analysis",
+            "schema-validation",
+            "security-scan",
+            "policy-check",
+            "manual-review",
+            "formal-proof",
+            "other"
+          ]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "evidence-type": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "AuthoredReusableAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset-type",
+        "intended-use",
+        "source-entity-ids",
+        "allowed-scope",
+        "required-validation",
+        "rationale"
+      ],
+      "properties": {
+        "reusable-asset-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "asset-type": {
+          "$ref": "isl-r3-common.schema.json#/$defs/ReusableAssetType"
+        },
+        "intended-use": {
+          "type": "string",
+          "enum": [
+            "reuse-full",
+            "reuse-partial",
+            "wrap",
+            "extend",
+            "compose",
+            "promote-candidate",
+            "prohibit"
+          ]
+        },
+        "source-entity-ids": {
+          "$ref": "isl-r3-common.schema.json#/$defs/ReferenceArray"
+        },
+        "allowed-scope": {
+          "type": "string",
+          "enum": [
+            "project",
+            "workspace",
+            "tenant",
+            "enterprise",
+            "public",
+            "prohibited"
+          ]
+        },
+        "required-validation": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+          }
+        },
+        "governance-condition": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "rationale": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "GovernanceConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "governance-profile-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "approval-required": {
+          "type": "boolean"
+        },
+        "waiver-policy-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "audit-required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ChangeRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "date",
+        "author",
+        "change-summary"
+      ],
+      "properties": {
+        "version": {
+          "$ref": "isl-r3-common.schema.json#/$defs/SemVer"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "author": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "change-summary": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "affected-sections": {
+          "type": "array",
+          "items": {
+            "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+          }
+        },
+        "readiness-impact": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "Release3ConformanceEvidenceSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document-kind",
+        "release",
+        "implementation-id",
+        "claimed-profile",
+        "generated-at",
+        "evidence"
+      ],
+      "properties": {
+        "document-kind": {
+          "const": "r3-conformance-evidence-set"
+        },
+        "release": {
+          "const": "r3"
+        },
+        "implementation-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "claimed-profile": {
+          "type": "string",
+          "enum": [
+            "Enterprise",
+            "Regulated"
+          ]
+        },
+        "generated-at": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        },
+        "evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "conformance-matrix",
+            "schema-artifacts",
+            "parser-tests",
+            "lifecycle-tests",
+            "reuse-tests",
+            "boundary-tests",
+            "security-tests",
+            "audit-export"
+          ],
+          "properties": {
+            "conformance-matrix": {
+              "$ref": "#/$defs/EvidenceReference"
+            },
+            "schema-artifacts": {
+              "$ref": "#/$defs/EvidenceReference"
+            },
+            "parser-tests": {
+              "$ref": "#/$defs/EvidenceReference"
+            },
+            "lifecycle-tests": {
+              "$ref": "#/$defs/EvidenceReference"
+            },
+            "reuse-tests": {
+              "$ref": "#/$defs/EvidenceReference"
+            },
+            "boundary-tests": {
+              "$ref": "#/$defs/EvidenceReference"
+            },
+            "security-tests": {
+              "$ref": "#/$defs/EvidenceReference"
+            },
+            "audit-export": {
+              "$ref": "#/$defs/EvidenceReference"
+            }
+          }
+        }
+      }
+    },
+    "EvidenceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence-id",
+        "evidence-type",
+        "subject-id",
+        "location",
+        "status"
+      ],
+      "properties": {
+        "evidence-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "evidence-type": {
+          "type": "string",
+          "enum": [
+            "schema",
+            "parser-test",
+            "lifecycle-test",
+            "reuse-test",
+            "boundary-test",
+            "security-test",
+            "validation-report",
+            "traceability-export",
+            "audit-export",
+            "artifact-metadata",
+            "governance-record"
+          ]
+        },
+        "subject-id": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Identifier"
+        },
+        "location": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "present",
+            "missing",
+            "stale",
+            "inconsistent",
+            "waived"
+          ]
+        },
+        "hash": {
+          "$ref": "isl-r3-common.schema.json#/$defs/NonEmptyString"
+        },
+        "produced-at": {
+          "$ref": "isl-r3-common.schema.json#/$defs/Timestamp"
+        }
+      }
+    }
+  }
+}

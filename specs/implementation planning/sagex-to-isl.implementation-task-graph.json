@@ -1,0 +1,3603 @@
+{
+  "task_graph_id": "TASKGRAPH-sagex-isl-local-first-implementation-0001",
+  "version": "0.1.0",
+  "created_at": "2026-06-18T00:00:00-04:00",
+  "description": "Local-first implementation task graph derived from the granular SAGE-X execution plan. This is the work-packet view used for implementation planning and tracking.",
+  "work_packets": [
+    {
+      "packet_id": "WP-0001",
+      "macro_phase": "Phase 0",
+      "purpose": "Create the initial local-first module layout and preserve logical service boundaries.",
+      "inputs": [
+        "workspace root",
+        "deployment service model"
+      ],
+      "outputs": [
+        "module layout"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "layout contains expected module directories"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 0",
+        "artifact_refs": [
+          "module layout"
+        ]
+      },
+      "depends_on": [],
+      "capability_ref": "CAP-local-files",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0001"
+    },
+    {
+      "packet_id": "WP-0002",
+      "macro_phase": "Phase 0",
+      "purpose": "Load and parse the consolidated SAGE-X platform schema.",
+      "inputs": [
+        "platform-schema.json"
+      ],
+      "outputs": [
+        "schema loader"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "schema JSON parses"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 0",
+        "artifact_refs": [
+          "schema loader"
+        ]
+      },
+      "depends_on": [
+        "WP-0001"
+      ],
+      "capability_ref": "CAP-schema-validation",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0002"
+    },
+    {
+      "packet_id": "WP-0003",
+      "macro_phase": "Phase 0",
+      "purpose": "Create a definition index for named schema artifacts.",
+      "inputs": [
+        "schema loader",
+        "platform-schema.json"
+      ],
+      "outputs": [
+        "artifact definition index"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "required definition names resolve"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 0",
+        "artifact_refs": [
+          "artifact definition index"
+        ]
+      },
+      "depends_on": [
+        "WP-0002"
+      ],
+      "capability_ref": "CAP-schema-validation",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0003"
+    },
+    {
+      "packet_id": "WP-0004",
+      "macro_phase": "Phase 0",
+      "purpose": "Validate arbitrary artifacts against a named schema definition.",
+      "inputs": [
+        "artifact definition index"
+      ],
+      "outputs": [
+        "validator wrapper"
+      ],
+      "validation": {
+        "method": "contract_test",
+        "rules": [
+          "valid fixture passes",
+          "invalid fixture fails"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 0",
+        "artifact_refs": [
+          "validator wrapper"
+        ]
+      },
+      "depends_on": [
+        "WP-0003"
+      ],
+      "capability_ref": "CAP-schema-validation",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0004"
+    },
+    {
+      "packet_id": "WP-0005",
+      "macro_phase": "Phase 0",
+      "purpose": "Create fixture directories and naming convention.",
+      "inputs": [
+        "fixture naming rules"
+      ],
+      "outputs": [
+        "fixture scaffold"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "fixture paths resolve"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 0",
+        "artifact_refs": [
+          "fixture scaffold"
+        ]
+      },
+      "depends_on": [
+        "WP-0004"
+      ],
+      "capability_ref": "CAP-local-files",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0005"
+    },
+    {
+      "packet_id": "WP-0006",
+      "macro_phase": "Phase 0",
+      "purpose": "Create the first artifact manifest fixture.",
+      "inputs": [
+        "artifactManifest schema"
+      ],
+      "outputs": [
+        "artifact manifest fixture"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "fixture validates as artifactManifest"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "artifactManifest"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 0",
+        "artifact_refs": [
+          "artifact manifest fixture"
+        ]
+      },
+      "depends_on": [
+        "WP-0005"
+      ],
+      "capability_ref": "CAP-schema-validation",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0006"
+    },
+    {
+      "packet_id": "WP-0007",
+      "macro_phase": "Phase 0",
+      "purpose": "Run schema validation tests for fixtures.",
+      "inputs": [
+        "validator wrapper",
+        "fixture scaffold"
+      ],
+      "outputs": [
+        "contract test harness"
+      ],
+      "validation": {
+        "method": "contract_test",
+        "rules": [
+          "all current fixtures run locally"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 0",
+        "artifact_refs": [
+          "contract test harness"
+        ]
+      },
+      "depends_on": [
+        "WP-0006"
+      ],
+      "capability_ref": "CAP-test-runner",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0007"
+    },
+    {
+      "packet_id": "WP-0101",
+      "macro_phase": "Phase 1",
+      "purpose": "Define the first ISL plugin registration artifact.",
+      "inputs": [
+        "specificationPluginRegistration schema"
+      ],
+      "outputs": [
+        "ISL plugin registration fixture"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "fixture validates as specificationPluginRegistration"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "specificationPluginRegistration"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 1",
+        "artifact_refs": [
+          "ISL plugin registration fixture"
+        ]
+      },
+      "depends_on": [
+        "WP-0007"
+      ],
+      "capability_ref": "CAP-schema-validation",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0101"
+    },
+    {
+      "packet_id": "WP-0102",
+      "macro_phase": "Phase 1",
+      "purpose": "Register and look up specification plugins.",
+      "inputs": [
+        "ISL plugin registration fixture"
+      ],
+      "outputs": [
+        "plugin registry module"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "registration lookup test passes"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 1",
+        "artifact_refs": [
+          "plugin registry module"
+        ]
+      },
+      "depends_on": [
+        "WP-0101"
+      ],
+      "capability_ref": "CAP-specification-processing",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0102"
+    },
+    {
+      "packet_id": "WP-0103",
+      "macro_phase": "Phase 1",
+      "purpose": "Create a minimal valid ISL-like ingestion request.",
+      "inputs": [
+        "specificationIngestionRequest schema"
+      ],
+      "outputs": [
+        "valid ingestion fixture"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "fixture validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "specificationIngestionRequest"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 1",
+        "artifact_refs": [
+          "valid ingestion fixture"
+        ]
+      },
+      "depends_on": [
+        "WP-0102"
+      ],
+      "capability_ref": "CAP-schema-validation",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0103"
+    },
+    {
+      "packet_id": "WP-0104",
+      "macro_phase": "Phase 1",
+      "purpose": "Create an invalid ingestion fixture for negative tests.",
+      "inputs": [
+        "specificationIngestionRequest schema"
+      ],
+      "outputs": [
+        "invalid ingestion fixture"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "fixture fails validation as expected"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "specificationIngestionRequest"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 1",
+        "artifact_refs": [
+          "invalid ingestion fixture"
+        ]
+      },
+      "depends_on": [
+        "WP-0103"
+      ],
+      "capability_ref": "CAP-schema-validation",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0104"
+    },
+    {
+      "packet_id": "WP-0105",
+      "macro_phase": "Phase 1",
+      "purpose": "Validate ingestion requests and return structured errors.",
+      "inputs": [
+        "valid ingestion fixture",
+        "invalid ingestion fixture"
+      ],
+      "outputs": [
+        "ingestion validation module"
+      ],
+      "validation": {
+        "method": "contract_test",
+        "rules": [
+          "valid accepted",
+          "invalid rejected"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 1",
+        "artifact_refs": [
+          "ingestion validation module"
+        ]
+      },
+      "depends_on": [
+        "WP-0104"
+      ],
+      "capability_ref": "CAP-specification-processing",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0105"
+    },
+    {
+      "packet_id": "WP-0106",
+      "macro_phase": "Phase 1",
+      "purpose": "Build parsed specification model output from accepted input.",
+      "inputs": [
+        "valid ingestion fixture"
+      ],
+      "outputs": [
+        "specification model builder"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "output validates as specificationModel"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "specificationModel"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 1",
+        "artifact_refs": [
+          "specification model builder"
+        ]
+      },
+      "depends_on": [
+        "WP-0105"
+      ],
+      "capability_ref": "CAP-specification-processing",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0106"
+    },
+    {
+      "packet_id": "WP-0107",
+      "macro_phase": "Phase 1",
+      "purpose": "Record plugin validation result artifacts.",
+      "inputs": [
+        "pluginValidationResult schema"
+      ],
+      "outputs": [
+        "plugin validation result writer"
+      ],
+      "validation": {
+        "method": "contract_test",
+        "rules": [
+          "result validates as pluginValidationResult"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "pluginValidationResult"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 1",
+        "artifact_refs": [
+          "plugin validation result writer"
+        ]
+      },
+      "depends_on": [
+        "WP-0106"
+      ],
+      "capability_ref": "CAP-specification-processing",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0107"
+    },
+    {
+      "packet_id": "WP-0108",
+      "macro_phase": "Phase 1",
+      "purpose": "Map parsed specification elements into deterministic Knowledge Units.",
+      "inputs": [
+        "specification model",
+        "knowledgeUnit schema"
+      ],
+      "outputs": [
+        "Knowledge Unit compiler"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "Knowledge Units validate",
+          "same input produces same output"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "knowledgeUnit"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 1",
+        "artifact_refs": [
+          "Knowledge Unit compiler"
+        ]
+      },
+      "depends_on": [
+        "WP-0106"
+      ],
+      "capability_ref": "CAP-knowledge-compilation",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0108"
+    },
+    {
+      "packet_id": "WP-0109",
+      "macro_phase": "Phase 1",
+      "purpose": "Persist and retrieve Knowledge Units locally.",
+      "inputs": [
+        "Knowledge Units"
+      ],
+      "outputs": [
+        "file-backed Knowledge Unit store"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "write/read round trip passes"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 1",
+        "artifact_refs": [
+          "file-backed Knowledge Unit store"
+        ]
+      },
+      "depends_on": [
+        "WP-0108"
+      ],
+      "capability_ref": "CAP-local-files",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0109"
+    },
+    {
+      "packet_id": "WP-0201",
+      "macro_phase": "Phase 2",
+      "purpose": "Create execution steps from Knowledge Units.",
+      "inputs": [
+        "Knowledge Units",
+        "executionStep schema"
+      ],
+      "outputs": [
+        "execution step factory"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "step validates as executionStep"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 2",
+        "artifact_refs": [
+          "execution step factory"
+        ]
+      },
+      "depends_on": [
+        "WP-0109"
+      ],
+      "capability_ref": "CAP-planning",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0201"
+    },
+    {
+      "packet_id": "WP-0202",
+      "macro_phase": "Phase 2",
+      "purpose": "Create dependency edges between execution steps.",
+      "inputs": [
+        "execution steps",
+        "dependency schema"
+      ],
+      "outputs": [
+        "dependency graph builder"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "graph references known steps"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "dependency"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 2",
+        "artifact_refs": [
+          "dependency graph builder"
+        ]
+      },
+      "depends_on": [
+        "WP-0201"
+      ],
+      "capability_ref": "CAP-planning",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0202"
+    },
+    {
+      "packet_id": "WP-0203",
+      "macro_phase": "Phase 2",
+      "purpose": "Create plan checkpoints for validation boundaries.",
+      "inputs": [
+        "execution steps",
+        "planCheckpoint schema"
+      ],
+      "outputs": [
+        "checkpoint planner"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "checkpoints validate"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "planCheckpoint",
+          "checkpoint"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 2",
+        "artifact_refs": [
+          "checkpoint planner"
+        ]
+      },
+      "depends_on": [
+        "WP-0201"
+      ],
+      "capability_ref": "CAP-planning",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0203"
+    },
+    {
+      "packet_id": "WP-0204",
+      "macro_phase": "Phase 2",
+      "purpose": "Produce local-first execution mode defaults.",
+      "inputs": [
+        "executionModes schema"
+      ],
+      "outputs": [
+        "execution modes factory"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "execution modes validate"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionModes"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 2",
+        "artifact_refs": [
+          "execution modes factory"
+        ]
+      },
+      "depends_on": [
+        "WP-0201"
+      ],
+      "capability_ref": "CAP-planning",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0204"
+    },
+    {
+      "packet_id": "WP-0205",
+      "macro_phase": "Phase 2",
+      "purpose": "Assemble steps, dependencies, checkpoints, and modes into a plan.",
+      "inputs": [
+        "steps",
+        "dependencies",
+        "checkpoints",
+        "execution modes"
+      ],
+      "outputs": [
+        "execution plan generator"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "plan validates as executionPlan"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionPlan",
+          "checkpoint"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 2",
+        "artifact_refs": [
+          "execution plan generator"
+        ]
+      },
+      "depends_on": [
+        "WP-0202",
+        "WP-0203",
+        "WP-0204"
+      ],
+      "capability_ref": "CAP-planning",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0205"
+    },
+    {
+      "packet_id": "WP-0206",
+      "macro_phase": "Phase 2",
+      "purpose": "Prove same Knowledge Units produce same plan.",
+      "inputs": [
+        "execution plan generator"
+      ],
+      "outputs": [
+        "plan determinism test"
+      ],
+      "validation": {
+        "method": "contract_test",
+        "rules": [
+          "same input produces same plan"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 2",
+        "artifact_refs": [
+          "plan determinism test"
+        ]
+      },
+      "depends_on": [
+        "WP-0205"
+      ],
+      "capability_ref": "CAP-test-runner",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0206"
+    },
+    {
+      "packet_id": "WP-0207",
+      "macro_phase": "Phase 2",
+      "purpose": "Prove malformed plans are rejected.",
+      "inputs": [
+        "validator wrapper",
+        "malformed plan fixture"
+      ],
+      "outputs": [
+        "plan rejection test"
+      ],
+      "validation": {
+        "method": "contract_test",
+        "rules": [
+          "invalid plan fails"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 2",
+        "artifact_refs": [
+          "plan rejection test"
+        ]
+      },
+      "depends_on": [
+        "WP-0205"
+      ],
+      "capability_ref": "CAP-test-runner",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0207"
+    },
+    {
+      "packet_id": "WP-0301",
+      "macro_phase": "Phase 3",
+      "purpose": "Create one active mock capability registration.",
+      "inputs": [
+        "capabilityRegistration schema"
+      ],
+      "outputs": [
+        "mock capability registration fixture"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "fixture validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "capabilityRegistration"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 3",
+        "artifact_refs": [
+          "mock capability registration fixture"
+        ]
+      },
+      "depends_on": [
+        "WP-0007"
+      ],
+      "capability_ref": "CAP-schema-validation",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0301"
+    },
+    {
+      "packet_id": "WP-0302",
+      "macro_phase": "Phase 3",
+      "purpose": "Register and retrieve active capabilities.",
+      "inputs": [
+        "capability registration fixture"
+      ],
+      "outputs": [
+        "capability registry module"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "active capability lookup test passes"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 3",
+        "artifact_refs": [
+          "capability registry module"
+        ]
+      },
+      "depends_on": [
+        "WP-0301"
+      ],
+      "capability_ref": "CAP-capability-registry",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0302"
+    },
+    {
+      "packet_id": "WP-0303",
+      "macro_phase": "Phase 3",
+      "purpose": "Query capabilities by id or type.",
+      "inputs": [
+        "capabilityDiscoveryQuery schema",
+        "capabilityDiscoveryResponse schema"
+      ],
+      "outputs": [
+        "capability discovery module"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "response validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "capabilityDiscoveryQuery",
+          "capabilityDiscoveryResponse"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 3",
+        "artifact_refs": [
+          "capability discovery module"
+        ]
+      },
+      "depends_on": [
+        "WP-0302"
+      ],
+      "capability_ref": "CAP-capability-registry",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0303"
+    },
+    {
+      "packet_id": "WP-0304",
+      "macro_phase": "Phase 3",
+      "purpose": "Build capability invocation request artifacts.",
+      "inputs": [
+        "capabilityInvocationRequest schema"
+      ],
+      "outputs": [
+        "invocation request builder"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "request validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "capabilityInvocationRequest"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 3",
+        "artifact_refs": [
+          "invocation request builder"
+        ]
+      },
+      "depends_on": [
+        "WP-0302"
+      ],
+      "capability_ref": "CAP-capability-registry",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0304"
+    },
+    {
+      "packet_id": "WP-0305",
+      "macro_phase": "Phase 3",
+      "purpose": "Build capability invocation response artifacts.",
+      "inputs": [
+        "capabilityInvocationResponse schema"
+      ],
+      "outputs": [
+        "invocation response builder"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "response validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "capabilityInvocationResponse"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 3",
+        "artifact_refs": [
+          "invocation response builder"
+        ]
+      },
+      "depends_on": [
+        "WP-0304"
+      ],
+      "capability_ref": "CAP-capability-registry",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0305"
+    },
+    {
+      "packet_id": "WP-0306",
+      "macro_phase": "Phase 3",
+      "purpose": "Map capability failures to structured errors.",
+      "inputs": [
+        "capabilityError schema"
+      ],
+      "outputs": [
+        "capability error mapper"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "error validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "capabilityError"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 3",
+        "artifact_refs": [
+          "capability error mapper"
+        ]
+      },
+      "depends_on": [
+        "WP-0305"
+      ],
+      "capability_ref": "CAP-capability-registry",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0306"
+    },
+    {
+      "packet_id": "WP-0307",
+      "macro_phase": "Phase 3",
+      "purpose": "Reject invocation of disabled capabilities.",
+      "inputs": [
+        "capability registry"
+      ],
+      "outputs": [
+        "disabled capability guard"
+      ],
+      "validation": {
+        "method": "contract_test",
+        "rules": [
+          "disabled invocation fails"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 3",
+        "artifact_refs": [
+          "disabled capability guard"
+        ]
+      },
+      "depends_on": [
+        "WP-0302",
+        "WP-0304"
+      ],
+      "capability_ref": "CAP-test-runner",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0307"
+    },
+    {
+      "packet_id": "WP-0401",
+      "macro_phase": "Phase 4",
+      "purpose": "Represent allowed Sage-X execution states.",
+      "inputs": [
+        "executionStateName schema"
+      ],
+      "outputs": [
+        "state constants"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "states match schema enum"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionState",
+          "executionStateName"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 4",
+        "artifact_refs": [
+          "state constants"
+        ]
+      },
+      "depends_on": [
+        "WP-0007"
+      ],
+      "capability_ref": "CAP-execution-core",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0401"
+    },
+    {
+      "packet_id": "WP-0402",
+      "macro_phase": "Phase 4",
+      "purpose": "Define valid state transitions.",
+      "inputs": [
+        "state constants",
+        "state machine specification"
+      ],
+      "outputs": [
+        "transition table"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "valid transitions listed"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 4",
+        "artifact_refs": [
+          "transition table"
+        ]
+      },
+      "depends_on": [
+        "WP-0401"
+      ],
+      "capability_ref": "CAP-execution-core",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0402"
+    },
+    {
+      "packet_id": "WP-0403",
+      "macro_phase": "Phase 4",
+      "purpose": "Validate requested state transitions.",
+      "inputs": [
+        "transition table"
+      ],
+      "outputs": [
+        "transition validator"
+      ],
+      "validation": {
+        "method": "contract_test",
+        "rules": [
+          "invalid transition rejected"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 4",
+        "artifact_refs": [
+          "transition validator"
+        ]
+      },
+      "depends_on": [
+        "WP-0402"
+      ],
+      "capability_ref": "CAP-execution-core",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0403"
+    },
+    {
+      "packet_id": "WP-0404",
+      "macro_phase": "Phase 4",
+      "purpose": "Build execution state records.",
+      "inputs": [
+        "executionState schema"
+      ],
+      "outputs": [
+        "execution state builder"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "state validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionState"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 4",
+        "artifact_refs": [
+          "execution state builder"
+        ]
+      },
+      "depends_on": [
+        "WP-0403",
+        "WP-0205"
+      ],
+      "capability_ref": "CAP-execution-core",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0404"
+    },
+    {
+      "packet_id": "WP-0405",
+      "macro_phase": "Phase 4",
+      "purpose": "Write checkpoint records.",
+      "inputs": [
+        "checkpoint schema"
+      ],
+      "outputs": [
+        "checkpoint writer"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "checkpoint validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "checkpoint"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 4",
+        "artifact_refs": [
+          "checkpoint writer"
+        ]
+      },
+      "depends_on": [
+        "WP-0404"
+      ],
+      "capability_ref": "CAP-execution-core",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0405"
+    },
+    {
+      "packet_id": "WP-0406",
+      "macro_phase": "Phase 4",
+      "purpose": "Write trace event records for execution actions.",
+      "inputs": [
+        "traceEvent schema"
+      ],
+      "outputs": [
+        "trace event writer"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "trace event validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "traceEvent"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 4",
+        "artifact_refs": [
+          "trace event writer"
+        ]
+      },
+      "depends_on": [
+        "WP-0404"
+      ],
+      "capability_ref": "CAP-trace",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0406"
+    },
+    {
+      "packet_id": "WP-0407",
+      "macro_phase": "Phase 4",
+      "purpose": "Write observability log records.",
+      "inputs": [
+        "logEntry schema"
+      ],
+      "outputs": [
+        "log entry writer"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "log validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "logEntry"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 4",
+        "artifact_refs": [
+          "log entry writer"
+        ]
+      },
+      "depends_on": [
+        "WP-0406"
+      ],
+      "capability_ref": "CAP-trace",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0407"
+    },
+    {
+      "packet_id": "WP-0408",
+      "macro_phase": "Phase 4",
+      "purpose": "Write structured explanation records.",
+      "inputs": [
+        "explanationRecord schema"
+      ],
+      "outputs": [
+        "explanation writer"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "explanation validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "explanationRecord"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 4",
+        "artifact_refs": [
+          "explanation writer"
+        ]
+      },
+      "depends_on": [
+        "WP-0406"
+      ],
+      "capability_ref": "CAP-trace",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0408"
+    },
+    {
+      "packet_id": "WP-0409",
+      "macro_phase": "Phase 4",
+      "purpose": "Reconstruct execution from trace events.",
+      "inputs": [
+        "trace event sequence"
+      ],
+      "outputs": [
+        "trace reconstruction test"
+      ],
+      "validation": {
+        "method": "contract_test",
+        "rules": [
+          "execution can be reconstructed"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 4",
+        "artifact_refs": [
+          "trace reconstruction test"
+        ]
+      },
+      "depends_on": [
+        "WP-0406"
+      ],
+      "capability_ref": "CAP-test-runner",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0409"
+    },
+    {
+      "packet_id": "WP-0501",
+      "macro_phase": "Phase 5",
+      "purpose": "Evaluate simple validation rules.",
+      "inputs": [
+        "validationRules schema"
+      ],
+      "outputs": [
+        "validation evaluator"
+      ],
+      "validation": {
+        "method": "contract_test",
+        "rules": [
+          "pass/fail rule test"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "validationRules"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 5",
+        "artifact_refs": [
+          "validation evaluator"
+        ]
+      },
+      "depends_on": [
+        "WP-0305",
+        "WP-0406"
+      ],
+      "capability_ref": "CAP-validation-recovery",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0501"
+    },
+    {
+      "packet_id": "WP-0502",
+      "macro_phase": "Phase 5",
+      "purpose": "Write validation result records.",
+      "inputs": [
+        "validationResult schema"
+      ],
+      "outputs": [
+        "validation result writer"
+      ],
+      "validation": {
+        "method": "contract_test",
+        "rules": [
+          "result validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "validationResult"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 5",
+        "artifact_refs": [
+          "validation result writer"
+        ]
+      },
+      "depends_on": [
+        "WP-0501"
+      ],
+      "capability_ref": "CAP-validation-recovery",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0502"
+    },
+    {
+      "packet_id": "WP-0503",
+      "macro_phase": "Phase 5",
+      "purpose": "Write validation violation records.",
+      "inputs": [
+        "validationViolation schema"
+      ],
+      "outputs": [
+        "validation violation writer"
+      ],
+      "validation": {
+        "method": "contract_test",
+        "rules": [
+          "violation validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "validationViolation"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 5",
+        "artifact_refs": [
+          "validation violation writer"
+        ]
+      },
+      "depends_on": [
+        "WP-0501"
+      ],
+      "capability_ref": "CAP-validation-recovery",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0503"
+    },
+    {
+      "packet_id": "WP-0504",
+      "macro_phase": "Phase 5",
+      "purpose": "Classify failures by Sage-X taxonomy.",
+      "inputs": [
+        "failure taxonomy"
+      ],
+      "outputs": [
+        "failure classifier"
+      ],
+      "validation": {
+        "method": "contract_test",
+        "rules": [
+          "taxonomy mapping test passes"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 5",
+        "artifact_refs": [
+          "failure classifier"
+        ]
+      },
+      "depends_on": [
+        "WP-0502",
+        "WP-0503"
+      ],
+      "capability_ref": "CAP-validation-recovery",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0504"
+    },
+    {
+      "packet_id": "WP-0505",
+      "macro_phase": "Phase 5",
+      "purpose": "Write failure records.",
+      "inputs": [
+        "failureRecord schema"
+      ],
+      "outputs": [
+        "failure record writer"
+      ],
+      "validation": {
+        "method": "contract_test",
+        "rules": [
+          "failure record validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "failureRecord"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 5",
+        "artifact_refs": [
+          "failure record writer"
+        ]
+      },
+      "depends_on": [
+        "WP-0504"
+      ],
+      "capability_ref": "CAP-validation-recovery",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0505"
+    },
+    {
+      "packet_id": "WP-0506",
+      "macro_phase": "Phase 5",
+      "purpose": "Select nearest valid checkpoint.",
+      "inputs": [
+        "checkpoint records"
+      ],
+      "outputs": [
+        "recovery selector"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "nearest valid checkpoint selected"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "checkpoint"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 5",
+        "artifact_refs": [
+          "recovery selector"
+        ]
+      },
+      "depends_on": [
+        "WP-0405",
+        "WP-0505"
+      ],
+      "capability_ref": "CAP-validation-recovery",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0506"
+    },
+    {
+      "packet_id": "WP-0507",
+      "macro_phase": "Phase 5",
+      "purpose": "Rollback and resume from checkpoint only.",
+      "inputs": [
+        "execution state",
+        "checkpoint"
+      ],
+      "outputs": [
+        "rollback-resume module"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "resumes from checkpoint only"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "checkpoint"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 5",
+        "artifact_refs": [
+          "rollback-resume module"
+        ]
+      },
+      "depends_on": [
+        "WP-0506",
+        "WP-0403"
+      ],
+      "capability_ref": "CAP-validation-recovery",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0507"
+    },
+    {
+      "packet_id": "WP-0601",
+      "macro_phase": "Phase 6",
+      "purpose": "Create first governance policy fixture.",
+      "inputs": [
+        "governancePolicy schema"
+      ],
+      "outputs": [
+        "policy fixture"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "policy validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "governancePolicy"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 6",
+        "artifact_refs": [
+          "policy fixture"
+        ]
+      },
+      "depends_on": [
+        "WP-0007"
+      ],
+      "capability_ref": "CAP-governance-security",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0601"
+    },
+    {
+      "packet_id": "WP-0602",
+      "macro_phase": "Phase 6",
+      "purpose": "Register and retrieve policies.",
+      "inputs": [
+        "policy fixture"
+      ],
+      "outputs": [
+        "policy registry"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "policy lookup test passes"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 6",
+        "artifact_refs": [
+          "policy registry"
+        ]
+      },
+      "depends_on": [
+        "WP-0601"
+      ],
+      "capability_ref": "CAP-governance-security",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0602"
+    },
+    {
+      "packet_id": "WP-0603",
+      "macro_phase": "Phase 6",
+      "purpose": "Evaluate allow/block policy outcomes.",
+      "inputs": [
+        "policy registry"
+      ],
+      "outputs": [
+        "policy evaluator"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "allow/block test passes"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 6",
+        "artifact_refs": [
+          "policy evaluator"
+        ]
+      },
+      "depends_on": [
+        "WP-0602"
+      ],
+      "capability_ref": "CAP-governance-security",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0603"
+    },
+    {
+      "packet_id": "WP-0604",
+      "macro_phase": "Phase 6",
+      "purpose": "Write approval records.",
+      "inputs": [
+        "approvalRecord schema"
+      ],
+      "outputs": [
+        "approval writer"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "approval validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "approvalRecord"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 6",
+        "artifact_refs": [
+          "approval writer"
+        ]
+      },
+      "depends_on": [
+        "WP-0603"
+      ],
+      "capability_ref": "CAP-governance-security",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0604"
+    },
+    {
+      "packet_id": "WP-0605",
+      "macro_phase": "Phase 6",
+      "purpose": "Write override records.",
+      "inputs": [
+        "overrideRecord schema"
+      ],
+      "outputs": [
+        "override writer"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "override validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "overrideRecord"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 6",
+        "artifact_refs": [
+          "override writer"
+        ]
+      },
+      "depends_on": [
+        "WP-0603"
+      ],
+      "capability_ref": "CAP-governance-security",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0605"
+    },
+    {
+      "packet_id": "WP-0606",
+      "macro_phase": "Phase 6",
+      "purpose": "Write governance decision records.",
+      "inputs": [
+        "governanceDecision schema"
+      ],
+      "outputs": [
+        "governance decision writer"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "decision validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "governanceDecision"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 6",
+        "artifact_refs": [
+          "governance decision writer"
+        ]
+      },
+      "depends_on": [
+        "WP-0604",
+        "WP-0605"
+      ],
+      "capability_ref": "CAP-governance-security",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0606"
+    },
+    {
+      "packet_id": "WP-0607",
+      "macro_phase": "Phase 6",
+      "purpose": "Build security context records.",
+      "inputs": [
+        "securityContext schema"
+      ],
+      "outputs": [
+        "security context builder"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "security context validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "securityContext"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 6",
+        "artifact_refs": [
+          "security context builder"
+        ]
+      },
+      "depends_on": [
+        "WP-0603"
+      ],
+      "capability_ref": "CAP-governance-security",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0607"
+    },
+    {
+      "packet_id": "WP-0608",
+      "macro_phase": "Phase 6",
+      "purpose": "Write access decision records.",
+      "inputs": [
+        "accessDecision schema"
+      ],
+      "outputs": [
+        "access decision writer"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "access decision validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "accessDecision"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 6",
+        "artifact_refs": [
+          "access decision writer"
+        ]
+      },
+      "depends_on": [
+        "WP-0607"
+      ],
+      "capability_ref": "CAP-governance-security",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0608"
+    },
+    {
+      "packet_id": "WP-0701",
+      "macro_phase": "Phase 7",
+      "purpose": "Parse and validate control requests.",
+      "inputs": [
+        "controlRequest schema"
+      ],
+      "outputs": [
+        "control request parser"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "request validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "controlRequest"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 7",
+        "artifact_refs": [
+          "control request parser"
+        ]
+      },
+      "depends_on": [
+        "WP-0404",
+        "WP-0608"
+      ],
+      "capability_ref": "CAP-control-surface",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0701"
+    },
+    {
+      "packet_id": "WP-0702",
+      "macro_phase": "Phase 7",
+      "purpose": "Build control response records.",
+      "inputs": [
+        "controlResponse schema"
+      ],
+      "outputs": [
+        "control response builder"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "response validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "controlResponse"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 7",
+        "artifact_refs": [
+          "control response builder"
+        ]
+      },
+      "depends_on": [
+        "WP-0701"
+      ],
+      "capability_ref": "CAP-control-surface",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0702"
+    },
+    {
+      "packet_id": "WP-0703",
+      "macro_phase": "Phase 7",
+      "purpose": "Handle start, pause, resume, and stop.",
+      "inputs": [
+        "execution state manager"
+      ],
+      "outputs": [
+        "execution control handlers"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "operation tests pass"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 7",
+        "artifact_refs": [
+          "execution control handlers"
+        ]
+      },
+      "depends_on": [
+        "WP-0702",
+        "WP-0404"
+      ],
+      "capability_ref": "CAP-control-surface",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0703"
+    },
+    {
+      "packet_id": "WP-0704",
+      "macro_phase": "Phase 7",
+      "purpose": "Execute one guided step through the control surface.",
+      "inputs": [
+        "execution step",
+        "capability registry"
+      ],
+      "outputs": [
+        "guided step handler"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "one step execution test passes"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 7",
+        "artifact_refs": [
+          "guided step handler"
+        ]
+      },
+      "depends_on": [
+        "WP-0703",
+        "WP-0305"
+      ],
+      "capability_ref": "CAP-control-surface",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0704"
+    },
+    {
+      "packet_id": "WP-0705",
+      "macro_phase": "Phase 7",
+      "purpose": "Expose generate, retrieve, validate, and modify plan operations.",
+      "inputs": [
+        "plan generator"
+      ],
+      "outputs": [
+        "planning control handlers"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "plan operation tests pass"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 7",
+        "artifact_refs": [
+          "planning control handlers"
+        ]
+      },
+      "depends_on": [
+        "WP-0205",
+        "WP-0702"
+      ],
+      "capability_ref": "CAP-control-surface",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0705"
+    },
+    {
+      "packet_id": "WP-0706",
+      "macro_phase": "Phase 7",
+      "purpose": "Expose approval and override operations.",
+      "inputs": [
+        "governance decision writer"
+      ],
+      "outputs": [
+        "governance control handlers"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "approval flow test passes"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 7",
+        "artifact_refs": [
+          "governance control handlers"
+        ]
+      },
+      "depends_on": [
+        "WP-0606",
+        "WP-0702"
+      ],
+      "capability_ref": "CAP-control-surface",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0706"
+    },
+    {
+      "packet_id": "WP-0707",
+      "macro_phase": "Phase 7",
+      "purpose": "Expose trace, state, and failure query operations.",
+      "inputs": [
+        "trace/state/failure records"
+      ],
+      "outputs": [
+        "observability query handlers"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "queries return schema-backed records"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 7",
+        "artifact_refs": [
+          "observability query handlers"
+        ]
+      },
+      "depends_on": [
+        "WP-0409",
+        "WP-0505",
+        "WP-0702"
+      ],
+      "capability_ref": "CAP-control-surface",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0707"
+    },
+    {
+      "packet_id": "WP-0708",
+      "macro_phase": "Phase 7",
+      "purpose": "Expose rollback, resume, and branch operations.",
+      "inputs": [
+        "recovery module"
+      ],
+      "outputs": [
+        "recovery control handlers"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "recovery operation test passes"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 7",
+        "artifact_refs": [
+          "recovery control handlers"
+        ]
+      },
+      "depends_on": [
+        "WP-0507",
+        "WP-0702"
+      ],
+      "capability_ref": "CAP-control-surface",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0708"
+    },
+    {
+      "packet_id": "WP-0801",
+      "macro_phase": "Phase 8",
+      "purpose": "Preserve ISL origin references in Knowledge Units.",
+      "inputs": [
+        "Knowledge Units"
+      ],
+      "outputs": [
+        "origin metadata support"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "metadata preserved test passes"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 8",
+        "artifact_refs": [
+          "origin metadata support"
+        ]
+      },
+      "depends_on": [
+        "WP-0108"
+      ],
+      "capability_ref": "CAP-bridge-prep",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0801"
+    },
+    {
+      "packet_id": "WP-0802",
+      "macro_phase": "Phase 8",
+      "purpose": "Add traceable references from execution steps to Knowledge Units.",
+      "inputs": [
+        "execution plan",
+        "Knowledge Units"
+      ],
+      "outputs": [
+        "step-to-KU link support"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "references resolve"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 8",
+        "artifact_refs": [
+          "step-to-KU link support"
+        ]
+      },
+      "depends_on": [
+        "WP-0205",
+        "WP-0801"
+      ],
+      "capability_ref": "CAP-bridge-prep",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0802"
+    },
+    {
+      "packet_id": "WP-0803",
+      "macro_phase": "Phase 8",
+      "purpose": "Attach output references to producing steps.",
+      "inputs": [
+        "execution outputs",
+        "execution steps"
+      ],
+      "outputs": [
+        "output trace support"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "output-to-step references resolve"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 8",
+        "artifact_refs": [
+          "output trace support"
+        ]
+      },
+      "depends_on": [
+        "WP-0704",
+        "WP-0802"
+      ],
+      "capability_ref": "CAP-bridge-prep",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0803"
+    },
+    {
+      "packet_id": "WP-0804",
+      "macro_phase": "Phase 8",
+      "purpose": "Write artifact manifest records.",
+      "inputs": [
+        "artifactManifest schema"
+      ],
+      "outputs": [
+        "artifact manifest writer"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "manifest validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "artifactManifest"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 8",
+        "artifact_refs": [
+          "artifact manifest writer"
+        ]
+      },
+      "depends_on": [
+        "WP-0803"
+      ],
+      "capability_ref": "CAP-bridge-prep",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0804"
+    },
+    {
+      "packet_id": "WP-0805",
+      "macro_phase": "Phase 8",
+      "purpose": "Round-trip placeholder bridge metadata without runtime restructuring.",
+      "inputs": [
+        "artifact manifest",
+        "Knowledge Unit metadata"
+      ],
+      "outputs": [
+        "bridge-ready metadata handling"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "field round trip test passes"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 8",
+        "artifact_refs": [
+          "bridge-ready metadata handling"
+        ]
+      },
+      "depends_on": [
+        "WP-0804"
+      ],
+      "capability_ref": "CAP-bridge-prep",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0805"
+    },
+    {
+      "packet_id": "WP-0901",
+      "macro_phase": "Phase 9",
+      "purpose": "Write conformance test result records.",
+      "inputs": [
+        "conformanceTestResult schema"
+      ],
+      "outputs": [
+        "test result writer"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "test result validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "conformanceTestResult"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 9",
+        "artifact_refs": [
+          "test result writer"
+        ]
+      },
+      "depends_on": [
+        "WP-0007"
+      ],
+      "capability_ref": "CAP-conformance-reporting",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0901"
+    },
+    {
+      "packet_id": "WP-0902",
+      "macro_phase": "Phase 9",
+      "purpose": "Write conformance report records.",
+      "inputs": [
+        "conformanceReport schema"
+      ],
+      "outputs": [
+        "conformance report writer"
+      ],
+      "validation": {
+        "method": "schema_validation",
+        "rules": [
+          "report validates"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "conformanceReport"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 9",
+        "artifact_refs": [
+          "conformance report writer"
+        ]
+      },
+      "depends_on": [
+        "WP-0901"
+      ],
+      "capability_ref": "CAP-conformance-reporting",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0902"
+    },
+    {
+      "packet_id": "WP-0903",
+      "macro_phase": "Phase 9",
+      "purpose": "Add deterministic Level 1 conformance tests.",
+      "inputs": [
+        "runtime foundation"
+      ],
+      "outputs": [
+        "Level 1 conformance tests"
+      ],
+      "validation": {
+        "method": "contract_test",
+        "rules": [
+          "tests pass/fail deterministically"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 9",
+        "artifact_refs": [
+          "Level 1 conformance tests"
+        ]
+      },
+      "depends_on": [
+        "WP-0902",
+        "WP-0708"
+      ],
+      "capability_ref": "CAP-conformance-reporting",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0903"
+    },
+    {
+      "packet_id": "WP-0904",
+      "macro_phase": "Phase 9",
+      "purpose": "Record gaps and deviations explicitly.",
+      "inputs": [
+        "test outcomes"
+      ],
+      "outputs": [
+        "known deviations report"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "deviations are explicit"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 9",
+        "artifact_refs": [
+          "known deviations report"
+        ]
+      },
+      "depends_on": [
+        "WP-0903"
+      ],
+      "capability_ref": "CAP-conformance-reporting",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0904"
+    },
+    {
+      "packet_id": "WP-0905",
+      "macro_phase": "Phase 9",
+      "purpose": "Collect manifest, report, traces, and validations into an evidence bundle.",
+      "inputs": [
+        "manifest",
+        "report",
+        "trace refs",
+        "validation refs"
+      ],
+      "outputs": [
+        "implementation evidence bundle"
+      ],
+      "validation": {
+        "method": "unit_test",
+        "rules": [
+          "manifest, report, and traces resolve"
+        ],
+        "expected_result": "All listed validation rules pass locally."
+      },
+      "traceability": {
+        "schema_refs": [
+          "executionStep"
+        ],
+        "specification_refs": [
+          "SAGE-X v1r0",
+          "ISL r2",
+          "ISL-Sage-X Integration Profile"
+        ],
+        "macro_step_ref": "Phase 9",
+        "artifact_refs": [
+          "implementation evidence bundle"
+        ]
+      },
+      "depends_on": [
+        "WP-0805",
+        "WP-0904"
+      ],
+      "capability_ref": "CAP-conformance-reporting",
+      "status": "planned",
+      "checkpoint_ref": "CHK-0905"
+    }
+  ],
+  "dependency_graph": [
+    {
+      "from": "WP-0001",
+      "to": "WP-0002"
+    },
+    {
+      "from": "WP-0002",
+      "to": "WP-0003"
+    },
+    {
+      "from": "WP-0003",
+      "to": "WP-0004"
+    },
+    {
+      "from": "WP-0004",
+      "to": "WP-0005"
+    },
+    {
+      "from": "WP-0005",
+      "to": "WP-0006"
+    },
+    {
+      "from": "WP-0006",
+      "to": "WP-0007"
+    },
+    {
+      "from": "WP-0007",
+      "to": "WP-0101"
+    },
+    {
+      "from": "WP-0101",
+      "to": "WP-0102"
+    },
+    {
+      "from": "WP-0102",
+      "to": "WP-0103"
+    },
+    {
+      "from": "WP-0103",
+      "to": "WP-0104"
+    },
+    {
+      "from": "WP-0104",
+      "to": "WP-0105"
+    },
+    {
+      "from": "WP-0105",
+      "to": "WP-0106"
+    },
+    {
+      "from": "WP-0106",
+      "to": "WP-0107"
+    },
+    {
+      "from": "WP-0106",
+      "to": "WP-0108"
+    },
+    {
+      "from": "WP-0108",
+      "to": "WP-0109"
+    },
+    {
+      "from": "WP-0109",
+      "to": "WP-0201"
+    },
+    {
+      "from": "WP-0201",
+      "to": "WP-0202"
+    },
+    {
+      "from": "WP-0201",
+      "to": "WP-0203"
+    },
+    {
+      "from": "WP-0201",
+      "to": "WP-0204"
+    },
+    {
+      "from": "WP-0202",
+      "to": "WP-0205"
+    },
+    {
+      "from": "WP-0203",
+      "to": "WP-0205"
+    },
+    {
+      "from": "WP-0204",
+      "to": "WP-0205"
+    },
+    {
+      "from": "WP-0205",
+      "to": "WP-0206"
+    },
+    {
+      "from": "WP-0205",
+      "to": "WP-0207"
+    },
+    {
+      "from": "WP-0007",
+      "to": "WP-0301"
+    },
+    {
+      "from": "WP-0301",
+      "to": "WP-0302"
+    },
+    {
+      "from": "WP-0302",
+      "to": "WP-0303"
+    },
+    {
+      "from": "WP-0302",
+      "to": "WP-0304"
+    },
+    {
+      "from": "WP-0304",
+      "to": "WP-0305"
+    },
+    {
+      "from": "WP-0305",
+      "to": "WP-0306"
+    },
+    {
+      "from": "WP-0302",
+      "to": "WP-0307"
+    },
+    {
+      "from": "WP-0304",
+      "to": "WP-0307"
+    },
+    {
+      "from": "WP-0007",
+      "to": "WP-0401"
+    },
+    {
+      "from": "WP-0401",
+      "to": "WP-0402"
+    },
+    {
+      "from": "WP-0402",
+      "to": "WP-0403"
+    },
+    {
+      "from": "WP-0403",
+      "to": "WP-0404"
+    },
+    {
+      "from": "WP-0205",
+      "to": "WP-0404"
+    },
+    {
+      "from": "WP-0404",
+      "to": "WP-0405"
+    },
+    {
+      "from": "WP-0404",
+      "to": "WP-0406"
+    },
+    {
+      "from": "WP-0406",
+      "to": "WP-0407"
+    },
+    {
+      "from": "WP-0406",
+      "to": "WP-0408"
+    },
+    {
+      "from": "WP-0406",
+      "to": "WP-0409"
+    },
+    {
+      "from": "WP-0305",
+      "to": "WP-0501"
+    },
+    {
+      "from": "WP-0406",
+      "to": "WP-0501"
+    },
+    {
+      "from": "WP-0501",
+      "to": "WP-0502"
+    },
+    {
+      "from": "WP-0501",
+      "to": "WP-0503"
+    },
+    {
+      "from": "WP-0502",
+      "to": "WP-0504"
+    },
+    {
+      "from": "WP-0503",
+      "to": "WP-0504"
+    },
+    {
+      "from": "WP-0504",
+      "to": "WP-0505"
+    },
+    {
+      "from": "WP-0405",
+      "to": "WP-0506"
+    },
+    {
+      "from": "WP-0505",
+      "to": "WP-0506"
+    },
+    {
+      "from": "WP-0506",
+      "to": "WP-0507"
+    },
+    {
+      "from": "WP-0403",
+      "to": "WP-0507"
+    },
+    {
+      "from": "WP-0007",
+      "to": "WP-0601"
+    },
+    {
+      "from": "WP-0601",
+      "to": "WP-0602"
+    },
+    {
+      "from": "WP-0602",
+      "to": "WP-0603"
+    },
+    {
+      "from": "WP-0603",
+      "to": "WP-0604"
+    },
+    {
+      "from": "WP-0603",
+      "to": "WP-0605"
+    },
+    {
+      "from": "WP-0604",
+      "to": "WP-0606"
+    },
+    {
+      "from": "WP-0605",
+      "to": "WP-0606"
+    },
+    {
+      "from": "WP-0603",
+      "to": "WP-0607"
+    },
+    {
+      "from": "WP-0607",
+      "to": "WP-0608"
+    },
+    {
+      "from": "WP-0404",
+      "to": "WP-0701"
+    },
+    {
+      "from": "WP-0608",
+      "to": "WP-0701"
+    },
+    {
+      "from": "WP-0701",
+      "to": "WP-0702"
+    },
+    {
+      "from": "WP-0702",
+      "to": "WP-0703"
+    },
+    {
+      "from": "WP-0404",
+      "to": "WP-0703"
+    },
+    {
+      "from": "WP-0703",
+      "to": "WP-0704"
+    },
+    {
+      "from": "WP-0305",
+      "to": "WP-0704"
+    },
+    {
+      "from": "WP-0205",
+      "to": "WP-0705"
+    },
+    {
+      "from": "WP-0702",
+      "to": "WP-0705"
+    },
+    {
+      "from": "WP-0606",
+      "to": "WP-0706"
+    },
+    {
+      "from": "WP-0702",
+      "to": "WP-0706"
+    },
+    {
+      "from": "WP-0409",
+      "to": "WP-0707"
+    },
+    {
+      "from": "WP-0505",
+      "to": "WP-0707"
+    },
+    {
+      "from": "WP-0702",
+      "to": "WP-0707"
+    },
+    {
+      "from": "WP-0507",
+      "to": "WP-0708"
+    },
+    {
+      "from": "WP-0702",
+      "to": "WP-0708"
+    },
+    {
+      "from": "WP-0108",
+      "to": "WP-0801"
+    },
+    {
+      "from": "WP-0205",
+      "to": "WP-0802"
+    },
+    {
+      "from": "WP-0801",
+      "to": "WP-0802"
+    },
+    {
+      "from": "WP-0704",
+      "to": "WP-0803"
+    },
+    {
+      "from": "WP-0802",
+      "to": "WP-0803"
+    },
+    {
+      "from": "WP-0803",
+      "to": "WP-0804"
+    },
+    {
+      "from": "WP-0804",
+      "to": "WP-0805"
+    },
+    {
+      "from": "WP-0007",
+      "to": "WP-0901"
+    },
+    {
+      "from": "WP-0901",
+      "to": "WP-0902"
+    },
+    {
+      "from": "WP-0902",
+      "to": "WP-0903"
+    },
+    {
+      "from": "WP-0708",
+      "to": "WP-0903"
+    },
+    {
+      "from": "WP-0903",
+      "to": "WP-0904"
+    },
+    {
+      "from": "WP-0805",
+      "to": "WP-0905"
+    },
+    {
+      "from": "WP-0904",
+      "to": "WP-0905"
+    }
+  ],
+  "checkpoints": [
+    {
+      "checkpoint_id": "CHK-0001",
+      "step_id": "WP-0001",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0002",
+      "step_id": "WP-0002",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0003",
+      "step_id": "WP-0003",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0004",
+      "step_id": "WP-0004",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0005",
+      "step_id": "WP-0005",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0006",
+      "step_id": "WP-0006",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0007",
+      "step_id": "WP-0007",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0101",
+      "step_id": "WP-0101",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0102",
+      "step_id": "WP-0102",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0103",
+      "step_id": "WP-0103",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0104",
+      "step_id": "WP-0104",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0105",
+      "step_id": "WP-0105",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0106",
+      "step_id": "WP-0106",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0107",
+      "step_id": "WP-0107",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0108",
+      "step_id": "WP-0108",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0109",
+      "step_id": "WP-0109",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0201",
+      "step_id": "WP-0201",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0202",
+      "step_id": "WP-0202",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0203",
+      "step_id": "WP-0203",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0204",
+      "step_id": "WP-0204",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0205",
+      "step_id": "WP-0205",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0206",
+      "step_id": "WP-0206",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0207",
+      "step_id": "WP-0207",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0301",
+      "step_id": "WP-0301",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0302",
+      "step_id": "WP-0302",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0303",
+      "step_id": "WP-0303",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0304",
+      "step_id": "WP-0304",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0305",
+      "step_id": "WP-0305",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0306",
+      "step_id": "WP-0306",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0307",
+      "step_id": "WP-0307",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0401",
+      "step_id": "WP-0401",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0402",
+      "step_id": "WP-0402",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0403",
+      "step_id": "WP-0403",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0404",
+      "step_id": "WP-0404",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0405",
+      "step_id": "WP-0405",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0406",
+      "step_id": "WP-0406",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0407",
+      "step_id": "WP-0407",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0408",
+      "step_id": "WP-0408",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0409",
+      "step_id": "WP-0409",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0501",
+      "step_id": "WP-0501",
+      "type": "validation",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0502",
+      "step_id": "WP-0502",
+      "type": "validation",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0503",
+      "step_id": "WP-0503",
+      "type": "validation",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0504",
+      "step_id": "WP-0504",
+      "type": "validation",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0505",
+      "step_id": "WP-0505",
+      "type": "validation",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0506",
+      "step_id": "WP-0506",
+      "type": "validation",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0507",
+      "step_id": "WP-0507",
+      "type": "validation",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0601",
+      "step_id": "WP-0601",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0602",
+      "step_id": "WP-0602",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0603",
+      "step_id": "WP-0603",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0604",
+      "step_id": "WP-0604",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0605",
+      "step_id": "WP-0605",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0606",
+      "step_id": "WP-0606",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0607",
+      "step_id": "WP-0607",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0608",
+      "step_id": "WP-0608",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0701",
+      "step_id": "WP-0701",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0702",
+      "step_id": "WP-0702",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0703",
+      "step_id": "WP-0703",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0704",
+      "step_id": "WP-0704",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0705",
+      "step_id": "WP-0705",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0706",
+      "step_id": "WP-0706",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0707",
+      "step_id": "WP-0707",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0708",
+      "step_id": "WP-0708",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0801",
+      "step_id": "WP-0801",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0802",
+      "step_id": "WP-0802",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0803",
+      "step_id": "WP-0803",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0804",
+      "step_id": "WP-0804",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0805",
+      "step_id": "WP-0805",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0901",
+      "step_id": "WP-0901",
+      "type": "validation",
+      "recoverable": false
+    },
+    {
+      "checkpoint_id": "CHK-0902",
+      "step_id": "WP-0902",
+      "type": "validation",
+      "recoverable": false
+    },
+    {
+      "checkpoint_id": "CHK-0903",
+      "step_id": "WP-0903",
+      "type": "validation",
+      "recoverable": false
+    },
+    {
+      "checkpoint_id": "CHK-0904",
+      "step_id": "WP-0904",
+      "type": "validation",
+      "recoverable": false
+    },
+    {
+      "checkpoint_id": "CHK-0905",
+      "step_id": "WP-0905",
+      "type": "validation",
+      "recoverable": false
+    }
+  ],
+  "governance": {
+    "approval_required": true,
+    "approval_roles": [
+      "architecture-owner",
+      "implementation-owner"
+    ]
+  }
+}

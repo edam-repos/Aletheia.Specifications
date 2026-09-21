@@ -1,0 +1,1713 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aletheia.dev/schemas/isl/r2/isl-r2.schema.json",
+  "title": "ALETHEIA Specification Language (ISL) r2 Schema",
+  "description": "Machine-readable schema for ISL r2 authored specifications, canonical semantic models, and r2 enterprise conformance evidence sets.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/AuthoredSpecification"
+    },
+    {
+      "$ref": "#/$defs/CanonicalModel"
+    },
+    {
+      "$ref": "#/$defs/Release2ConformanceEvidenceSet"
+    }
+  ],
+  "$defs": {
+    "Identifier": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+    },
+    "NonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "SemVer": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:[-+][0-9A-Za-z.-]+)?$"
+    },
+    "Timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "Release": {
+      "const": "r2"
+    },
+    "ReadinessLevel": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "reviewable",
+        "machine-valid",
+        "autonomous-ready"
+      ]
+    },
+    "ConformanceProfile": {
+      "type": "string",
+      "enum": [
+        "Core",
+        "Team",
+        "Enterprise",
+        "Regulated"
+      ]
+    },
+    "RiskTier": {
+      "type": "string",
+      "enum": [
+        "Low",
+        "Standard",
+        "High",
+        "Critical"
+      ]
+    },
+    "SensitivityClassification": {
+      "type": "string",
+      "enum": [
+        "public",
+        "internal",
+        "confidential",
+        "restricted"
+      ]
+    },
+    "ValidationStatus": {
+      "type": "string",
+      "enum": [
+        "not-evaluated",
+        "passed",
+        "failed",
+        "warning",
+        "waived"
+      ]
+    },
+    "GovernanceStatus": {
+      "type": "string",
+      "enum": [
+        "not-required",
+        "pending",
+        "approved",
+        "waived",
+        "blocked"
+      ]
+    },
+    "ReferenceArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Identifier"
+      },
+      "uniqueItems": true
+    },
+    "ExtensionObject": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "AuthoredSpecification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document-kind",
+        "release",
+        "isl-version",
+        "conformance-profile",
+        "metadata",
+        "system-identity",
+        "r2-controls",
+        "business-objectives",
+        "actors",
+        "functional-requirements",
+        "non-functional-requirements",
+        "data-model",
+        "service-boundaries",
+        "security-policies",
+        "operational-expectations",
+        "validation",
+        "change-history"
+      ],
+      "properties": {
+        "document-kind": {
+          "const": "authored-specification"
+        },
+        "release": {
+          "$ref": "#/$defs/Release"
+        },
+        "isl-version": {
+          "type": "string",
+          "pattern": "^(ISL )?r2(\\b.*)?$"
+        },
+        "conformance-profile": {
+          "$ref": "#/$defs/ConformanceProfile"
+        },
+        "metadata": {
+          "$ref": "#/$defs/SpecificationMetadata"
+        },
+        "system-identity": {
+          "$ref": "#/$defs/SystemIdentity"
+        },
+        "r2-controls": {
+          "$ref": "#/$defs/R2ControlDeclaration"
+        },
+        "business-objectives": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Objective"
+          }
+        },
+        "scope": {
+          "$ref": "#/$defs/Scope"
+        },
+        "actors": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Actor"
+          }
+        },
+        "stakeholders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Stakeholder"
+          }
+        },
+        "functional-requirements": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Requirement"
+          }
+        },
+        "non-functional-requirements": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Requirement"
+          }
+        },
+        "data-model": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DataEntity"
+          }
+        },
+        "service-boundaries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/ServiceBoundary"
+          }
+        },
+        "workflows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Workflow"
+          }
+        },
+        "security-policies": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Policy"
+          }
+        },
+        "operational-expectations": {
+          "$ref": "#/$defs/OperationalExpectations"
+        },
+        "validation": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/ValidationCriterion"
+          }
+        },
+        "reusable-assets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AuthoredReusableAsset"
+          }
+        },
+        "construction-boundaries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ConstructionBoundary"
+          }
+        },
+        "connection-contexts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ConnectionContext"
+          }
+        },
+        "governance": {
+          "$ref": "#/$defs/GovernanceConfiguration"
+        },
+        "change-history": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/ChangeRecord"
+          }
+        },
+        "extensions": {
+          "$ref": "#/$defs/ExtensionObject"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "r2-controls": {
+                "properties": {
+                  "reuse-enabled": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "reuse-enabled"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "reusable-assets"
+            ],
+            "properties": {
+              "reusable-assets": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "r2-controls": {
+                "properties": {
+                  "boundary-scoped-construction": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "boundary-scoped-construction"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "construction-boundaries"
+            ],
+            "properties": {
+              "construction-boundaries": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "r2-controls": {
+                "properties": {
+                  "cross-boundary-context-transfer": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "cross-boundary-context-transfer"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "connection-contexts"
+            ],
+            "properties": {
+              "connection-contexts": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "SpecificationMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "specification-id",
+        "title",
+        "version",
+        "owner"
+      ],
+      "properties": {
+        "specification-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "title": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "version": {
+          "$ref": "#/$defs/SemVer"
+        },
+        "owner": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "authors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NonEmptyString"
+          }
+        },
+        "created-at": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "updated-at": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "risk-tier": {
+          "$ref": "#/$defs/RiskTier"
+        }
+      }
+    },
+    "SystemIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "system-id",
+        "name",
+        "version",
+        "domain",
+        "owner",
+        "description",
+        "readiness-level"
+      ],
+      "properties": {
+        "system-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "name": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "version": {
+          "$ref": "#/$defs/SemVer"
+        },
+        "domain": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "owner": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "description": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "readiness-level": {
+          "$ref": "#/$defs/ReadinessLevel"
+        },
+        "external-context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NonEmptyString"
+          }
+        }
+      }
+    },
+    "R2ControlDeclaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reuse-enabled",
+        "boundary-scoped-construction",
+        "cross-boundary-context-transfer",
+        "context-minimization-required",
+        "duplication-detection-required"
+      ],
+      "properties": {
+        "reuse-enabled": {
+          "type": "boolean"
+        },
+        "boundary-scoped-construction": {
+          "type": "boolean"
+        },
+        "cross-boundary-context-transfer": {
+          "type": "boolean"
+        },
+        "context-minimization-required": {
+          "type": "boolean"
+        },
+        "duplication-detection-required": {
+          "type": "boolean"
+        },
+        "model-profile": {
+          "type": "string",
+          "enum": [
+            "local",
+            "cloud",
+            "hybrid",
+            "unspecified"
+          ]
+        }
+      }
+    },
+    "Objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "objective-id",
+        "statement",
+        "priority"
+      ],
+      "properties": {
+        "objective-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "statement": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "must",
+            "should",
+            "could",
+            "wont"
+          ]
+        },
+        "success-measures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NonEmptyString"
+          }
+        }
+      }
+    },
+    "Scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "in-scope": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NonEmptyString"
+          }
+        },
+        "out-of-scope": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NonEmptyString"
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NonEmptyString"
+          }
+        }
+      }
+    },
+    "Actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actor-id",
+        "name",
+        "role"
+      ],
+      "properties": {
+        "actor-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "name": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "role": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NonEmptyString"
+          }
+        }
+      }
+    },
+    "Stakeholder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stakeholder-id",
+        "name",
+        "interest"
+      ],
+      "properties": {
+        "stakeholder-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "name": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "interest": {
+          "$ref": "#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "Requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirement-id",
+        "type",
+        "statement",
+        "priority",
+        "validation-ids"
+      ],
+      "properties": {
+        "requirement-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "business",
+            "functional",
+            "non-functional",
+            "security",
+            "operational",
+            "constraint"
+          ]
+        },
+        "statement": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "must",
+            "should",
+            "could",
+            "wont"
+          ]
+        },
+        "source-objective-ids": {
+          "$ref": "#/$defs/ReferenceArray"
+        },
+        "policy-ids": {
+          "$ref": "#/$defs/ReferenceArray"
+        },
+        "validation-ids": {
+          "$ref": "#/$defs/ReferenceArray"
+        }
+      }
+    },
+    "DataEntity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entity-id",
+        "name",
+        "description",
+        "attributes"
+      ],
+      "properties": {
+        "entity-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "name": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "description": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DataAttribute"
+          }
+        },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DataRelationship"
+          }
+        }
+      }
+    },
+    "DataAttribute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type",
+        "required"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "type": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "sensitivity-classification": {
+          "$ref": "#/$defs/SensitivityClassification"
+        }
+      }
+    },
+    "DataRelationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relationship-id",
+        "target-entity-id",
+        "cardinality"
+      ],
+      "properties": {
+        "relationship-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "target-entity-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "cardinality": {
+          "type": "string",
+          "enum": [
+            "one-to-one",
+            "one-to-many",
+            "many-to-one",
+            "many-to-many"
+          ]
+        }
+      }
+    },
+    "ServiceBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "service-id",
+        "name",
+        "responsibility",
+        "interface-ids"
+      ],
+      "properties": {
+        "service-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "name": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "responsibility": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "interface-ids": {
+          "$ref": "#/$defs/ReferenceArray"
+        },
+        "data-entity-ids": {
+          "$ref": "#/$defs/ReferenceArray"
+        }
+      }
+    },
+    "Workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workflow-id",
+        "name",
+        "steps"
+      ],
+      "properties": {
+        "workflow-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "name": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/WorkflowStep"
+          }
+        },
+        "exception-paths": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NonEmptyString"
+          }
+        }
+      }
+    },
+    "WorkflowStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "step-id",
+        "description"
+      ],
+      "properties": {
+        "step-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "description": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "actor-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "requirement-ids": {
+          "$ref": "#/$defs/ReferenceArray"
+        }
+      }
+    },
+    "Policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy-id",
+        "name",
+        "rule",
+        "enforcement-level"
+      ],
+      "properties": {
+        "policy-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "name": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "rule": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "enforcement-level": {
+          "type": "string",
+          "enum": [
+            "advisory",
+            "warning",
+            "blocking"
+          ]
+        }
+      }
+    },
+    "OperationalExpectations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deployment-profile",
+        "availability",
+        "observability"
+      ],
+      "properties": {
+        "deployment-profile": {
+          "type": "string",
+          "enum": [
+            "local-standalone",
+            "team-shared",
+            "enterprise-datacenter",
+            "distributed-cluster",
+            "hybrid-integrated",
+            "regulated-enterprise",
+            "multi-tenant-platform"
+          ]
+        },
+        "availability": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "observability": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "recovery": {
+          "$ref": "#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "ValidationCriterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "validation-id",
+        "description",
+        "method",
+        "required"
+      ],
+      "properties": {
+        "validation-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "description": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "method": {
+          "type": "string",
+          "enum": [
+            "test",
+            "static-analysis",
+            "schema-validation",
+            "security-scan",
+            "policy-check",
+            "manual-review",
+            "formal-proof",
+            "other"
+          ]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "evidence-type": {
+          "$ref": "#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "AuthoredReusableAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset-type",
+        "intended-use",
+        "source-entity-ids",
+        "allowed-scope",
+        "required-validation",
+        "rationale"
+      ],
+      "properties": {
+        "reusable-asset-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "asset-type": {
+          "$ref": "#/$defs/ReusableAssetType"
+        },
+        "intended-use": {
+          "type": "string",
+          "enum": [
+            "reuse-full",
+            "reuse-partial",
+            "wrap",
+            "extend",
+            "compose",
+            "promote-candidate",
+            "prohibit"
+          ]
+        },
+        "source-entity-ids": {
+          "$ref": "#/$defs/ReferenceArray"
+        },
+        "allowed-scope": {
+          "type": "string",
+          "enum": [
+            "project",
+            "workspace",
+            "tenant",
+            "enterprise",
+            "public",
+            "prohibited"
+          ]
+        },
+        "required-validation": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/NonEmptyString"
+          }
+        },
+        "governance-condition": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "rationale": {
+          "$ref": "#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "ReusableAssetType": {
+      "type": "string",
+      "enum": [
+        "library",
+        "module",
+        "component",
+        "utility",
+        "service-contract",
+        "schema",
+        "template",
+        "infrastructure-module",
+        "validation-harness",
+        "policy-module",
+        "agent-pattern"
+      ]
+    },
+    "ConstructionBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "boundary-id",
+        "boundary-name",
+        "boundary-type",
+        "included-entity-ids",
+        "excluded-scope",
+        "connection-context-ids",
+        "drift-handling"
+      ],
+      "properties": {
+        "boundary-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "boundary-name": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "boundary-type": {
+          "type": "string",
+          "enum": [
+            "foundation",
+            "specification",
+            "semantic",
+            "planning",
+            "runtime",
+            "governance",
+            "security",
+            "tooling",
+            "agent",
+            "telemetry",
+            "deployment",
+            "experimental"
+          ]
+        },
+        "included-entity-ids": {
+          "$ref": "#/$defs/ReferenceArray"
+        },
+        "excluded-scope": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NonEmptyString"
+          }
+        },
+        "expected-artifact-types": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NonEmptyString"
+          }
+        },
+        "allowed-reusable-assets": {
+          "$ref": "#/$defs/ReferenceArray"
+        },
+        "prohibited-context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NonEmptyString"
+          }
+        },
+        "connection-context-ids": {
+          "$ref": "#/$defs/ReferenceArray"
+        },
+        "drift-handling": {
+          "type": "string",
+          "enum": [
+            "block",
+            "repair",
+            "replan",
+            "escalate"
+          ]
+        }
+      }
+    },
+    "ConnectionContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "connection-context-id",
+        "from-boundary-id",
+        "to-boundary-id",
+        "context-purpose",
+        "allowed-elements",
+        "sensitivity-classification",
+        "minimization-rule",
+        "validation-rule"
+      ],
+      "properties": {
+        "connection-context-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "from-boundary-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "to-boundary-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "context-purpose": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "allowed-elements": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Identifier"
+          }
+        },
+        "prohibited-elements": {
+          "$ref": "#/$defs/ReferenceArray"
+        },
+        "sensitivity-classification": {
+          "$ref": "#/$defs/SensitivityClassification"
+        },
+        "minimization-rule": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "validation-rule": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "expiration-rule": {
+          "$ref": "#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "GovernanceConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "governance-profile-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "approval-required": {
+          "type": "boolean"
+        },
+        "waiver-policy-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "audit-required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ChangeRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "date",
+        "author",
+        "change-summary"
+      ],
+      "properties": {
+        "version": {
+          "$ref": "#/$defs/SemVer"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "author": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "change-summary": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "affected-sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NonEmptyString"
+          }
+        },
+        "readiness-impact": {
+          "$ref": "#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "CanonicalModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document-kind",
+        "release",
+        "canonical-model-id",
+        "source-specification-id",
+        "source-specification-version",
+        "readiness-level",
+        "generated-at",
+        "entities",
+        "relationships",
+        "traceability"
+      ],
+      "properties": {
+        "document-kind": {
+          "const": "canonical-model"
+        },
+        "release": {
+          "$ref": "#/$defs/Release"
+        },
+        "canonical-model-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "source-specification-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "source-specification-version": {
+          "$ref": "#/$defs/SemVer"
+        },
+        "readiness-level": {
+          "$ref": "#/$defs/ReadinessLevel"
+        },
+        "generated-at": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "entities": {
+          "$ref": "#/$defs/CanonicalEntities"
+        },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CanonicalRelationship"
+          }
+        },
+        "traceability": {
+          "$ref": "#/$defs/TraceabilityModel"
+        },
+        "planning": {
+          "$ref": "#/$defs/PlanningModel"
+        },
+        "reusable-assets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReusableAssetRecord"
+          }
+        },
+        "reuse-decisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ReuseDecisionRecord"
+          }
+        },
+        "construction-boundaries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ConstructionBoundary"
+          }
+        },
+        "connection-contexts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ConnectionContext"
+          }
+        },
+        "extensions": {
+          "$ref": "#/$defs/ExtensionObject"
+        }
+      }
+    },
+    "CanonicalEntities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projects",
+        "requirements",
+        "services",
+        "interfaces",
+        "policies",
+        "validations"
+      ],
+      "properties": {
+        "projects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CanonicalEntity"
+          }
+        },
+        "contexts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CanonicalEntity"
+          }
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CanonicalEntity"
+          }
+        },
+        "actors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CanonicalEntity"
+          }
+        },
+        "stakeholders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CanonicalEntity"
+          }
+        },
+        "data-entities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CanonicalEntity"
+          }
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CanonicalEntity"
+          }
+        },
+        "interfaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CanonicalEntity"
+          }
+        },
+        "workflows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CanonicalEntity"
+          }
+        },
+        "policies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CanonicalEntity"
+          }
+        },
+        "validations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CanonicalEntity"
+          }
+        }
+      }
+    },
+    "CanonicalEntity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entity-id",
+        "entity-type",
+        "name",
+        "description",
+        "status"
+      ],
+      "properties": {
+        "entity-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "entity-type": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "name": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "description": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "active",
+            "deprecated",
+            "superseded"
+          ]
+        },
+        "source-reference": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "properties": {
+          "$ref": "#/$defs/ExtensionObject"
+        }
+      }
+    },
+    "CanonicalRelationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relationship-id",
+        "relationship-type",
+        "source-id",
+        "target-id"
+      ],
+      "properties": {
+        "relationship-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "relationship-type": {
+          "type": "string",
+          "enum": [
+            "depends-on",
+            "requires",
+            "implements",
+            "validates",
+            "governs",
+            "traces-to",
+            "reuses",
+            "extends",
+            "wraps",
+            "composes",
+            "authorizes-reuse",
+            "contains-task",
+            "contains-artifact",
+            "depends-on-boundary",
+            "provides-context",
+            "consumes-context"
+          ]
+        },
+        "source-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "target-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "rationale": {
+          "$ref": "#/$defs/NonEmptyString"
+        }
+      }
+    },
+    "TraceabilityModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "traceability-snapshot-id",
+        "coverage-status",
+        "links"
+      ],
+      "properties": {
+        "traceability-snapshot-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "coverage-status": {
+          "type": "string",
+          "enum": [
+            "complete",
+            "incomplete",
+            "inconsistent"
+          ]
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CanonicalRelationship"
+          }
+        }
+      }
+    },
+    "PlanningModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "construction-plan-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "plan-status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "valid",
+            "executable",
+            "in-progress",
+            "completed",
+            "failed",
+            "superseded"
+          ]
+        },
+        "construction-tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ConstructionTask"
+          }
+        }
+      }
+    },
+    "ConstructionTask": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task-id",
+        "task-type",
+        "source-entity-ids",
+        "status"
+      ],
+      "properties": {
+        "task-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "task-type": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "source-entity-ids": {
+          "$ref": "#/$defs/ReferenceArray"
+        },
+        "boundary-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "reuse-decision-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "ready",
+            "in-progress",
+            "completed",
+            "failed",
+            "blocked",
+            "escalated"
+          ]
+        }
+      }
+    },
+    "ReusableAssetRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset-id",
+        "asset-type",
+        "name",
+        "description",
+        "version",
+        "validation-status",
+        "traceability-snapshot-id",
+        "sensitivity-classification",
+        "trust-level",
+        "owner",
+        "reuse-scope",
+        "deprecation-state"
+      ],
+      "properties": {
+        "asset-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "asset-type": {
+          "$ref": "#/$defs/ReusableAssetType"
+        },
+        "name": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "description": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "version": {
+          "$ref": "#/$defs/SemVer"
+        },
+        "capability-tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NonEmptyString"
+          }
+        },
+        "validation-status": {
+          "type": "string",
+          "enum": [
+            "unvalidated",
+            "validated",
+            "warning",
+            "failed",
+            "expired",
+            "superseded"
+          ]
+        },
+        "traceability-snapshot-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "sensitivity-classification": {
+          "$ref": "#/$defs/SensitivityClassification"
+        },
+        "trust-level": {
+          "type": "string",
+          "enum": [
+            "approved",
+            "restricted",
+            "experimental",
+            "prohibited"
+          ]
+        },
+        "owner": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "reuse-scope": {
+          "type": "string",
+          "enum": [
+            "project",
+            "workspace",
+            "tenant",
+            "enterprise",
+            "public"
+          ]
+        },
+        "deprecation-state": {
+          "type": "string",
+          "enum": [
+            "active",
+            "deprecated",
+            "superseded",
+            "retired"
+          ]
+        }
+      }
+    },
+    "ReuseDecisionRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reuse-decision-id",
+        "task-id",
+        "construction-boundary-id",
+        "outcome",
+        "decision-rationale",
+        "delta-generation-required",
+        "traceability-link-ids",
+        "decided-by",
+        "decided-at"
+      ],
+      "properties": {
+        "reuse-decision-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "task-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "construction-boundary-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "selected-asset-ids": {
+          "$ref": "#/$defs/ReferenceArray"
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "reuse-full",
+            "reuse-partial",
+            "wrap",
+            "extend",
+            "compose",
+            "generate-new",
+            "reject-reuse",
+            "escalate"
+          ]
+        },
+        "decision-rationale": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "delta-generation-required": {
+          "type": "boolean"
+        },
+        "delta-generation-rationale": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "governance-decision-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "traceability-link-ids": {
+          "$ref": "#/$defs/ReferenceArray"
+        },
+        "decided-by": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "decided-at": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    },
+    "Release2ConformanceEvidenceSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document-kind",
+        "release",
+        "implementation-id",
+        "claimed-profile",
+        "generated-at",
+        "evidence"
+      ],
+      "properties": {
+        "document-kind": {
+          "const": "r2-conformance-evidence-set"
+        },
+        "release": {
+          "$ref": "#/$defs/Release"
+        },
+        "implementation-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "claimed-profile": {
+          "type": "string",
+          "enum": [
+            "Enterprise",
+            "Regulated"
+          ]
+        },
+        "generated-at": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "conformance-matrix",
+            "schema-artifacts",
+            "parser-tests",
+            "lifecycle-tests",
+            "reuse-tests",
+            "boundary-tests",
+            "security-tests",
+            "audit-export"
+          ],
+          "properties": {
+            "conformance-matrix": {
+              "$ref": "#/$defs/EvidenceReference"
+            },
+            "schema-artifacts": {
+              "$ref": "#/$defs/EvidenceReference"
+            },
+            "parser-tests": {
+              "$ref": "#/$defs/EvidenceReference"
+            },
+            "lifecycle-tests": {
+              "$ref": "#/$defs/EvidenceReference"
+            },
+            "reuse-tests": {
+              "$ref": "#/$defs/EvidenceReference"
+            },
+            "boundary-tests": {
+              "$ref": "#/$defs/EvidenceReference"
+            },
+            "security-tests": {
+              "$ref": "#/$defs/EvidenceReference"
+            },
+            "audit-export": {
+              "$ref": "#/$defs/EvidenceReference"
+            }
+          }
+        }
+      }
+    },
+    "EvidenceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence-id",
+        "location",
+        "status"
+      ],
+      "properties": {
+        "evidence-id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "location": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "present",
+            "missing",
+            "stale",
+            "inconsistent",
+            "waived"
+          ]
+        },
+        "hash": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "produced-at": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    }
+  }
+}

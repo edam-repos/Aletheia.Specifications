@@ -1,0 +1,3339 @@
+{
+  "plan_id": "PLAN-sagex-isl-local-first-implementation-0002",
+  "version": "0.2.0",
+  "created_at": "2026-06-18T00:00:00-04:00",
+  "spec_version": "SAGE-X v1r0 + ISL r2 bridge draft",
+  "description": "Granular local-first implementation task graph for moving from SAGE-X and ISL specifications to a minimal implementation foundation.",
+  "execution_modes": {
+    "autonomous": false,
+    "guided": true,
+    "hybrid": true
+  },
+  "governance": {
+    "approval_required": true,
+    "approval_roles": [
+      "architecture-owner",
+      "implementation-owner"
+    ]
+  },
+  "steps": [
+    {
+      "step_id": "WP-0001",
+      "name": "Create repository/module skeleton",
+      "type": "execution",
+      "description": "Create the initial local-first module layout and preserve logical service boundaries.",
+      "inputs": [
+        "workspace root",
+        "deployment service model"
+      ],
+      "outputs": [
+        "module layout"
+      ],
+      "required_rules": [
+        "layout contains expected module directories"
+      ],
+      "depends_on": [],
+      "capability_ref": "CAP-local-files",
+      "validation": {
+        "rules": [
+          "layout contains expected module directories"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0001",
+      "rollback_point": true,
+      "phase": "Phase 0"
+    },
+    {
+      "step_id": "WP-0002",
+      "name": "Implement platform schema loader",
+      "type": "execution",
+      "description": "Load and parse the consolidated SAGE-X platform schema.",
+      "inputs": [
+        "platform-schema.json"
+      ],
+      "outputs": [
+        "schema loader"
+      ],
+      "required_rules": [
+        "schema JSON parses"
+      ],
+      "depends_on": [
+        "WP-0001"
+      ],
+      "capability_ref": "CAP-schema-validation",
+      "validation": {
+        "rules": [
+          "schema JSON parses"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0002",
+      "rollback_point": true,
+      "phase": "Phase 0"
+    },
+    {
+      "step_id": "WP-0003",
+      "name": "Index schema definitions by artifact type",
+      "type": "transformation",
+      "description": "Create a definition index for named schema artifacts.",
+      "inputs": [
+        "schema loader",
+        "platform-schema.json"
+      ],
+      "outputs": [
+        "artifact definition index"
+      ],
+      "required_rules": [
+        "required definition names resolve"
+      ],
+      "depends_on": [
+        "WP-0002"
+      ],
+      "capability_ref": "CAP-schema-validation",
+      "validation": {
+        "rules": [
+          "required definition names resolve"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0003",
+      "rollback_point": true,
+      "phase": "Phase 0"
+    },
+    {
+      "step_id": "WP-0004",
+      "name": "Implement validator wrapper",
+      "type": "validation",
+      "description": "Validate arbitrary artifacts against a named schema definition.",
+      "inputs": [
+        "artifact definition index"
+      ],
+      "outputs": [
+        "validator wrapper"
+      ],
+      "required_rules": [
+        "valid fixture passes",
+        "invalid fixture fails"
+      ],
+      "depends_on": [
+        "WP-0003"
+      ],
+      "capability_ref": "CAP-schema-validation",
+      "validation": {
+        "rules": [
+          "valid fixture passes",
+          "invalid fixture fails"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0004",
+      "rollback_point": true,
+      "phase": "Phase 0"
+    },
+    {
+      "step_id": "WP-0005",
+      "name": "Create fixture scaffold",
+      "type": "execution",
+      "description": "Create fixture directories and naming convention.",
+      "inputs": [
+        "fixture naming rules"
+      ],
+      "outputs": [
+        "fixture scaffold"
+      ],
+      "required_rules": [
+        "fixture paths resolve"
+      ],
+      "depends_on": [
+        "WP-0004"
+      ],
+      "capability_ref": "CAP-local-files",
+      "validation": {
+        "rules": [
+          "fixture paths resolve"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0005",
+      "rollback_point": true,
+      "phase": "Phase 0"
+    },
+    {
+      "step_id": "WP-0006",
+      "name": "Create artifact manifest fixture",
+      "type": "execution",
+      "description": "Create the first artifact manifest fixture.",
+      "inputs": [
+        "artifactManifest schema"
+      ],
+      "outputs": [
+        "artifact manifest fixture"
+      ],
+      "required_rules": [
+        "fixture validates as artifactManifest"
+      ],
+      "depends_on": [
+        "WP-0005"
+      ],
+      "capability_ref": "CAP-schema-validation",
+      "validation": {
+        "rules": [
+          "fixture validates as artifactManifest"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0006",
+      "rollback_point": true,
+      "phase": "Phase 0"
+    },
+    {
+      "step_id": "WP-0007",
+      "name": "Create contract test harness",
+      "type": "validation",
+      "description": "Run schema validation tests for fixtures.",
+      "inputs": [
+        "validator wrapper",
+        "fixture scaffold"
+      ],
+      "outputs": [
+        "contract test harness"
+      ],
+      "required_rules": [
+        "all current fixtures run locally"
+      ],
+      "depends_on": [
+        "WP-0006"
+      ],
+      "capability_ref": "CAP-test-runner",
+      "validation": {
+        "rules": [
+          "all current fixtures run locally"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0007",
+      "rollback_point": true,
+      "phase": "Phase 0"
+    },
+    {
+      "step_id": "WP-0101",
+      "name": "Create ISL plugin registration fixture",
+      "type": "execution",
+      "description": "Define the first ISL plugin registration artifact.",
+      "inputs": [
+        "specificationPluginRegistration schema"
+      ],
+      "outputs": [
+        "ISL plugin registration fixture"
+      ],
+      "required_rules": [
+        "fixture validates as specificationPluginRegistration"
+      ],
+      "depends_on": [
+        "WP-0007"
+      ],
+      "capability_ref": "CAP-schema-validation",
+      "validation": {
+        "rules": [
+          "fixture validates as specificationPluginRegistration"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0101",
+      "rollback_point": true,
+      "phase": "Phase 1"
+    },
+    {
+      "step_id": "WP-0102",
+      "name": "Implement plugin registry",
+      "type": "execution",
+      "description": "Register and look up specification plugins.",
+      "inputs": [
+        "ISL plugin registration fixture"
+      ],
+      "outputs": [
+        "plugin registry module"
+      ],
+      "required_rules": [
+        "registration lookup test passes"
+      ],
+      "depends_on": [
+        "WP-0101"
+      ],
+      "capability_ref": "CAP-specification-processing",
+      "validation": {
+        "rules": [
+          "registration lookup test passes"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0102",
+      "rollback_point": true,
+      "phase": "Phase 1"
+    },
+    {
+      "step_id": "WP-0103",
+      "name": "Create valid specification ingestion fixture",
+      "type": "execution",
+      "description": "Create a minimal valid ISL-like ingestion request.",
+      "inputs": [
+        "specificationIngestionRequest schema"
+      ],
+      "outputs": [
+        "valid ingestion fixture"
+      ],
+      "required_rules": [
+        "fixture validates"
+      ],
+      "depends_on": [
+        "WP-0102"
+      ],
+      "capability_ref": "CAP-schema-validation",
+      "validation": {
+        "rules": [
+          "fixture validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0103",
+      "rollback_point": true,
+      "phase": "Phase 1"
+    },
+    {
+      "step_id": "WP-0104",
+      "name": "Create invalid specification ingestion fixture",
+      "type": "execution",
+      "description": "Create an invalid ingestion fixture for negative tests.",
+      "inputs": [
+        "specificationIngestionRequest schema"
+      ],
+      "outputs": [
+        "invalid ingestion fixture"
+      ],
+      "required_rules": [
+        "fixture fails validation as expected"
+      ],
+      "depends_on": [
+        "WP-0103"
+      ],
+      "capability_ref": "CAP-schema-validation",
+      "validation": {
+        "rules": [
+          "fixture fails validation as expected"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0104",
+      "rollback_point": true,
+      "phase": "Phase 1"
+    },
+    {
+      "step_id": "WP-0105",
+      "name": "Implement ingestion validator",
+      "type": "validation",
+      "description": "Validate ingestion requests and return structured errors.",
+      "inputs": [
+        "valid ingestion fixture",
+        "invalid ingestion fixture"
+      ],
+      "outputs": [
+        "ingestion validation module"
+      ],
+      "required_rules": [
+        "valid accepted",
+        "invalid rejected"
+      ],
+      "depends_on": [
+        "WP-0104"
+      ],
+      "capability_ref": "CAP-specification-processing",
+      "validation": {
+        "rules": [
+          "valid accepted",
+          "invalid rejected"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0105",
+      "rollback_point": true,
+      "phase": "Phase 1"
+    },
+    {
+      "step_id": "WP-0106",
+      "name": "Implement specification model builder",
+      "type": "transformation",
+      "description": "Build parsed specification model output from accepted input.",
+      "inputs": [
+        "valid ingestion fixture"
+      ],
+      "outputs": [
+        "specification model builder"
+      ],
+      "required_rules": [
+        "output validates as specificationModel"
+      ],
+      "depends_on": [
+        "WP-0105"
+      ],
+      "capability_ref": "CAP-specification-processing",
+      "validation": {
+        "rules": [
+          "output validates as specificationModel"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0106",
+      "rollback_point": true,
+      "phase": "Phase 1"
+    },
+    {
+      "step_id": "WP-0107",
+      "name": "Implement plugin validation result writer",
+      "type": "validation",
+      "description": "Record plugin validation result artifacts.",
+      "inputs": [
+        "pluginValidationResult schema"
+      ],
+      "outputs": [
+        "plugin validation result writer"
+      ],
+      "required_rules": [
+        "result validates as pluginValidationResult"
+      ],
+      "depends_on": [
+        "WP-0106"
+      ],
+      "capability_ref": "CAP-specification-processing",
+      "validation": {
+        "rules": [
+          "result validates as pluginValidationResult"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0107",
+      "rollback_point": true,
+      "phase": "Phase 1"
+    },
+    {
+      "step_id": "WP-0108",
+      "name": "Implement Knowledge Unit mapper",
+      "type": "transformation",
+      "description": "Map parsed specification elements into deterministic Knowledge Units.",
+      "inputs": [
+        "specification model",
+        "knowledgeUnit schema"
+      ],
+      "outputs": [
+        "Knowledge Unit compiler"
+      ],
+      "required_rules": [
+        "Knowledge Units validate",
+        "same input produces same output"
+      ],
+      "depends_on": [
+        "WP-0106"
+      ],
+      "capability_ref": "CAP-knowledge-compilation",
+      "validation": {
+        "rules": [
+          "Knowledge Units validate",
+          "same input produces same output"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0108",
+      "rollback_point": true,
+      "phase": "Phase 1"
+    },
+    {
+      "step_id": "WP-0109",
+      "name": "Implement local Knowledge Unit store",
+      "type": "execution",
+      "description": "Persist and retrieve Knowledge Units locally.",
+      "inputs": [
+        "Knowledge Units"
+      ],
+      "outputs": [
+        "file-backed Knowledge Unit store"
+      ],
+      "required_rules": [
+        "write/read round trip passes"
+      ],
+      "depends_on": [
+        "WP-0108"
+      ],
+      "capability_ref": "CAP-local-files",
+      "validation": {
+        "rules": [
+          "write/read round trip passes"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0109",
+      "rollback_point": true,
+      "phase": "Phase 1"
+    },
+    {
+      "step_id": "WP-0201",
+      "name": "Build execution step factory",
+      "type": "transformation",
+      "description": "Create execution steps from Knowledge Units.",
+      "inputs": [
+        "Knowledge Units",
+        "executionStep schema"
+      ],
+      "outputs": [
+        "execution step factory"
+      ],
+      "required_rules": [
+        "step validates as executionStep"
+      ],
+      "depends_on": [
+        "WP-0109"
+      ],
+      "capability_ref": "CAP-planning",
+      "validation": {
+        "rules": [
+          "step validates as executionStep"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0201",
+      "rollback_point": true,
+      "phase": "Phase 2"
+    },
+    {
+      "step_id": "WP-0202",
+      "name": "Build dependency graph builder",
+      "type": "transformation",
+      "description": "Create dependency edges between execution steps.",
+      "inputs": [
+        "execution steps",
+        "dependency schema"
+      ],
+      "outputs": [
+        "dependency graph builder"
+      ],
+      "required_rules": [
+        "graph references known steps"
+      ],
+      "depends_on": [
+        "WP-0201"
+      ],
+      "capability_ref": "CAP-planning",
+      "validation": {
+        "rules": [
+          "graph references known steps"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0202",
+      "rollback_point": true,
+      "phase": "Phase 2"
+    },
+    {
+      "step_id": "WP-0203",
+      "name": "Build checkpoint planner",
+      "type": "transformation",
+      "description": "Create plan checkpoints for validation boundaries.",
+      "inputs": [
+        "execution steps",
+        "planCheckpoint schema"
+      ],
+      "outputs": [
+        "checkpoint planner"
+      ],
+      "required_rules": [
+        "checkpoints validate"
+      ],
+      "depends_on": [
+        "WP-0201"
+      ],
+      "capability_ref": "CAP-planning",
+      "validation": {
+        "rules": [
+          "checkpoints validate"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0203",
+      "rollback_point": true,
+      "phase": "Phase 2"
+    },
+    {
+      "step_id": "WP-0204",
+      "name": "Build execution modes defaults",
+      "type": "transformation",
+      "description": "Produce local-first execution mode defaults.",
+      "inputs": [
+        "executionModes schema"
+      ],
+      "outputs": [
+        "execution modes factory"
+      ],
+      "required_rules": [
+        "execution modes validate"
+      ],
+      "depends_on": [
+        "WP-0201"
+      ],
+      "capability_ref": "CAP-planning",
+      "validation": {
+        "rules": [
+          "execution modes validate"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0204",
+      "rollback_point": true,
+      "phase": "Phase 2"
+    },
+    {
+      "step_id": "WP-0205",
+      "name": "Build execution plan assembler",
+      "type": "transformation",
+      "description": "Assemble steps, dependencies, checkpoints, and modes into a plan.",
+      "inputs": [
+        "steps",
+        "dependencies",
+        "checkpoints",
+        "execution modes"
+      ],
+      "outputs": [
+        "execution plan generator"
+      ],
+      "required_rules": [
+        "plan validates as executionPlan"
+      ],
+      "depends_on": [
+        "WP-0202",
+        "WP-0203",
+        "WP-0204"
+      ],
+      "capability_ref": "CAP-planning",
+      "validation": {
+        "rules": [
+          "plan validates as executionPlan"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0205",
+      "rollback_point": true,
+      "phase": "Phase 2"
+    },
+    {
+      "step_id": "WP-0206",
+      "name": "Add plan determinism test",
+      "type": "validation",
+      "description": "Prove same Knowledge Units produce same plan.",
+      "inputs": [
+        "execution plan generator"
+      ],
+      "outputs": [
+        "plan determinism test"
+      ],
+      "required_rules": [
+        "same input produces same plan"
+      ],
+      "depends_on": [
+        "WP-0205"
+      ],
+      "capability_ref": "CAP-test-runner",
+      "validation": {
+        "rules": [
+          "same input produces same plan"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0206",
+      "rollback_point": true,
+      "phase": "Phase 2"
+    },
+    {
+      "step_id": "WP-0207",
+      "name": "Add malformed plan rejection test",
+      "type": "validation",
+      "description": "Prove malformed plans are rejected.",
+      "inputs": [
+        "validator wrapper",
+        "malformed plan fixture"
+      ],
+      "outputs": [
+        "plan rejection test"
+      ],
+      "required_rules": [
+        "invalid plan fails"
+      ],
+      "depends_on": [
+        "WP-0205"
+      ],
+      "capability_ref": "CAP-test-runner",
+      "validation": {
+        "rules": [
+          "invalid plan fails"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0207",
+      "rollback_point": true,
+      "phase": "Phase 2"
+    },
+    {
+      "step_id": "WP-0301",
+      "name": "Create mock capability registration fixture",
+      "type": "execution",
+      "description": "Create one active mock capability registration.",
+      "inputs": [
+        "capabilityRegistration schema"
+      ],
+      "outputs": [
+        "mock capability registration fixture"
+      ],
+      "required_rules": [
+        "fixture validates"
+      ],
+      "depends_on": [
+        "WP-0007"
+      ],
+      "capability_ref": "CAP-schema-validation",
+      "validation": {
+        "rules": [
+          "fixture validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0301",
+      "rollback_point": true,
+      "phase": "Phase 3"
+    },
+    {
+      "step_id": "WP-0302",
+      "name": "Implement capability registry",
+      "type": "execution",
+      "description": "Register and retrieve active capabilities.",
+      "inputs": [
+        "capability registration fixture"
+      ],
+      "outputs": [
+        "capability registry module"
+      ],
+      "required_rules": [
+        "active capability lookup test passes"
+      ],
+      "depends_on": [
+        "WP-0301"
+      ],
+      "capability_ref": "CAP-capability-registry",
+      "validation": {
+        "rules": [
+          "active capability lookup test passes"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0302",
+      "rollback_point": true,
+      "phase": "Phase 3"
+    },
+    {
+      "step_id": "WP-0303",
+      "name": "Implement capability discovery query",
+      "type": "execution",
+      "description": "Query capabilities by id or type.",
+      "inputs": [
+        "capabilityDiscoveryQuery schema",
+        "capabilityDiscoveryResponse schema"
+      ],
+      "outputs": [
+        "capability discovery module"
+      ],
+      "required_rules": [
+        "response validates"
+      ],
+      "depends_on": [
+        "WP-0302"
+      ],
+      "capability_ref": "CAP-capability-registry",
+      "validation": {
+        "rules": [
+          "response validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0303",
+      "rollback_point": true,
+      "phase": "Phase 3"
+    },
+    {
+      "step_id": "WP-0304",
+      "name": "Implement invocation request builder",
+      "type": "execution",
+      "description": "Build capability invocation request artifacts.",
+      "inputs": [
+        "capabilityInvocationRequest schema"
+      ],
+      "outputs": [
+        "invocation request builder"
+      ],
+      "required_rules": [
+        "request validates"
+      ],
+      "depends_on": [
+        "WP-0302"
+      ],
+      "capability_ref": "CAP-capability-registry",
+      "validation": {
+        "rules": [
+          "request validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0304",
+      "rollback_point": true,
+      "phase": "Phase 3"
+    },
+    {
+      "step_id": "WP-0305",
+      "name": "Implement invocation response builder",
+      "type": "execution",
+      "description": "Build capability invocation response artifacts.",
+      "inputs": [
+        "capabilityInvocationResponse schema"
+      ],
+      "outputs": [
+        "invocation response builder"
+      ],
+      "required_rules": [
+        "response validates"
+      ],
+      "depends_on": [
+        "WP-0304"
+      ],
+      "capability_ref": "CAP-capability-registry",
+      "validation": {
+        "rules": [
+          "response validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0305",
+      "rollback_point": true,
+      "phase": "Phase 3"
+    },
+    {
+      "step_id": "WP-0306",
+      "name": "Implement capability error mapping",
+      "type": "execution",
+      "description": "Map capability failures to structured errors.",
+      "inputs": [
+        "capabilityError schema"
+      ],
+      "outputs": [
+        "capability error mapper"
+      ],
+      "required_rules": [
+        "error validates"
+      ],
+      "depends_on": [
+        "WP-0305"
+      ],
+      "capability_ref": "CAP-capability-registry",
+      "validation": {
+        "rules": [
+          "error validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0306",
+      "rollback_point": true,
+      "phase": "Phase 3"
+    },
+    {
+      "step_id": "WP-0307",
+      "name": "Add disabled capability rejection",
+      "type": "validation",
+      "description": "Reject invocation of disabled capabilities.",
+      "inputs": [
+        "capability registry"
+      ],
+      "outputs": [
+        "disabled capability guard"
+      ],
+      "required_rules": [
+        "disabled invocation fails"
+      ],
+      "depends_on": [
+        "WP-0302",
+        "WP-0304"
+      ],
+      "capability_ref": "CAP-test-runner",
+      "validation": {
+        "rules": [
+          "disabled invocation fails"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0307",
+      "rollback_point": true,
+      "phase": "Phase 3"
+    },
+    {
+      "step_id": "WP-0401",
+      "name": "Implement state enum",
+      "type": "execution",
+      "description": "Represent allowed Sage-X execution states.",
+      "inputs": [
+        "executionStateName schema"
+      ],
+      "outputs": [
+        "state constants"
+      ],
+      "required_rules": [
+        "states match schema enum"
+      ],
+      "depends_on": [
+        "WP-0007"
+      ],
+      "capability_ref": "CAP-execution-core",
+      "validation": {
+        "rules": [
+          "states match schema enum"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0401",
+      "rollback_point": true,
+      "phase": "Phase 4"
+    },
+    {
+      "step_id": "WP-0402",
+      "name": "Implement transition table",
+      "type": "execution",
+      "description": "Define valid state transitions.",
+      "inputs": [
+        "state constants",
+        "state machine specification"
+      ],
+      "outputs": [
+        "transition table"
+      ],
+      "required_rules": [
+        "valid transitions listed"
+      ],
+      "depends_on": [
+        "WP-0401"
+      ],
+      "capability_ref": "CAP-execution-core",
+      "validation": {
+        "rules": [
+          "valid transitions listed"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0402",
+      "rollback_point": true,
+      "phase": "Phase 4"
+    },
+    {
+      "step_id": "WP-0403",
+      "name": "Implement transition validator",
+      "type": "validation",
+      "description": "Validate requested state transitions.",
+      "inputs": [
+        "transition table"
+      ],
+      "outputs": [
+        "transition validator"
+      ],
+      "required_rules": [
+        "invalid transition rejected"
+      ],
+      "depends_on": [
+        "WP-0402"
+      ],
+      "capability_ref": "CAP-execution-core",
+      "validation": {
+        "rules": [
+          "invalid transition rejected"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0403",
+      "rollback_point": true,
+      "phase": "Phase 4"
+    },
+    {
+      "step_id": "WP-0404",
+      "name": "Implement execution state record builder",
+      "type": "execution",
+      "description": "Build execution state records.",
+      "inputs": [
+        "executionState schema"
+      ],
+      "outputs": [
+        "execution state builder"
+      ],
+      "required_rules": [
+        "state validates"
+      ],
+      "depends_on": [
+        "WP-0403",
+        "WP-0205"
+      ],
+      "capability_ref": "CAP-execution-core",
+      "validation": {
+        "rules": [
+          "state validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0404",
+      "rollback_point": true,
+      "phase": "Phase 4"
+    },
+    {
+      "step_id": "WP-0405",
+      "name": "Implement checkpoint writer",
+      "type": "execution",
+      "description": "Write checkpoint records.",
+      "inputs": [
+        "checkpoint schema"
+      ],
+      "outputs": [
+        "checkpoint writer"
+      ],
+      "required_rules": [
+        "checkpoint validates"
+      ],
+      "depends_on": [
+        "WP-0404"
+      ],
+      "capability_ref": "CAP-execution-core",
+      "validation": {
+        "rules": [
+          "checkpoint validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0405",
+      "rollback_point": true,
+      "phase": "Phase 4"
+    },
+    {
+      "step_id": "WP-0406",
+      "name": "Implement trace event writer",
+      "type": "execution",
+      "description": "Write trace event records for execution actions.",
+      "inputs": [
+        "traceEvent schema"
+      ],
+      "outputs": [
+        "trace event writer"
+      ],
+      "required_rules": [
+        "trace event validates"
+      ],
+      "depends_on": [
+        "WP-0404"
+      ],
+      "capability_ref": "CAP-trace",
+      "validation": {
+        "rules": [
+          "trace event validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0406",
+      "rollback_point": true,
+      "phase": "Phase 4"
+    },
+    {
+      "step_id": "WP-0407",
+      "name": "Implement log entry writer",
+      "type": "execution",
+      "description": "Write observability log records.",
+      "inputs": [
+        "logEntry schema"
+      ],
+      "outputs": [
+        "log entry writer"
+      ],
+      "required_rules": [
+        "log validates"
+      ],
+      "depends_on": [
+        "WP-0406"
+      ],
+      "capability_ref": "CAP-trace",
+      "validation": {
+        "rules": [
+          "log validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0407",
+      "rollback_point": true,
+      "phase": "Phase 4"
+    },
+    {
+      "step_id": "WP-0408",
+      "name": "Implement explanation record writer",
+      "type": "execution",
+      "description": "Write structured explanation records.",
+      "inputs": [
+        "explanationRecord schema"
+      ],
+      "outputs": [
+        "explanation writer"
+      ],
+      "required_rules": [
+        "explanation validates"
+      ],
+      "depends_on": [
+        "WP-0406"
+      ],
+      "capability_ref": "CAP-trace",
+      "validation": {
+        "rules": [
+          "explanation validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0408",
+      "rollback_point": true,
+      "phase": "Phase 4"
+    },
+    {
+      "step_id": "WP-0409",
+      "name": "Add trace reconstruction test",
+      "type": "validation",
+      "description": "Reconstruct execution from trace events.",
+      "inputs": [
+        "trace event sequence"
+      ],
+      "outputs": [
+        "trace reconstruction test"
+      ],
+      "required_rules": [
+        "execution can be reconstructed"
+      ],
+      "depends_on": [
+        "WP-0406"
+      ],
+      "capability_ref": "CAP-test-runner",
+      "validation": {
+        "rules": [
+          "execution can be reconstructed"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0409",
+      "rollback_point": true,
+      "phase": "Phase 4"
+    },
+    {
+      "step_id": "WP-0501",
+      "name": "Implement validation rule evaluator",
+      "type": "validation",
+      "description": "Evaluate simple validation rules.",
+      "inputs": [
+        "validationRules schema"
+      ],
+      "outputs": [
+        "validation evaluator"
+      ],
+      "required_rules": [
+        "pass/fail rule test"
+      ],
+      "depends_on": [
+        "WP-0305",
+        "WP-0406"
+      ],
+      "capability_ref": "CAP-validation-recovery",
+      "validation": {
+        "rules": [
+          "pass/fail rule test"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0501",
+      "rollback_point": true,
+      "phase": "Phase 5"
+    },
+    {
+      "step_id": "WP-0502",
+      "name": "Implement validation result writer",
+      "type": "validation",
+      "description": "Write validation result records.",
+      "inputs": [
+        "validationResult schema"
+      ],
+      "outputs": [
+        "validation result writer"
+      ],
+      "required_rules": [
+        "result validates"
+      ],
+      "depends_on": [
+        "WP-0501"
+      ],
+      "capability_ref": "CAP-validation-recovery",
+      "validation": {
+        "rules": [
+          "result validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0502",
+      "rollback_point": true,
+      "phase": "Phase 5"
+    },
+    {
+      "step_id": "WP-0503",
+      "name": "Implement validation violation writer",
+      "type": "validation",
+      "description": "Write validation violation records.",
+      "inputs": [
+        "validationViolation schema"
+      ],
+      "outputs": [
+        "validation violation writer"
+      ],
+      "required_rules": [
+        "violation validates"
+      ],
+      "depends_on": [
+        "WP-0501"
+      ],
+      "capability_ref": "CAP-validation-recovery",
+      "validation": {
+        "rules": [
+          "violation validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0503",
+      "rollback_point": true,
+      "phase": "Phase 5"
+    },
+    {
+      "step_id": "WP-0504",
+      "name": "Implement failure classifier",
+      "type": "validation",
+      "description": "Classify failures by Sage-X taxonomy.",
+      "inputs": [
+        "failure taxonomy"
+      ],
+      "outputs": [
+        "failure classifier"
+      ],
+      "required_rules": [
+        "taxonomy mapping test passes"
+      ],
+      "depends_on": [
+        "WP-0502",
+        "WP-0503"
+      ],
+      "capability_ref": "CAP-validation-recovery",
+      "validation": {
+        "rules": [
+          "taxonomy mapping test passes"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0504",
+      "rollback_point": true,
+      "phase": "Phase 5"
+    },
+    {
+      "step_id": "WP-0505",
+      "name": "Implement failure record writer",
+      "type": "validation",
+      "description": "Write failure records.",
+      "inputs": [
+        "failureRecord schema"
+      ],
+      "outputs": [
+        "failure record writer"
+      ],
+      "required_rules": [
+        "failure record validates"
+      ],
+      "depends_on": [
+        "WP-0504"
+      ],
+      "capability_ref": "CAP-validation-recovery",
+      "validation": {
+        "rules": [
+          "failure record validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0505",
+      "rollback_point": true,
+      "phase": "Phase 5"
+    },
+    {
+      "step_id": "WP-0506",
+      "name": "Implement recovery point selector",
+      "type": "execution",
+      "description": "Select nearest valid checkpoint.",
+      "inputs": [
+        "checkpoint records"
+      ],
+      "outputs": [
+        "recovery selector"
+      ],
+      "required_rules": [
+        "nearest valid checkpoint selected"
+      ],
+      "depends_on": [
+        "WP-0405",
+        "WP-0505"
+      ],
+      "capability_ref": "CAP-validation-recovery",
+      "validation": {
+        "rules": [
+          "nearest valid checkpoint selected"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0506",
+      "rollback_point": true,
+      "phase": "Phase 5"
+    },
+    {
+      "step_id": "WP-0507",
+      "name": "Implement rollback and resume path",
+      "type": "execution",
+      "description": "Rollback and resume from checkpoint only.",
+      "inputs": [
+        "execution state",
+        "checkpoint"
+      ],
+      "outputs": [
+        "rollback-resume module"
+      ],
+      "required_rules": [
+        "resumes from checkpoint only"
+      ],
+      "depends_on": [
+        "WP-0506",
+        "WP-0403"
+      ],
+      "capability_ref": "CAP-validation-recovery",
+      "validation": {
+        "rules": [
+          "resumes from checkpoint only"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0507",
+      "rollback_point": true,
+      "phase": "Phase 5"
+    },
+    {
+      "step_id": "WP-0601",
+      "name": "Create governance policy fixture",
+      "type": "execution",
+      "description": "Create first governance policy fixture.",
+      "inputs": [
+        "governancePolicy schema"
+      ],
+      "outputs": [
+        "policy fixture"
+      ],
+      "required_rules": [
+        "policy validates"
+      ],
+      "depends_on": [
+        "WP-0007"
+      ],
+      "capability_ref": "CAP-governance-security",
+      "validation": {
+        "rules": [
+          "policy validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0601",
+      "rollback_point": true,
+      "phase": "Phase 6"
+    },
+    {
+      "step_id": "WP-0602",
+      "name": "Implement policy registry",
+      "type": "execution",
+      "description": "Register and retrieve policies.",
+      "inputs": [
+        "policy fixture"
+      ],
+      "outputs": [
+        "policy registry"
+      ],
+      "required_rules": [
+        "policy lookup test passes"
+      ],
+      "depends_on": [
+        "WP-0601"
+      ],
+      "capability_ref": "CAP-governance-security",
+      "validation": {
+        "rules": [
+          "policy lookup test passes"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0602",
+      "rollback_point": true,
+      "phase": "Phase 6"
+    },
+    {
+      "step_id": "WP-0603",
+      "name": "Implement policy evaluator",
+      "type": "decision",
+      "description": "Evaluate allow/block policy outcomes.",
+      "inputs": [
+        "policy registry"
+      ],
+      "outputs": [
+        "policy evaluator"
+      ],
+      "required_rules": [
+        "allow/block test passes"
+      ],
+      "depends_on": [
+        "WP-0602"
+      ],
+      "capability_ref": "CAP-governance-security",
+      "validation": {
+        "rules": [
+          "allow/block test passes"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0603",
+      "rollback_point": true,
+      "phase": "Phase 6"
+    },
+    {
+      "step_id": "WP-0604",
+      "name": "Implement approval record writer",
+      "type": "decision",
+      "description": "Write approval records.",
+      "inputs": [
+        "approvalRecord schema"
+      ],
+      "outputs": [
+        "approval writer"
+      ],
+      "required_rules": [
+        "approval validates"
+      ],
+      "depends_on": [
+        "WP-0603"
+      ],
+      "capability_ref": "CAP-governance-security",
+      "validation": {
+        "rules": [
+          "approval validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0604",
+      "rollback_point": true,
+      "phase": "Phase 6",
+      "execution_mode": "manual",
+      "autonomy_policy": {
+        "policy_id": "AUTO-POLICY-WP-0604-approval-record-writer",
+        "scope": "step",
+        "scope_ref": "WP-0604",
+        "mode": "manual",
+        "human_input_required": true,
+        "approval_required": true,
+        "approval_roles": [
+          "governance-owner"
+        ],
+        "pause_before": true,
+        "pause_after": true,
+        "allow_step_through": true,
+        "allow_autonomous_continuation": false,
+        "override_allowed": false,
+        "trace_required": true,
+        "validation_required": true
+      }
+    },
+    {
+      "step_id": "WP-0605",
+      "name": "Implement override record writer",
+      "type": "decision",
+      "description": "Write override records.",
+      "inputs": [
+        "overrideRecord schema"
+      ],
+      "outputs": [
+        "override writer"
+      ],
+      "required_rules": [
+        "override validates"
+      ],
+      "depends_on": [
+        "WP-0603"
+      ],
+      "capability_ref": "CAP-governance-security",
+      "validation": {
+        "rules": [
+          "override validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0605",
+      "rollback_point": true,
+      "phase": "Phase 6"
+    },
+    {
+      "step_id": "WP-0606",
+      "name": "Implement governance decision writer",
+      "type": "decision",
+      "description": "Write governance decision records.",
+      "inputs": [
+        "governanceDecision schema"
+      ],
+      "outputs": [
+        "governance decision writer"
+      ],
+      "required_rules": [
+        "decision validates"
+      ],
+      "depends_on": [
+        "WP-0604",
+        "WP-0605"
+      ],
+      "capability_ref": "CAP-governance-security",
+      "validation": {
+        "rules": [
+          "decision validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0606",
+      "rollback_point": true,
+      "phase": "Phase 6"
+    },
+    {
+      "step_id": "WP-0607",
+      "name": "Implement security context builder",
+      "type": "execution",
+      "description": "Build security context records.",
+      "inputs": [
+        "securityContext schema"
+      ],
+      "outputs": [
+        "security context builder"
+      ],
+      "required_rules": [
+        "security context validates"
+      ],
+      "depends_on": [
+        "WP-0603"
+      ],
+      "capability_ref": "CAP-governance-security",
+      "validation": {
+        "rules": [
+          "security context validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0607",
+      "rollback_point": true,
+      "phase": "Phase 6"
+    },
+    {
+      "step_id": "WP-0608",
+      "name": "Implement access decision writer",
+      "type": "decision",
+      "description": "Write access decision records.",
+      "inputs": [
+        "accessDecision schema"
+      ],
+      "outputs": [
+        "access decision writer"
+      ],
+      "required_rules": [
+        "access decision validates"
+      ],
+      "depends_on": [
+        "WP-0607"
+      ],
+      "capability_ref": "CAP-governance-security",
+      "validation": {
+        "rules": [
+          "access decision validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0608",
+      "rollback_point": true,
+      "phase": "Phase 6"
+    },
+    {
+      "step_id": "WP-0701",
+      "name": "Implement control request parser",
+      "type": "execution",
+      "description": "Parse and validate control requests.",
+      "inputs": [
+        "controlRequest schema"
+      ],
+      "outputs": [
+        "control request parser"
+      ],
+      "required_rules": [
+        "request validates"
+      ],
+      "depends_on": [
+        "WP-0404",
+        "WP-0608"
+      ],
+      "capability_ref": "CAP-control-surface",
+      "validation": {
+        "rules": [
+          "request validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0701",
+      "rollback_point": true,
+      "phase": "Phase 7"
+    },
+    {
+      "step_id": "WP-0702",
+      "name": "Implement control response builder",
+      "type": "execution",
+      "description": "Build control response records.",
+      "inputs": [
+        "controlResponse schema"
+      ],
+      "outputs": [
+        "control response builder"
+      ],
+      "required_rules": [
+        "response validates"
+      ],
+      "depends_on": [
+        "WP-0701"
+      ],
+      "capability_ref": "CAP-control-surface",
+      "validation": {
+        "rules": [
+          "response validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0702",
+      "rollback_point": true,
+      "phase": "Phase 7"
+    },
+    {
+      "step_id": "WP-0703",
+      "name": "Implement execution control operations",
+      "type": "execution",
+      "description": "Handle start, pause, resume, and stop.",
+      "inputs": [
+        "execution state manager"
+      ],
+      "outputs": [
+        "execution control handlers"
+      ],
+      "required_rules": [
+        "operation tests pass"
+      ],
+      "depends_on": [
+        "WP-0702",
+        "WP-0404"
+      ],
+      "capability_ref": "CAP-control-surface",
+      "validation": {
+        "rules": [
+          "operation tests pass"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0703",
+      "rollback_point": true,
+      "phase": "Phase 7"
+    },
+    {
+      "step_id": "WP-0704",
+      "name": "Implement guided step execution operation",
+      "type": "execution",
+      "description": "Execute one guided step through the control surface.",
+      "inputs": [
+        "execution step",
+        "capability registry"
+      ],
+      "outputs": [
+        "guided step handler"
+      ],
+      "required_rules": [
+        "one step execution test passes"
+      ],
+      "depends_on": [
+        "WP-0703",
+        "WP-0305"
+      ],
+      "capability_ref": "CAP-control-surface",
+      "validation": {
+        "rules": [
+          "one step execution test passes"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0704",
+      "rollback_point": true,
+      "phase": "Phase 7"
+    },
+    {
+      "step_id": "WP-0705",
+      "name": "Implement planning control operations",
+      "type": "execution",
+      "description": "Expose generate, retrieve, validate, and modify plan operations.",
+      "inputs": [
+        "plan generator"
+      ],
+      "outputs": [
+        "planning control handlers"
+      ],
+      "required_rules": [
+        "plan operation tests pass"
+      ],
+      "depends_on": [
+        "WP-0205",
+        "WP-0702"
+      ],
+      "capability_ref": "CAP-control-surface",
+      "validation": {
+        "rules": [
+          "plan operation tests pass"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0705",
+      "rollback_point": true,
+      "phase": "Phase 7"
+    },
+    {
+      "step_id": "WP-0706",
+      "name": "Implement governance control operations",
+      "type": "decision",
+      "description": "Expose approval and override operations.",
+      "inputs": [
+        "governance decision writer"
+      ],
+      "outputs": [
+        "governance control handlers"
+      ],
+      "required_rules": [
+        "approval flow test passes"
+      ],
+      "depends_on": [
+        "WP-0606",
+        "WP-0702"
+      ],
+      "capability_ref": "CAP-control-surface",
+      "validation": {
+        "rules": [
+          "approval flow test passes"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0706",
+      "rollback_point": true,
+      "phase": "Phase 7"
+    },
+    {
+      "step_id": "WP-0707",
+      "name": "Implement observability query operations",
+      "type": "execution",
+      "description": "Expose trace, state, and failure query operations.",
+      "inputs": [
+        "trace/state/failure records"
+      ],
+      "outputs": [
+        "observability query handlers"
+      ],
+      "required_rules": [
+        "queries return schema-backed records"
+      ],
+      "depends_on": [
+        "WP-0409",
+        "WP-0505",
+        "WP-0702"
+      ],
+      "capability_ref": "CAP-control-surface",
+      "validation": {
+        "rules": [
+          "queries return schema-backed records"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0707",
+      "rollback_point": true,
+      "phase": "Phase 7"
+    },
+    {
+      "step_id": "WP-0708",
+      "name": "Implement recovery control operations",
+      "type": "execution",
+      "description": "Expose rollback, resume, and branch operations.",
+      "inputs": [
+        "recovery module"
+      ],
+      "outputs": [
+        "recovery control handlers"
+      ],
+      "required_rules": [
+        "recovery operation test passes"
+      ],
+      "depends_on": [
+        "WP-0507",
+        "WP-0702"
+      ],
+      "capability_ref": "CAP-control-surface",
+      "validation": {
+        "rules": [
+          "recovery operation test passes"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0708",
+      "rollback_point": true,
+      "phase": "Phase 7"
+    },
+    {
+      "step_id": "WP-0801",
+      "name": "Add ISL origin metadata to Knowledge Units",
+      "type": "transformation",
+      "description": "Preserve ISL origin references in Knowledge Units.",
+      "inputs": [
+        "Knowledge Units"
+      ],
+      "outputs": [
+        "origin metadata support"
+      ],
+      "required_rules": [
+        "metadata preserved test passes"
+      ],
+      "depends_on": [
+        "WP-0108"
+      ],
+      "capability_ref": "CAP-bridge-prep",
+      "validation": {
+        "rules": [
+          "metadata preserved test passes"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0801",
+      "rollback_point": true,
+      "phase": "Phase 8"
+    },
+    {
+      "step_id": "WP-0802",
+      "name": "Link plan steps to Knowledge Units",
+      "type": "transformation",
+      "description": "Add traceable references from execution steps to Knowledge Units.",
+      "inputs": [
+        "execution plan",
+        "Knowledge Units"
+      ],
+      "outputs": [
+        "step-to-KU link support"
+      ],
+      "required_rules": [
+        "references resolve"
+      ],
+      "depends_on": [
+        "WP-0205",
+        "WP-0801"
+      ],
+      "capability_ref": "CAP-bridge-prep",
+      "validation": {
+        "rules": [
+          "references resolve"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0802",
+      "rollback_point": true,
+      "phase": "Phase 8"
+    },
+    {
+      "step_id": "WP-0803",
+      "name": "Link outputs to plan steps",
+      "type": "transformation",
+      "description": "Attach output references to producing steps.",
+      "inputs": [
+        "execution outputs",
+        "execution steps"
+      ],
+      "outputs": [
+        "output trace support"
+      ],
+      "required_rules": [
+        "output-to-step references resolve"
+      ],
+      "depends_on": [
+        "WP-0704",
+        "WP-0802"
+      ],
+      "capability_ref": "CAP-bridge-prep",
+      "validation": {
+        "rules": [
+          "output-to-step references resolve"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0803",
+      "rollback_point": true,
+      "phase": "Phase 8"
+    },
+    {
+      "step_id": "WP-0804",
+      "name": "Implement artifact manifest writer",
+      "type": "aggregation",
+      "description": "Write artifact manifest records.",
+      "inputs": [
+        "artifactManifest schema"
+      ],
+      "outputs": [
+        "artifact manifest writer"
+      ],
+      "required_rules": [
+        "manifest validates"
+      ],
+      "depends_on": [
+        "WP-0803"
+      ],
+      "capability_ref": "CAP-bridge-prep",
+      "validation": {
+        "rules": [
+          "manifest validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0804",
+      "rollback_point": true,
+      "phase": "Phase 8"
+    },
+    {
+      "step_id": "WP-0805",
+      "name": "Add bridge-ready metadata handling",
+      "type": "transformation",
+      "description": "Round-trip placeholder bridge metadata without runtime restructuring.",
+      "inputs": [
+        "artifact manifest",
+        "Knowledge Unit metadata"
+      ],
+      "outputs": [
+        "bridge-ready metadata handling"
+      ],
+      "required_rules": [
+        "field round trip test passes"
+      ],
+      "depends_on": [
+        "WP-0804"
+      ],
+      "capability_ref": "CAP-bridge-prep",
+      "validation": {
+        "rules": [
+          "field round trip test passes"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0805",
+      "rollback_point": true,
+      "phase": "Phase 8"
+    },
+    {
+      "step_id": "WP-0901",
+      "name": "Implement conformance test result writer",
+      "type": "aggregation",
+      "description": "Write conformance test result records.",
+      "inputs": [
+        "conformanceTestResult schema"
+      ],
+      "outputs": [
+        "test result writer"
+      ],
+      "required_rules": [
+        "test result validates"
+      ],
+      "depends_on": [
+        "WP-0007"
+      ],
+      "capability_ref": "CAP-conformance-reporting",
+      "validation": {
+        "rules": [
+          "test result validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0901",
+      "rollback_point": false,
+      "phase": "Phase 9"
+    },
+    {
+      "step_id": "WP-0902",
+      "name": "Implement conformance report writer",
+      "type": "aggregation",
+      "description": "Write conformance report records.",
+      "inputs": [
+        "conformanceReport schema"
+      ],
+      "outputs": [
+        "conformance report writer"
+      ],
+      "required_rules": [
+        "report validates"
+      ],
+      "depends_on": [
+        "WP-0901"
+      ],
+      "capability_ref": "CAP-conformance-reporting",
+      "validation": {
+        "rules": [
+          "report validates"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0902",
+      "rollback_point": false,
+      "phase": "Phase 9"
+    },
+    {
+      "step_id": "WP-0903",
+      "name": "Add Level 1 conformance test group",
+      "type": "validation",
+      "description": "Add deterministic Level 1 conformance tests.",
+      "inputs": [
+        "runtime foundation"
+      ],
+      "outputs": [
+        "Level 1 conformance tests"
+      ],
+      "required_rules": [
+        "tests pass/fail deterministically"
+      ],
+      "depends_on": [
+        "WP-0902",
+        "WP-0708"
+      ],
+      "capability_ref": "CAP-conformance-reporting",
+      "validation": {
+        "rules": [
+          "tests pass/fail deterministically"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0903",
+      "rollback_point": false,
+      "phase": "Phase 9"
+    },
+    {
+      "step_id": "WP-0904",
+      "name": "Add known deviations section",
+      "type": "aggregation",
+      "description": "Record gaps and deviations explicitly.",
+      "inputs": [
+        "test outcomes"
+      ],
+      "outputs": [
+        "known deviations report"
+      ],
+      "required_rules": [
+        "deviations are explicit"
+      ],
+      "depends_on": [
+        "WP-0903"
+      ],
+      "capability_ref": "CAP-conformance-reporting",
+      "validation": {
+        "rules": [
+          "deviations are explicit"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0904",
+      "rollback_point": false,
+      "phase": "Phase 9"
+    },
+    {
+      "step_id": "WP-0905",
+      "name": "Produce first implementation evidence bundle",
+      "type": "aggregation",
+      "description": "Collect manifest, report, traces, and validations into an evidence bundle.",
+      "inputs": [
+        "manifest",
+        "report",
+        "trace refs",
+        "validation refs"
+      ],
+      "outputs": [
+        "implementation evidence bundle"
+      ],
+      "required_rules": [
+        "manifest, report, and traces resolve"
+      ],
+      "depends_on": [
+        "WP-0805",
+        "WP-0904"
+      ],
+      "capability_ref": "CAP-conformance-reporting",
+      "validation": {
+        "rules": [
+          "manifest, report, and traces resolve"
+        ],
+        "strict": true
+      },
+      "checkpoint_ref": "CHK-0905",
+      "rollback_point": false,
+      "phase": "Phase 9"
+    }
+  ],
+  "dependency_graph": [
+    {
+      "from": "WP-0001",
+      "to": "WP-0002"
+    },
+    {
+      "from": "WP-0002",
+      "to": "WP-0003"
+    },
+    {
+      "from": "WP-0003",
+      "to": "WP-0004"
+    },
+    {
+      "from": "WP-0004",
+      "to": "WP-0005"
+    },
+    {
+      "from": "WP-0005",
+      "to": "WP-0006"
+    },
+    {
+      "from": "WP-0006",
+      "to": "WP-0007"
+    },
+    {
+      "from": "WP-0007",
+      "to": "WP-0101"
+    },
+    {
+      "from": "WP-0101",
+      "to": "WP-0102"
+    },
+    {
+      "from": "WP-0102",
+      "to": "WP-0103"
+    },
+    {
+      "from": "WP-0103",
+      "to": "WP-0104"
+    },
+    {
+      "from": "WP-0104",
+      "to": "WP-0105"
+    },
+    {
+      "from": "WP-0105",
+      "to": "WP-0106"
+    },
+    {
+      "from": "WP-0106",
+      "to": "WP-0107"
+    },
+    {
+      "from": "WP-0106",
+      "to": "WP-0108"
+    },
+    {
+      "from": "WP-0108",
+      "to": "WP-0109"
+    },
+    {
+      "from": "WP-0109",
+      "to": "WP-0201"
+    },
+    {
+      "from": "WP-0201",
+      "to": "WP-0202"
+    },
+    {
+      "from": "WP-0201",
+      "to": "WP-0203"
+    },
+    {
+      "from": "WP-0201",
+      "to": "WP-0204"
+    },
+    {
+      "from": "WP-0202",
+      "to": "WP-0205"
+    },
+    {
+      "from": "WP-0203",
+      "to": "WP-0205"
+    },
+    {
+      "from": "WP-0204",
+      "to": "WP-0205"
+    },
+    {
+      "from": "WP-0205",
+      "to": "WP-0206"
+    },
+    {
+      "from": "WP-0205",
+      "to": "WP-0207"
+    },
+    {
+      "from": "WP-0007",
+      "to": "WP-0301"
+    },
+    {
+      "from": "WP-0301",
+      "to": "WP-0302"
+    },
+    {
+      "from": "WP-0302",
+      "to": "WP-0303"
+    },
+    {
+      "from": "WP-0302",
+      "to": "WP-0304"
+    },
+    {
+      "from": "WP-0304",
+      "to": "WP-0305"
+    },
+    {
+      "from": "WP-0305",
+      "to": "WP-0306"
+    },
+    {
+      "from": "WP-0302",
+      "to": "WP-0307"
+    },
+    {
+      "from": "WP-0304",
+      "to": "WP-0307"
+    },
+    {
+      "from": "WP-0007",
+      "to": "WP-0401"
+    },
+    {
+      "from": "WP-0401",
+      "to": "WP-0402"
+    },
+    {
+      "from": "WP-0402",
+      "to": "WP-0403"
+    },
+    {
+      "from": "WP-0403",
+      "to": "WP-0404"
+    },
+    {
+      "from": "WP-0205",
+      "to": "WP-0404"
+    },
+    {
+      "from": "WP-0404",
+      "to": "WP-0405"
+    },
+    {
+      "from": "WP-0404",
+      "to": "WP-0406"
+    },
+    {
+      "from": "WP-0406",
+      "to": "WP-0407"
+    },
+    {
+      "from": "WP-0406",
+      "to": "WP-0408"
+    },
+    {
+      "from": "WP-0406",
+      "to": "WP-0409"
+    },
+    {
+      "from": "WP-0305",
+      "to": "WP-0501"
+    },
+    {
+      "from": "WP-0406",
+      "to": "WP-0501"
+    },
+    {
+      "from": "WP-0501",
+      "to": "WP-0502"
+    },
+    {
+      "from": "WP-0501",
+      "to": "WP-0503"
+    },
+    {
+      "from": "WP-0502",
+      "to": "WP-0504"
+    },
+    {
+      "from": "WP-0503",
+      "to": "WP-0504"
+    },
+    {
+      "from": "WP-0504",
+      "to": "WP-0505"
+    },
+    {
+      "from": "WP-0405",
+      "to": "WP-0506"
+    },
+    {
+      "from": "WP-0505",
+      "to": "WP-0506"
+    },
+    {
+      "from": "WP-0506",
+      "to": "WP-0507"
+    },
+    {
+      "from": "WP-0403",
+      "to": "WP-0507"
+    },
+    {
+      "from": "WP-0007",
+      "to": "WP-0601"
+    },
+    {
+      "from": "WP-0601",
+      "to": "WP-0602"
+    },
+    {
+      "from": "WP-0602",
+      "to": "WP-0603"
+    },
+    {
+      "from": "WP-0603",
+      "to": "WP-0604"
+    },
+    {
+      "from": "WP-0603",
+      "to": "WP-0605"
+    },
+    {
+      "from": "WP-0604",
+      "to": "WP-0606"
+    },
+    {
+      "from": "WP-0605",
+      "to": "WP-0606"
+    },
+    {
+      "from": "WP-0603",
+      "to": "WP-0607"
+    },
+    {
+      "from": "WP-0607",
+      "to": "WP-0608"
+    },
+    {
+      "from": "WP-0404",
+      "to": "WP-0701"
+    },
+    {
+      "from": "WP-0608",
+      "to": "WP-0701"
+    },
+    {
+      "from": "WP-0701",
+      "to": "WP-0702"
+    },
+    {
+      "from": "WP-0702",
+      "to": "WP-0703"
+    },
+    {
+      "from": "WP-0404",
+      "to": "WP-0703"
+    },
+    {
+      "from": "WP-0703",
+      "to": "WP-0704"
+    },
+    {
+      "from": "WP-0305",
+      "to": "WP-0704"
+    },
+    {
+      "from": "WP-0205",
+      "to": "WP-0705"
+    },
+    {
+      "from": "WP-0702",
+      "to": "WP-0705"
+    },
+    {
+      "from": "WP-0606",
+      "to": "WP-0706"
+    },
+    {
+      "from": "WP-0702",
+      "to": "WP-0706"
+    },
+    {
+      "from": "WP-0409",
+      "to": "WP-0707"
+    },
+    {
+      "from": "WP-0505",
+      "to": "WP-0707"
+    },
+    {
+      "from": "WP-0702",
+      "to": "WP-0707"
+    },
+    {
+      "from": "WP-0507",
+      "to": "WP-0708"
+    },
+    {
+      "from": "WP-0702",
+      "to": "WP-0708"
+    },
+    {
+      "from": "WP-0108",
+      "to": "WP-0801"
+    },
+    {
+      "from": "WP-0205",
+      "to": "WP-0802"
+    },
+    {
+      "from": "WP-0801",
+      "to": "WP-0802"
+    },
+    {
+      "from": "WP-0704",
+      "to": "WP-0803"
+    },
+    {
+      "from": "WP-0802",
+      "to": "WP-0803"
+    },
+    {
+      "from": "WP-0803",
+      "to": "WP-0804"
+    },
+    {
+      "from": "WP-0804",
+      "to": "WP-0805"
+    },
+    {
+      "from": "WP-0007",
+      "to": "WP-0901"
+    },
+    {
+      "from": "WP-0901",
+      "to": "WP-0902"
+    },
+    {
+      "from": "WP-0902",
+      "to": "WP-0903"
+    },
+    {
+      "from": "WP-0708",
+      "to": "WP-0903"
+    },
+    {
+      "from": "WP-0903",
+      "to": "WP-0904"
+    },
+    {
+      "from": "WP-0805",
+      "to": "WP-0905"
+    },
+    {
+      "from": "WP-0904",
+      "to": "WP-0905"
+    }
+  ],
+  "checkpoints": [
+    {
+      "checkpoint_id": "CHK-0001",
+      "step_id": "WP-0001",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0002",
+      "step_id": "WP-0002",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0003",
+      "step_id": "WP-0003",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0004",
+      "step_id": "WP-0004",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0005",
+      "step_id": "WP-0005",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0006",
+      "step_id": "WP-0006",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0007",
+      "step_id": "WP-0007",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0101",
+      "step_id": "WP-0101",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0102",
+      "step_id": "WP-0102",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0103",
+      "step_id": "WP-0103",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0104",
+      "step_id": "WP-0104",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0105",
+      "step_id": "WP-0105",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0106",
+      "step_id": "WP-0106",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0107",
+      "step_id": "WP-0107",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0108",
+      "step_id": "WP-0108",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0109",
+      "step_id": "WP-0109",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0201",
+      "step_id": "WP-0201",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0202",
+      "step_id": "WP-0202",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0203",
+      "step_id": "WP-0203",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0204",
+      "step_id": "WP-0204",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0205",
+      "step_id": "WP-0205",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0206",
+      "step_id": "WP-0206",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0207",
+      "step_id": "WP-0207",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0301",
+      "step_id": "WP-0301",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0302",
+      "step_id": "WP-0302",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0303",
+      "step_id": "WP-0303",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0304",
+      "step_id": "WP-0304",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0305",
+      "step_id": "WP-0305",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0306",
+      "step_id": "WP-0306",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0307",
+      "step_id": "WP-0307",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0401",
+      "step_id": "WP-0401",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0402",
+      "step_id": "WP-0402",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0403",
+      "step_id": "WP-0403",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0404",
+      "step_id": "WP-0404",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0405",
+      "step_id": "WP-0405",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0406",
+      "step_id": "WP-0406",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0407",
+      "step_id": "WP-0407",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0408",
+      "step_id": "WP-0408",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0409",
+      "step_id": "WP-0409",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0501",
+      "step_id": "WP-0501",
+      "type": "validation",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0502",
+      "step_id": "WP-0502",
+      "type": "validation",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0503",
+      "step_id": "WP-0503",
+      "type": "validation",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0504",
+      "step_id": "WP-0504",
+      "type": "validation",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0505",
+      "step_id": "WP-0505",
+      "type": "validation",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0506",
+      "step_id": "WP-0506",
+      "type": "validation",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0507",
+      "step_id": "WP-0507",
+      "type": "validation",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0601",
+      "step_id": "WP-0601",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0602",
+      "step_id": "WP-0602",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0603",
+      "step_id": "WP-0603",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0604",
+      "step_id": "WP-0604",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0605",
+      "step_id": "WP-0605",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0606",
+      "step_id": "WP-0606",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0607",
+      "step_id": "WP-0607",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0608",
+      "step_id": "WP-0608",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0701",
+      "step_id": "WP-0701",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0702",
+      "step_id": "WP-0702",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0703",
+      "step_id": "WP-0703",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0704",
+      "step_id": "WP-0704",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0705",
+      "step_id": "WP-0705",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0706",
+      "step_id": "WP-0706",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0707",
+      "step_id": "WP-0707",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0708",
+      "step_id": "WP-0708",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0801",
+      "step_id": "WP-0801",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0802",
+      "step_id": "WP-0802",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0803",
+      "step_id": "WP-0803",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0804",
+      "step_id": "WP-0804",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0805",
+      "step_id": "WP-0805",
+      "type": "post_step",
+      "recoverable": true
+    },
+    {
+      "checkpoint_id": "CHK-0901",
+      "step_id": "WP-0901",
+      "type": "validation",
+      "recoverable": false
+    },
+    {
+      "checkpoint_id": "CHK-0902",
+      "step_id": "WP-0902",
+      "type": "validation",
+      "recoverable": false
+    },
+    {
+      "checkpoint_id": "CHK-0903",
+      "step_id": "WP-0903",
+      "type": "validation",
+      "recoverable": false
+    },
+    {
+      "checkpoint_id": "CHK-0904",
+      "step_id": "WP-0904",
+      "type": "validation",
+      "recoverable": false
+    },
+    {
+      "checkpoint_id": "CHK-0905",
+      "step_id": "WP-0905",
+      "type": "validation",
+      "recoverable": false
+    }
+  ],
+  "default_execution_mode": "guided",
+  "autonomy_policy": {
+    "policy_id": "AUTO-POLICY-plan-default-0001",
+    "scope": "plan",
+    "scope_ref": "PLAN-sagex-isl-local-first-implementation-0002",
+    "mode": "guided",
+    "human_input_required": true,
+    "approval_required": true,
+    "approval_roles": [
+      "architecture-owner",
+      "implementation-owner"
+    ],
+    "pause_before": false,
+    "pause_after": false,
+    "allow_step_through": true,
+    "allow_autonomous_continuation": false,
+    "override_allowed": true,
+    "trace_required": true,
+    "validation_required": true
+  },
+  "plan_segments": [
+    {
+      "segment_id": "SEG-phase-0-contract-foundation",
+      "name": "Contract foundation",
+      "description": "Phase 0 work packets executed as a scoped plan segment.",
+      "step_ids": [
+        "WP-0001",
+        "WP-0002",
+        "WP-0003",
+        "WP-0004",
+        "WP-0005",
+        "WP-0006",
+        "WP-0007"
+      ],
+      "execution_mode": "guided",
+      "autonomy_policy": {
+        "policy_id": "AUTO-POLICY-SEG-phase-0-contract-foundation",
+        "scope": "segment",
+        "scope_ref": "SEG-phase-0-contract-foundation",
+        "mode": "guided",
+        "human_input_required": true,
+        "approval_required": false,
+        "approval_roles": [],
+        "pause_before": true,
+        "pause_after": true,
+        "allow_step_through": true,
+        "allow_autonomous_continuation": false,
+        "override_allowed": true,
+        "trace_required": true,
+        "validation_required": true
+      },
+      "checkpoint_refs": [
+        "CHK-0001",
+        "CHK-0002",
+        "CHK-0003",
+        "CHK-0004",
+        "CHK-0005",
+        "CHK-0006",
+        "CHK-0007"
+      ]
+    },
+    {
+      "segment_id": "SEG-phase-1-spec-knowledge",
+      "name": "Specification and knowledge layer",
+      "description": "Phase 1 work packets executed as a scoped plan segment.",
+      "step_ids": [
+        "WP-0101",
+        "WP-0102",
+        "WP-0103",
+        "WP-0104",
+        "WP-0105",
+        "WP-0106",
+        "WP-0107",
+        "WP-0108",
+        "WP-0109"
+      ],
+      "execution_mode": "guided",
+      "autonomy_policy": {
+        "policy_id": "AUTO-POLICY-SEG-phase-1-spec-knowledge",
+        "scope": "segment",
+        "scope_ref": "SEG-phase-1-spec-knowledge",
+        "mode": "guided",
+        "human_input_required": true,
+        "approval_required": false,
+        "approval_roles": [],
+        "pause_before": true,
+        "pause_after": true,
+        "allow_step_through": true,
+        "allow_autonomous_continuation": false,
+        "override_allowed": true,
+        "trace_required": true,
+        "validation_required": true
+      },
+      "checkpoint_refs": [
+        "CHK-0101",
+        "CHK-0102",
+        "CHK-0103",
+        "CHK-0104",
+        "CHK-0105",
+        "CHK-0106",
+        "CHK-0107",
+        "CHK-0108",
+        "CHK-0109"
+      ]
+    },
+    {
+      "segment_id": "SEG-phase-2-planning",
+      "name": "Planning engine",
+      "description": "Phase 2 work packets executed as a scoped plan segment.",
+      "step_ids": [
+        "WP-0201",
+        "WP-0202",
+        "WP-0203",
+        "WP-0204",
+        "WP-0205",
+        "WP-0206",
+        "WP-0207"
+      ],
+      "execution_mode": "auto",
+      "autonomy_policy": {
+        "policy_id": "AUTO-POLICY-SEG-phase-2-planning",
+        "scope": "segment",
+        "scope_ref": "SEG-phase-2-planning",
+        "mode": "auto",
+        "human_input_required": false,
+        "approval_required": false,
+        "approval_roles": [],
+        "pause_before": false,
+        "pause_after": false,
+        "allow_step_through": false,
+        "allow_autonomous_continuation": true,
+        "override_allowed": true,
+        "trace_required": true,
+        "validation_required": true
+      },
+      "checkpoint_refs": [
+        "CHK-0201",
+        "CHK-0202",
+        "CHK-0203",
+        "CHK-0204",
+        "CHK-0205",
+        "CHK-0206",
+        "CHK-0207"
+      ]
+    },
+    {
+      "segment_id": "SEG-phase-3-capabilities",
+      "name": "Capability registry and invocation",
+      "description": "Phase 3 work packets executed as a scoped plan segment.",
+      "step_ids": [
+        "WP-0301",
+        "WP-0302",
+        "WP-0303",
+        "WP-0304",
+        "WP-0305",
+        "WP-0306",
+        "WP-0307"
+      ],
+      "execution_mode": "auto",
+      "autonomy_policy": {
+        "policy_id": "AUTO-POLICY-SEG-phase-3-capabilities",
+        "scope": "segment",
+        "scope_ref": "SEG-phase-3-capabilities",
+        "mode": "auto",
+        "human_input_required": false,
+        "approval_required": false,
+        "approval_roles": [],
+        "pause_before": false,
+        "pause_after": false,
+        "allow_step_through": false,
+        "allow_autonomous_continuation": true,
+        "override_allowed": true,
+        "trace_required": true,
+        "validation_required": true
+      },
+      "checkpoint_refs": [
+        "CHK-0301",
+        "CHK-0302",
+        "CHK-0303",
+        "CHK-0304",
+        "CHK-0305",
+        "CHK-0306",
+        "CHK-0307"
+      ]
+    },
+    {
+      "segment_id": "SEG-phase-4-execution-core",
+      "name": "Execution core, state, checkpoints, and trace",
+      "description": "Phase 4 work packets executed as a scoped plan segment.",
+      "step_ids": [
+        "WP-0401",
+        "WP-0402",
+        "WP-0403",
+        "WP-0404",
+        "WP-0405",
+        "WP-0406",
+        "WP-0407",
+        "WP-0408",
+        "WP-0409"
+      ],
+      "execution_mode": "hybrid",
+      "autonomy_policy": {
+        "policy_id": "AUTO-POLICY-SEG-phase-4-execution-core",
+        "scope": "segment",
+        "scope_ref": "SEG-phase-4-execution-core",
+        "mode": "hybrid",
+        "human_input_required": true,
+        "approval_required": true,
+        "approval_roles": [
+          "implementation-owner"
+        ],
+        "pause_before": false,
+        "pause_after": false,
+        "allow_step_through": true,
+        "allow_autonomous_continuation": true,
+        "override_allowed": true,
+        "trace_required": true,
+        "validation_required": true
+      },
+      "checkpoint_refs": [
+        "CHK-0401",
+        "CHK-0402",
+        "CHK-0403",
+        "CHK-0404",
+        "CHK-0405",
+        "CHK-0406",
+        "CHK-0407",
+        "CHK-0408",
+        "CHK-0409"
+      ]
+    },
+    {
+      "segment_id": "SEG-phase-5-validation-recovery",
+      "name": "Validation, failure, and recovery",
+      "description": "Phase 5 work packets executed as a scoped plan segment.",
+      "step_ids": [
+        "WP-0501",
+        "WP-0502",
+        "WP-0503",
+        "WP-0504",
+        "WP-0505",
+        "WP-0506",
+        "WP-0507"
+      ],
+      "execution_mode": "hybrid",
+      "autonomy_policy": {
+        "policy_id": "AUTO-POLICY-SEG-phase-5-validation-recovery",
+        "scope": "segment",
+        "scope_ref": "SEG-phase-5-validation-recovery",
+        "mode": "hybrid",
+        "human_input_required": true,
+        "approval_required": true,
+        "approval_roles": [
+          "implementation-owner"
+        ],
+        "pause_before": false,
+        "pause_after": false,
+        "allow_step_through": true,
+        "allow_autonomous_continuation": true,
+        "override_allowed": true,
+        "trace_required": true,
+        "validation_required": true
+      },
+      "checkpoint_refs": [
+        "CHK-0501",
+        "CHK-0502",
+        "CHK-0503",
+        "CHK-0504",
+        "CHK-0505",
+        "CHK-0506",
+        "CHK-0507"
+      ]
+    },
+    {
+      "segment_id": "SEG-phase-6-governance-security",
+      "name": "Governance and security controls",
+      "description": "Phase 6 work packets executed as a scoped plan segment.",
+      "step_ids": [
+        "WP-0601",
+        "WP-0602",
+        "WP-0603",
+        "WP-0604",
+        "WP-0605",
+        "WP-0606",
+        "WP-0607",
+        "WP-0608"
+      ],
+      "execution_mode": "hybrid",
+      "autonomy_policy": {
+        "policy_id": "AUTO-POLICY-SEG-phase-6-governance-security",
+        "scope": "segment",
+        "scope_ref": "SEG-phase-6-governance-security",
+        "mode": "hybrid",
+        "human_input_required": true,
+        "approval_required": true,
+        "approval_roles": [
+          "implementation-owner"
+        ],
+        "pause_before": false,
+        "pause_after": false,
+        "allow_step_through": true,
+        "allow_autonomous_continuation": true,
+        "override_allowed": true,
+        "trace_required": true,
+        "validation_required": true
+      },
+      "checkpoint_refs": [
+        "CHK-0601",
+        "CHK-0602",
+        "CHK-0603",
+        "CHK-0604",
+        "CHK-0605",
+        "CHK-0606",
+        "CHK-0607",
+        "CHK-0608"
+      ]
+    },
+    {
+      "segment_id": "SEG-phase-7-control-surface",
+      "name": "Control surface",
+      "description": "Phase 7 work packets executed as a scoped plan segment.",
+      "step_ids": [
+        "WP-0701",
+        "WP-0702",
+        "WP-0703",
+        "WP-0704",
+        "WP-0705",
+        "WP-0706",
+        "WP-0707",
+        "WP-0708"
+      ],
+      "execution_mode": "guided",
+      "autonomy_policy": {
+        "policy_id": "AUTO-POLICY-SEG-phase-7-control-surface",
+        "scope": "segment",
+        "scope_ref": "SEG-phase-7-control-surface",
+        "mode": "guided",
+        "human_input_required": true,
+        "approval_required": false,
+        "approval_roles": [],
+        "pause_before": true,
+        "pause_after": true,
+        "allow_step_through": true,
+        "allow_autonomous_continuation": false,
+        "override_allowed": true,
+        "trace_required": true,
+        "validation_required": true
+      },
+      "checkpoint_refs": [
+        "CHK-0701",
+        "CHK-0702",
+        "CHK-0703",
+        "CHK-0704",
+        "CHK-0705",
+        "CHK-0706",
+        "CHK-0707",
+        "CHK-0708"
+      ]
+    },
+    {
+      "segment_id": "SEG-phase-8-bridge-prep",
+      "name": "Bridge reuse preparation",
+      "description": "Phase 8 work packets executed as a scoped plan segment.",
+      "step_ids": [
+        "WP-0801",
+        "WP-0802",
+        "WP-0803",
+        "WP-0804",
+        "WP-0805"
+      ],
+      "execution_mode": "guided",
+      "autonomy_policy": {
+        "policy_id": "AUTO-POLICY-SEG-phase-8-bridge-prep",
+        "scope": "segment",
+        "scope_ref": "SEG-phase-8-bridge-prep",
+        "mode": "guided",
+        "human_input_required": true,
+        "approval_required": false,
+        "approval_roles": [],
+        "pause_before": true,
+        "pause_after": true,
+        "allow_step_through": true,
+        "allow_autonomous_continuation": false,
+        "override_allowed": true,
+        "trace_required": true,
+        "validation_required": true
+      },
+      "checkpoint_refs": [
+        "CHK-0801",
+        "CHK-0802",
+        "CHK-0803",
+        "CHK-0804",
+        "CHK-0805"
+      ]
+    },
+    {
+      "segment_id": "SEG-phase-9-conformance",
+      "name": "Conformance evidence",
+      "description": "Phase 9 work packets executed as a scoped plan segment.",
+      "step_ids": [
+        "WP-0901",
+        "WP-0902",
+        "WP-0903",
+        "WP-0904",
+        "WP-0905"
+      ],
+      "execution_mode": "auto",
+      "autonomy_policy": {
+        "policy_id": "AUTO-POLICY-SEG-phase-9-conformance",
+        "scope": "segment",
+        "scope_ref": "SEG-phase-9-conformance",
+        "mode": "auto",
+        "human_input_required": false,
+        "approval_required": false,
+        "approval_roles": [],
+        "pause_before": false,
+        "pause_after": false,
+        "allow_step_through": false,
+        "allow_autonomous_continuation": true,
+        "override_allowed": true,
+        "trace_required": true,
+        "validation_required": true
+      },
+      "checkpoint_refs": [
+        "CHK-0901",
+        "CHK-0902",
+        "CHK-0903",
+        "CHK-0904",
+        "CHK-0905"
+      ]
+    }
+  ]
+}

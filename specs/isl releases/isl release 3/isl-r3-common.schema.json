@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aletheia.dev/schemas/isl/r3/isl-r3-common.schema.json",
+  "title": "ALETHEIA Specification Language (ISL) r3 Common Schema",
+  "description": "Shared primitive types, enums, and domain definitions referenced by the ISL r3 language and canonical schemas. This is the single source of truth for these definitions.",
+  "$defs": {
+    "Identifier": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+    },
+    "NonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "SemVer": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:[-+][0-9A-Za-z.-]+)?$"
+    },
+    "Timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ReferenceArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Identifier"
+      },
+      "uniqueItems": true
+    },
+    "ExtensionObject": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "ReadinessLevel": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "reviewable",
+        "machine-valid",
+        "autonomous-ready"
+      ]
+    },
+    "ConformanceProfile": {
+      "type": "string",
+      "enum": [
+        "Core",
+        "Team",
+        "Enterprise",
+        "Regulated"
+      ]
+    },
+    "RiskTier": {
+      "type": "string",
+      "enum": [
+        "Low",
+        "Standard",
+        "High",
+        "Critical"
+      ]
+    },
+    "SensitivityClassification": {
+      "type": "string",
+      "enum": [
+        "public",
+        "internal",
+        "confidential",
+        "restricted"
+      ]
+    },
+    "ValidationStatus": {
+      "type": "string",
+      "enum": [
+        "not-evaluated",
+        "passed",
+        "failed",
+        "warning",
+        "waived"
+      ]
+    },
+    "GovernanceStatus": {
+      "type": "string",
+      "enum": [
+        "not-required",
+        "pending",
+        "approved",
+        "waived",
+        "blocked"
+      ]
+    },
+    "ArtifactState": {
+      "type": "string",
+      "enum": [
+        "candidate",
+        "pending",
+        "valid",
+        "failed",
+        "repaired",
+        "escalated",
+        "waived",
+        "stable",
+        "packaged",
+        "superseded",
+        "deprecated",
+        "non-deployable",
+        "archived",
+        "deleted"
+      ]
+    },
+    "DerivationType": {
+      "type": "string",
+      "enum": [
+        "direct",
+        "derived",
+        "inferred",
+        "repair",
+        "imported",
+        "packaged",
+        "reused",
+        "reuse-delta",
+        "wrapper",
+        "extension",
+        "composition"
+      ]
+    },
+    "ReuseOutcome": {
+      "type": "string",
+      "enum": [
+        "reuse-full",
+        "reuse-partial",
+        "wrap",
+        "extend",
+        "compose",
+        "promote-candidate",
+        "reject-reuse"
+      ]
+    },
+    "ExecutionStatus": {
+      "type": "string",
+      "enum": [
+        "initialized",
+        "admission-checking",
+        "admitted",
+        "preparing",
+        "running",
+        "pausing",
+        "paused",
+        "recovering",
+        "draining",
+        "completed",
+        "failed",
+        "halted",
+        "cancelled",
+        "escalated"
+      ]
+    },
+    "ReusableAssetType": {
+      "type": "string",
+      "enum": [
+        "contract",
+        "policy",
+        "validation",
+        "documentation-template",
+        "agent-pattern",
+        "service",
+        "library",
+        "infrastructure",
+        "test",
+        "schema"
+      ]
+    }
+  }
+}

@@ -1,0 +1,3109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://sage-x.local/schemas/sagex.00.v1r0.platform-schema.json",
+  "title": "SAGE-X Platform Schema",
+  "description": "Consolidated SAGE-X v1r0 platform schema. This file is the single authoritative schema bundle for core runtime artifacts, second-tier implementation artifacts, local-first implementation planning artifacts, ISL/Sage-X bridge preparation artifacts, and scoped human/autonomous execution policy artifacts. The archive schema files are retained as backup/source fragments.",
+  "definitions": {
+    "executionPlan": {
+      "title": "SAGE-X Execution Plan",
+      "type": "object",
+      "required": [
+        "plan_id",
+        "version",
+        "created_at",
+        "spec_version",
+        "steps",
+        "dependency_graph",
+        "checkpoints",
+        "execution_modes"
+      ],
+      "properties": {
+        "plan_id": {
+          "type": "string",
+          "description": "Unique identifier for the execution plan"
+        },
+        "version": {
+          "type": "string",
+          "description": "Version of the execution plan schema"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of plan creation"
+        },
+        "spec_version": {
+          "type": "string",
+          "description": "Reference to the specification version used"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of the plan"
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/executionStep"
+          }
+        },
+        "dependency_graph": {
+          "type": "array",
+          "description": "Defines dependencies between steps",
+          "items": {
+            "$ref": "#/definitions/dependency"
+          }
+        },
+        "checkpoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/planCheckpoint"
+          }
+        },
+        "execution_modes": {
+          "$ref": "#/definitions/executionModes"
+        },
+        "governance": {
+          "$ref": "#/definitions/governance"
+        },
+        "plan_segments": {
+          "type": "array",
+          "description": "Optional plan sections/subgraphs with scoped execution mode and autonomy policy.",
+          "items": {
+            "$ref": "#/definitions/planSegment"
+          }
+        },
+        "default_execution_mode": {
+          "$ref": "#/definitions/executionMode"
+        },
+        "autonomy_policy": {
+          "$ref": "#/definitions/autonomyPolicy"
+        }
+      },
+      "additionalProperties": true
+    },
+    "knowledgeUnit": {
+      "title": "Knowledge Unit",
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "content",
+        "metadata"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the knowledge unit"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "rule",
+            "constraint",
+            "workflow",
+            "policy",
+            "definition"
+          ]
+        },
+        "content": {
+          "type": "string",
+          "description": "Normalized content of the knowledge unit"
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "priority",
+            "domain"
+          ],
+          "properties": {
+            "priority": {
+              "type": "string",
+              "enum": [
+                "mandatory",
+                "recommended",
+                "optional"
+              ]
+            },
+            "domain": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "source_specification": {
+              "type": "string",
+              "description": "Optional reference to the originating specification"
+            },
+            "source_element": {
+              "type": "string",
+              "description": "Optional reference to the originating specification element"
+            }
+          },
+          "additionalProperties": true
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "executionStep": {
+      "title": "Execution Step",
+      "type": "object",
+      "required": [
+        "step_id",
+        "name",
+        "type",
+        "inputs",
+        "outputs",
+        "required_rules",
+        "validation"
+      ],
+      "properties": {
+        "step_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "transformation",
+            "validation",
+            "decision",
+            "execution",
+            "aggregation"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "required_rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "execution_mode": {
+          "$ref": "#/definitions/executionMode"
+        },
+        "execution": {
+          "type": "object",
+          "properties": {
+            "model": {
+              "type": "string"
+            },
+            "tool": {
+              "type": "string"
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "auto",
+                "autonomous",
+                "manual",
+                "guided",
+                "hybrid"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "capability_ref": {
+          "type": "string",
+          "description": "Reference to abstract capability used in this step"
+        },
+        "validation": {
+          "$ref": "#/definitions/validationRules"
+        },
+        "checkpoint_ref": {
+          "type": "string"
+        },
+        "rollback_point": {
+          "type": "boolean",
+          "default": false
+        },
+        "segment_id": {
+          "type": "string",
+          "description": "Optional plan segment containing this step. Segment policy applies unless overridden at step level."
+        },
+        "autonomy_policy": {
+          "$ref": "#/definitions/autonomyPolicy"
+        }
+      },
+      "additionalProperties": true
+    },
+    "validationResult": {
+      "title": "Validation Result",
+      "type": "object",
+      "required": [
+        "validation_id",
+        "execution_id",
+        "step_id",
+        "timestamp",
+        "outcome",
+        "rules_evaluated"
+      ],
+      "properties": {
+        "validation_id": {
+          "type": "string",
+          "description": "Unique validation result identifier"
+        },
+        "execution_id": {
+          "type": "string",
+          "description": "Execution instance associated with the validation"
+        },
+        "step_id": {
+          "type": "string",
+          "description": "Step validated"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "pass",
+            "fail",
+            "warning",
+            "skipped"
+          ]
+        },
+        "rules_evaluated": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "violation_details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/validationViolation"
+          }
+        },
+        "strict": {
+          "type": "boolean"
+        },
+        "output_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "trace_ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "executionState": {
+      "title": "Execution State",
+      "type": "object",
+      "required": [
+        "execution_id",
+        "plan_id",
+        "current_state",
+        "updated_at"
+      ],
+      "properties": {
+        "execution_id": {
+          "type": "string",
+          "description": "Execution instance identifier"
+        },
+        "plan_id": {
+          "type": "string",
+          "description": "Execution plan identifier"
+        },
+        "current_state": {
+          "$ref": "#/definitions/executionStateName"
+        },
+        "active_step_id": {
+          "type": "string"
+        },
+        "branch_id": {
+          "type": "string"
+        },
+        "checkpoint_ref": {
+          "type": "string"
+        },
+        "failure_ref": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "state_data": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/stateTransition"
+          }
+        },
+        "checkpoints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "active_segment_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "checkpoint": {
+      "title": "Checkpoint",
+      "type": "object",
+      "required": [
+        "checkpoint_id",
+        "execution_id",
+        "step_id",
+        "created_at",
+        "state_snapshot",
+        "validation_status",
+        "recoverable"
+      ],
+      "properties": {
+        "checkpoint_id": {
+          "type": "string"
+        },
+        "execution_id": {
+          "type": "string"
+        },
+        "step_id": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "pre_step",
+            "post_step",
+            "validation",
+            "approval",
+            "manual",
+            "recovery"
+          ]
+        },
+        "state_snapshot": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "validation_status": {
+          "type": "string",
+          "enum": [
+            "valid",
+            "invalid",
+            "pending",
+            "waived"
+          ]
+        },
+        "recoverable": {
+          "type": "boolean"
+        },
+        "trace_ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "failureRecord": {
+      "title": "Failure Record",
+      "type": "object",
+      "required": [
+        "failure_id",
+        "execution_id",
+        "step_id",
+        "error_category",
+        "description",
+        "timestamp"
+      ],
+      "properties": {
+        "failure_id": {
+          "type": "string"
+        },
+        "execution_id": {
+          "type": "string"
+        },
+        "step_id": {
+          "type": "string"
+        },
+        "error_category": {
+          "type": "string",
+          "enum": [
+            "validation_failure",
+            "dependency_failure",
+            "input_error",
+            "execution_failure",
+            "override_error",
+            "system_error"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "affected_rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "affected_dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "recommended_rollback_checkpoint": {
+          "type": "string"
+        },
+        "retry_eligible": {
+          "type": "boolean"
+        },
+        "trace_ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "traceEvent": {
+      "title": "Trace Event",
+      "type": "object",
+      "required": [
+        "trace_id",
+        "execution_id",
+        "timestamp",
+        "event_type"
+      ],
+      "properties": {
+        "trace_id": {
+          "type": "string"
+        },
+        "execution_id": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "event_type": {
+          "$ref": "#/definitions/traceEventType"
+        },
+        "step_id": {
+          "type": "string"
+        },
+        "state_before": {
+          "$ref": "#/definitions/executionStateName"
+        },
+        "state_after": {
+          "$ref": "#/definitions/executionStateName"
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "applied_knowledge_units": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "execution_context": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "validation_context": {
+          "type": "object",
+          "properties": {
+            "rules_evaluated": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "outcome": {
+              "type": "string",
+              "enum": [
+                "pass",
+                "fail",
+                "warning",
+                "skipped"
+              ]
+            },
+            "violation_details": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/validationViolation"
+              }
+            }
+          },
+          "additionalProperties": true
+        },
+        "failure_context": {
+          "type": "object",
+          "properties": {
+            "failure_origin_step": {
+              "type": "string"
+            },
+            "failure_type": {
+              "type": "string"
+            },
+            "violated_rule_or_dependency": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        },
+        "recovery_context": {
+          "type": "object",
+          "properties": {
+            "rollback_target": {
+              "type": "string"
+            },
+            "discarded_steps": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "resumed_state": {
+              "$ref": "#/definitions/executionStateName"
+            }
+          },
+          "additionalProperties": true
+        },
+        "human_action": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "dependency": {
+      "type": "object",
+      "required": [
+        "from",
+        "to"
+      ],
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "planCheckpoint": {
+      "type": "object",
+      "required": [
+        "checkpoint_id",
+        "step_id"
+      ],
+      "properties": {
+        "checkpoint_id": {
+          "type": "string"
+        },
+        "step_id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "pre_step",
+            "post_step",
+            "validation",
+            "approval"
+          ]
+        },
+        "recoverable": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "validationRules": {
+      "type": "object",
+      "properties": {
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "strict": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "validationViolation": {
+      "type": "object",
+      "required": [
+        "rule",
+        "message"
+      ],
+      "properties": {
+        "rule": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "info",
+            "warning",
+            "error",
+            "critical"
+          ]
+        },
+        "location": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "governance": {
+      "type": "object",
+      "properties": {
+        "approval_required": {
+          "type": "boolean"
+        },
+        "approval_roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "executionModes": {
+      "type": "object",
+      "properties": {
+        "autonomous": {
+          "type": "boolean"
+        },
+        "guided": {
+          "type": "boolean"
+        },
+        "hybrid": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "stateTransition": {
+      "type": "object",
+      "required": [
+        "from",
+        "to",
+        "timestamp"
+      ],
+      "properties": {
+        "from": {
+          "$ref": "#/definitions/executionStateName"
+        },
+        "to": {
+          "$ref": "#/definitions/executionStateName"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "trace_ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "executionStateName": {
+      "type": "string",
+      "enum": [
+        "INITIALIZED",
+        "READY",
+        "RUNNING",
+        "WAITING_FOR_INPUT",
+        "WAITING_FOR_APPROVAL",
+        "VALIDATING",
+        "COMPLETED_STEP",
+        "CHECKPOINTED",
+        "BRANCHED",
+        "FAILED",
+        "RECOVERING",
+        "RESUMED",
+        "COMPLETED"
+      ]
+    },
+    "traceEventType": {
+      "type": "string",
+      "enum": [
+        "STEP_STARTED",
+        "STEP_COMPLETED",
+        "VALIDATION_PERFORMED",
+        "VALIDATION_FAILED",
+        "STATE_TRANSITION",
+        "HUMAN_ACTION",
+        "CHECKPOINT_CREATED",
+        "BRANCH_CREATED",
+        "FAILURE_DETECTED",
+        "RECOVERY_EXECUTED",
+        "step_started",
+        "step_completed",
+        "validation_performed",
+        "validation_failed",
+        "state_transition",
+        "human_action",
+        "checkpoint_created",
+        "branch_created",
+        "failure_detected",
+        "recovery_executed"
+      ]
+    },
+    "capabilityRegistration": {
+      "title": "Capability Registration",
+      "type": "object",
+      "required": [
+        "capability_id",
+        "type",
+        "version",
+        "interface"
+      ],
+      "properties": {
+        "capability_id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "reasoning",
+            "transformation",
+            "validation",
+            "execution",
+            "aggregation"
+          ]
+        },
+        "version": {
+          "type": "string"
+        },
+        "interface": {
+          "$ref": "#/definitions/capabilityInterface"
+        },
+        "lifecycle_state": {
+          "type": "string",
+          "enum": [
+            "registered",
+            "active",
+            "deprecated",
+            "disabled"
+          ]
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "supported_operations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "constraints": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "capabilityInterface": {
+      "title": "Capability Interface",
+      "type": "object",
+      "required": [
+        "inputs",
+        "outputs"
+      ],
+      "properties": {
+        "inputs": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "outputs": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "capabilityInvocationRequest": {
+      "title": "Capability Invocation Request",
+      "type": "object",
+      "required": [
+        "execution_id",
+        "step_id",
+        "capability_id"
+      ],
+      "properties": {
+        "execution_id": {
+          "type": "string"
+        },
+        "step_id": {
+          "type": "string"
+        },
+        "capability_id": {
+          "type": "string"
+        },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "trace_ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "capabilityInvocationResponse": {
+      "title": "Capability Invocation Response",
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "outputs": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "success",
+            "failed",
+            "partial",
+            "rejected"
+          ]
+        },
+        "error": {
+          "$ref": "#/definitions/capabilityError"
+        },
+        "trace_ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "capabilityDiscoveryQuery": {
+      "title": "Capability Discovery Query",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "capability_id": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "lifecycle_state": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "capabilityDiscoveryResponse": {
+      "title": "Capability Discovery Response",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/capabilityRegistration"
+      }
+    },
+    "capabilityError": {
+      "title": "Capability Error",
+      "type": "object",
+      "required": [
+        "error_type",
+        "message"
+      ],
+      "properties": {
+        "error_type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "recoverable": {
+          "type": "boolean"
+        },
+        "failure_ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "governancePolicy": {
+      "title": "Governance Policy",
+      "type": "object",
+      "required": [
+        "policy_id",
+        "scope",
+        "rules"
+      ],
+      "properties": {
+        "policy_id": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "global",
+            "domain",
+            "local"
+          ]
+        },
+        "conditions": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "approvalRecord": {
+      "title": "Approval Record",
+      "type": "object",
+      "required": [
+        "execution_id",
+        "step_id",
+        "status"
+      ],
+      "properties": {
+        "approval_id": {
+          "type": "string"
+        },
+        "execution_id": {
+          "type": "string"
+        },
+        "step_id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "approved",
+            "rejected"
+          ]
+        },
+        "approver": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "policy_ref": {
+          "type": "string"
+        },
+        "trace_ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "overrideRecord": {
+      "title": "Override Record",
+      "type": "object",
+      "required": [
+        "execution_id",
+        "step_id",
+        "reason"
+      ],
+      "properties": {
+        "override_id": {
+          "type": "string"
+        },
+        "execution_id": {
+          "type": "string"
+        },
+        "step_id": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "authorized_by": {
+          "type": "string"
+        },
+        "policy_ref": {
+          "type": "string"
+        },
+        "validation_ref": {
+          "type": "string"
+        },
+        "trace_ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "governanceDecision": {
+      "title": "Governance Decision",
+      "type": "object",
+      "required": [
+        "decision_id",
+        "execution_id",
+        "decision_type",
+        "outcome",
+        "timestamp"
+      ],
+      "properties": {
+        "decision_id": {
+          "type": "string"
+        },
+        "execution_id": {
+          "type": "string"
+        },
+        "step_id": {
+          "type": "string"
+        },
+        "decision_type": {
+          "type": "string",
+          "enum": [
+            "policy_check",
+            "approval",
+            "override",
+            "waiver",
+            "conflict_resolution"
+          ]
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "approved",
+            "approved_with_conditions",
+            "rejected",
+            "escalated",
+            "deferred",
+            "blocked"
+          ]
+        },
+        "policy_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "decided_by": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "trace_ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "controlRequest": {
+      "title": "Control Request",
+      "type": "object",
+      "required": [
+        "request_id",
+        "operation"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "start_execution",
+            "pause_execution",
+            "resume_execution",
+            "stop_execution",
+            "step_execution",
+            "generate_plan",
+            "retrieve_plan",
+            "validate_plan",
+            "modify_plan",
+            "submit_for_approval",
+            "approve",
+            "reject",
+            "override",
+            "retrieve_execution_state",
+            "retrieve_execution_trace",
+            "retrieve_step_context",
+            "retrieve_failure_information",
+            "identify_recovery_point",
+            "execute_rollback",
+            "resume_from_checkpoint",
+            "branch_execution",
+            "set_execution_mode",
+            "set_autonomy_policy"
+          ]
+        },
+        "execution_id": {
+          "type": "string"
+        },
+        "plan_id": {
+          "type": "string"
+        },
+        "step_id": {
+          "type": "string"
+        },
+        "spec_version": {
+          "type": "string"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "requested_by": {
+          "type": "string"
+        },
+        "requested_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    },
+    "controlResponse": {
+      "title": "Control Response",
+      "type": "object",
+      "required": [
+        "request_id",
+        "status"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "accepted",
+            "completed",
+            "rejected",
+            "failed",
+            "pending"
+          ]
+        },
+        "execution_id": {
+          "type": "string"
+        },
+        "plan_id": {
+          "type": "string"
+        },
+        "result": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "error": {
+          "$ref": "#/definitions/capabilityError"
+        },
+        "trace_ref": {
+          "type": "string"
+        },
+        "responded_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    },
+    "specificationIngestionRequest": {
+      "title": "Specification Ingestion Request",
+      "type": "object",
+      "required": [
+        "spec_id",
+        "version",
+        "content"
+      ],
+      "properties": {
+        "spec_id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "format": {
+          "type": "string"
+        },
+        "content": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "plugin_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "specificationModel": {
+      "title": "Specification Model",
+      "type": "object",
+      "required": [
+        "spec_id",
+        "parsed_structure"
+      ],
+      "properties": {
+        "spec_id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "parsed_structure": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "validation_ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "specificationPluginRegistration": {
+      "title": "Specification Plugin Registration",
+      "type": "object",
+      "required": [
+        "plugin_id",
+        "supported_formats",
+        "version",
+        "capabilities"
+      ],
+      "properties": {
+        "plugin_id": {
+          "type": "string"
+        },
+        "supported_formats": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "version": {
+          "type": "string"
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ingestion",
+              "parsing",
+              "mapping",
+              "validation"
+            ]
+          }
+        },
+        "supported_specification_versions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "pluginValidationResult": {
+      "title": "Plugin Validation Result",
+      "type": "object",
+      "required": [
+        "valid"
+      ],
+      "properties": {
+        "validation_id": {
+          "type": "string"
+        },
+        "plugin_id": {
+          "type": "string"
+        },
+        "spec_id": {
+          "type": "string"
+        },
+        "valid": {
+          "type": "boolean"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    },
+    "logEntry": {
+      "title": "Log Entry",
+      "type": "object",
+      "required": [
+        "log_id",
+        "timestamp",
+        "source_component",
+        "level",
+        "message"
+      ],
+      "properties": {
+        "log_id": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source_component": {
+          "type": "string"
+        },
+        "level": {
+          "type": "string",
+          "enum": [
+            "informational",
+            "warning",
+            "error",
+            "critical"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "execution_id": {
+          "type": "string"
+        },
+        "trace_ref": {
+          "type": "string"
+        },
+        "context": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "explanationRecord": {
+      "title": "Explanation Record",
+      "type": "object",
+      "required": [
+        "explanation_id",
+        "execution_id",
+        "subject_type",
+        "subject_id",
+        "output_justification"
+      ],
+      "properties": {
+        "explanation_id": {
+          "type": "string"
+        },
+        "execution_id": {
+          "type": "string"
+        },
+        "subject_type": {
+          "type": "string",
+          "enum": [
+            "decision",
+            "generated_output",
+            "rule_application",
+            "validation",
+            "recovery"
+          ]
+        },
+        "subject_id": {
+          "type": "string"
+        },
+        "relevant_rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "input_context": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "reasoning_sequence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "output_justification": {
+          "type": "string"
+        },
+        "trace_ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "deploymentTopology": {
+      "title": "Deployment Topology",
+      "type": "object",
+      "required": [
+        "topology_id",
+        "deployment_model",
+        "services"
+      ],
+      "properties": {
+        "topology_id": {
+          "type": "string"
+        },
+        "deployment_model": {
+          "type": "string",
+          "enum": [
+            "monolithic",
+            "modular",
+            "distributed"
+          ]
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/serviceDescriptor"
+          }
+        },
+        "state_management": {
+          "type": "string",
+          "enum": [
+            "centralized",
+            "distributed"
+          ]
+        },
+        "communication_modes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "synchronous",
+              "asynchronous"
+            ]
+          }
+        },
+        "scaling_strategy": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "serviceDescriptor": {
+      "title": "Service Descriptor",
+      "type": "object",
+      "required": [
+        "service_id",
+        "service_type",
+        "responsibilities"
+      ],
+      "properties": {
+        "service_id": {
+          "type": "string"
+        },
+        "service_type": {
+          "type": "string",
+          "enum": [
+            "specification_processing",
+            "knowledge",
+            "planning",
+            "execution_core",
+            "execution_engine",
+            "validation",
+            "trace_observability",
+            "governance",
+            "recovery",
+            "control_surface"
+          ]
+        },
+        "responsibilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "interfaces": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "process_boundary": {
+          "type": "string"
+        },
+        "data_boundary": {
+          "type": "string"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "securityContext": {
+      "title": "Security Context",
+      "type": "object",
+      "required": [
+        "security_context_id",
+        "actor_id",
+        "actor_type",
+        "permissions"
+      ],
+      "properties": {
+        "security_context_id": {
+          "type": "string"
+        },
+        "actor_id": {
+          "type": "string"
+        },
+        "actor_type": {
+          "type": "string",
+          "enum": [
+            "user",
+            "system_component",
+            "capability"
+          ]
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "trust_boundary": {
+          "type": "string"
+        },
+        "data_classification": {
+          "type": "string",
+          "enum": [
+            "execution_data",
+            "knowledge_data",
+            "trace_data",
+            "sensitive_data"
+          ]
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    },
+    "accessDecision": {
+      "title": "Access Decision",
+      "type": "object",
+      "required": [
+        "access_decision_id",
+        "actor_id",
+        "operation",
+        "decision",
+        "timestamp"
+      ],
+      "properties": {
+        "access_decision_id": {
+          "type": "string"
+        },
+        "actor_id": {
+          "type": "string"
+        },
+        "operation": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string"
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "allowed",
+            "denied",
+            "conditional"
+          ]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "policy_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "trace_ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "conformanceReport": {
+      "title": "Conformance Report",
+      "type": "object",
+      "required": [
+        "report_id",
+        "implementation_id",
+        "conformance_level",
+        "test_results",
+        "created_at"
+      ],
+      "properties": {
+        "report_id": {
+          "type": "string"
+        },
+        "implementation_id": {
+          "type": "string"
+        },
+        "conformance_level": {
+          "type": "string",
+          "enum": [
+            "level_1_core",
+            "level_2_controlled_execution",
+            "level_3_full_enterprise"
+          ]
+        },
+        "test_results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/conformanceTestResult"
+          }
+        },
+        "deviations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "certification_status": {
+          "type": "string",
+          "enum": [
+            "passed",
+            "failed",
+            "conditional",
+            "not_certified"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    },
+    "conformanceTestResult": {
+      "title": "Conformance Test Result",
+      "type": "object",
+      "required": [
+        "test_id",
+        "category",
+        "outcome"
+      ],
+      "properties": {
+        "test_id": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "execution_correctness",
+            "state_transition_validity",
+            "failure_handling",
+            "recovery_accuracy",
+            "trace_completeness",
+            "governance_enforcement",
+            "security_validation"
+          ]
+        },
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "passed",
+            "failed",
+            "skipped",
+            "warning"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "artifactManifest": {
+      "title": "Artifact Manifest",
+      "type": "object",
+      "required": [
+        "manifest_id",
+        "artifact_refs",
+        "created_at"
+      ],
+      "properties": {
+        "manifest_id": {
+          "type": "string"
+        },
+        "execution_id": {
+          "type": "string"
+        },
+        "plan_id": {
+          "type": "string"
+        },
+        "artifact_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "validation_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "trace_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "governance_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    },
+    "implementationWorkPacket": {
+      "title": "Implementation Work Packet",
+      "type": "object",
+      "required": [
+        "packet_id",
+        "macro_phase",
+        "purpose",
+        "inputs",
+        "outputs",
+        "validation",
+        "traceability"
+      ],
+      "properties": {
+        "packet_id": {
+          "type": "string"
+        },
+        "macro_phase": {
+          "type": "string"
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "validation": {
+          "$ref": "#/definitions/workPacketValidation"
+        },
+        "traceability": {
+          "$ref": "#/definitions/workPacketTraceability"
+        },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "capability_ref": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "planned",
+            "ready",
+            "in_progress",
+            "blocked",
+            "completed",
+            "failed",
+            "deferred"
+          ]
+        },
+        "checkpoint_ref": {
+          "type": "string"
+        },
+        "risk_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "workPacketValidation": {
+      "title": "Work Packet Validation",
+      "type": "object",
+      "required": [
+        "method",
+        "rules"
+      ],
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": [
+            "schema_validation",
+            "unit_test",
+            "contract_test",
+            "integration_test",
+            "manual_review",
+            "static_check"
+          ]
+        },
+        "command": {
+          "type": "string"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expected_result": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "workPacketTraceability": {
+      "title": "Work Packet Traceability",
+      "type": "object",
+      "required": [
+        "schema_refs"
+      ],
+      "properties": {
+        "schema_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "specification_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "macro_step_ref": {
+          "type": "string"
+        },
+        "knowledge_unit_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "artifact_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "implementationTaskGraph": {
+      "title": "Implementation Task Graph",
+      "type": "object",
+      "required": [
+        "task_graph_id",
+        "version",
+        "created_at",
+        "work_packets",
+        "dependency_graph"
+      ],
+      "properties": {
+        "task_graph_id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "description": {
+          "type": "string"
+        },
+        "work_packets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/implementationWorkPacket"
+          }
+        },
+        "dependency_graph": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/dependency"
+          }
+        },
+        "checkpoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/planCheckpoint"
+          }
+        },
+        "governance": {
+          "$ref": "#/definitions/governance"
+        }
+      },
+      "additionalProperties": true
+    },
+    "implementationRisk": {
+      "title": "Implementation Risk",
+      "type": "object",
+      "required": [
+        "risk_id",
+        "description",
+        "severity",
+        "control"
+      ],
+      "properties": {
+        "risk_id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "control": {
+          "type": "string"
+        },
+        "affected_packets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "mitigated",
+            "accepted",
+            "closed"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "fixtureRecord": {
+      "title": "Fixture Record",
+      "type": "object",
+      "required": [
+        "fixture_id",
+        "schema_ref",
+        "path",
+        "expected_outcome"
+      ],
+      "properties": {
+        "fixture_id": {
+          "type": "string"
+        },
+        "schema_ref": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "expected_outcome": {
+          "type": "string",
+          "enum": [
+            "valid",
+            "invalid"
+          ]
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "related_packet_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "implementationEvidenceBundle": {
+      "title": "Implementation Evidence Bundle",
+      "type": "object",
+      "required": [
+        "evidence_bundle_id",
+        "implementation_id",
+        "created_at",
+        "artifact_manifest_ref",
+        "conformance_report_ref"
+      ],
+      "properties": {
+        "evidence_bundle_id": {
+          "type": "string"
+        },
+        "implementation_id": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "artifact_manifest_ref": {
+          "type": "string"
+        },
+        "conformance_report_ref": {
+          "type": "string"
+        },
+        "trace_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "validation_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "governance_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "risk_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fixture_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "bridgeAssetRecord": {
+      "title": "Bridge Asset Record",
+      "type": "object",
+      "required": [
+        "bridge_asset_id",
+        "source_system",
+        "asset_type",
+        "semantic_owner",
+        "name",
+        "version",
+        "capability_tags",
+        "validation_status",
+        "governance_status"
+      ],
+      "properties": {
+        "bridge_asset_id": {
+          "type": "string"
+        },
+        "source_system": {
+          "type": "string",
+          "enum": [
+            "sagex",
+            "isl",
+            "aletheia",
+            "external"
+          ]
+        },
+        "asset_type": {
+          "type": "string",
+          "enum": [
+            "source_module",
+            "service",
+            "library",
+            "schema",
+            "api_contract",
+            "event_contract",
+            "state_model",
+            "execution_engine",
+            "planning_engine",
+            "validation_harness",
+            "governance_policy",
+            "capability_adapter",
+            "console_component",
+            "observability_adapter",
+            "deployment_module",
+            "documentation_template"
+          ]
+        },
+        "semantic_owner": {
+          "$ref": "#/definitions/semanticOwner"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "repository_reference": {
+          "type": "string"
+        },
+        "immutable_reference": {
+          "type": "string"
+        },
+        "public_interface": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "consumed_interfaces": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "capability_tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "validation_status": {
+          "type": "string",
+          "enum": [
+            "unvalidated",
+            "validated",
+            "warning",
+            "failed",
+            "expired",
+            "superseded"
+          ]
+        },
+        "validation_evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "security_status": {
+          "type": "string",
+          "enum": [
+            "not_evaluated",
+            "passed",
+            "warning",
+            "failed",
+            "expired"
+          ]
+        },
+        "governance_status": {
+          "type": "string",
+          "enum": [
+            "unreviewed",
+            "approved",
+            "restricted",
+            "prohibited",
+            "deprecated"
+          ]
+        },
+        "sensitivity_classification": {
+          "type": "string",
+          "enum": [
+            "public",
+            "internal",
+            "confidential",
+            "restricted"
+          ]
+        },
+        "reuse_scope": {
+          "type": "string",
+          "enum": [
+            "local",
+            "project",
+            "workspace",
+            "tenant",
+            "enterprise",
+            "public"
+          ]
+        },
+        "compatibility_profile": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "extension_policy": {
+          "type": "string",
+          "enum": [
+            "closed",
+            "metadata_only",
+            "adapter_only",
+            "extension_allowed",
+            "fork_allowed"
+          ]
+        },
+        "owner": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "bridgeReuseAssessment": {
+      "title": "Bridge Reuse Assessment",
+      "type": "object",
+      "required": [
+        "assessment_id",
+        "construction_task_id",
+        "candidate_bridge_asset_id",
+        "semantic_match",
+        "recommended_reuse_mode",
+        "rationale",
+        "assessed_at"
+      ],
+      "properties": {
+        "assessment_id": {
+          "type": "string"
+        },
+        "construction_task_id": {
+          "type": "string"
+        },
+        "candidate_bridge_asset_id": {
+          "type": "string"
+        },
+        "semantic_match": {
+          "type": "string",
+          "enum": [
+            "full",
+            "partial",
+            "weak",
+            "none",
+            "conflicting",
+            "uncertain"
+          ]
+        },
+        "interface_match": {
+          "type": "string",
+          "enum": [
+            "compatible",
+            "adapter_required",
+            "incompatible",
+            "unknown"
+          ]
+        },
+        "schema_match": {
+          "type": "string",
+          "enum": [
+            "compatible",
+            "extension_required",
+            "incompatible",
+            "unknown"
+          ]
+        },
+        "behavior_match": {
+          "type": "string",
+          "enum": [
+            "equivalent",
+            "subset",
+            "superset",
+            "divergent",
+            "unknown"
+          ]
+        },
+        "validation_match": {
+          "type": "string",
+          "enum": [
+            "sufficient",
+            "additional_validation_required",
+            "insufficient",
+            "expired"
+          ]
+        },
+        "governance_match": {
+          "type": "string",
+          "enum": [
+            "approved",
+            "approval_required",
+            "waiver_required",
+            "prohibited"
+          ]
+        },
+        "security_match": {
+          "type": "string",
+          "enum": [
+            "passed",
+            "warning",
+            "failed",
+            "expired",
+            "not_evaluated"
+          ]
+        },
+        "boundary_match": {
+          "type": "string",
+          "enum": [
+            "within_boundary",
+            "connection_context_required",
+            "outside_boundary",
+            "unknown"
+          ]
+        },
+        "extension_cost": {
+          "type": "string",
+          "enum": [
+            "none",
+            "low",
+            "medium",
+            "high",
+            "prohibitive",
+            "unknown"
+          ]
+        },
+        "lifecycle_risk": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical",
+            "unknown"
+          ]
+        },
+        "recommended_reuse_mode": {
+          "$ref": "#/definitions/reuseMode"
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "assessed_by": {
+          "type": "string"
+        },
+        "assessed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    },
+    "bridgeReuseDecision": {
+      "title": "Bridge Reuse Decision",
+      "type": "object",
+      "required": [
+        "decision_id",
+        "construction_task_id",
+        "selected_reuse_mode",
+        "assessment_refs",
+        "rationale",
+        "decided_at"
+      ],
+      "properties": {
+        "decision_id": {
+          "type": "string"
+        },
+        "construction_task_id": {
+          "type": "string"
+        },
+        "selected_reuse_mode": {
+          "$ref": "#/definitions/reuseMode"
+        },
+        "selected_asset_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rejected_asset_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "assessment_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "governance_decision_ref": {
+          "type": "string"
+        },
+        "validation_evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "traceability_node_id": {
+          "type": "string"
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "decided_by": {
+          "type": "string"
+        },
+        "decided_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    },
+    "contractClassification": {
+      "title": "Contract Classification",
+      "type": "object",
+      "required": [
+        "classification_id",
+        "contract_name",
+        "contract_class",
+        "semantic_owner",
+        "validation_rules_ref",
+        "governance_status"
+      ],
+      "properties": {
+        "classification_id": {
+          "type": "string"
+        },
+        "contract_name": {
+          "type": "string"
+        },
+        "isl_contract_ref": {
+          "type": "string"
+        },
+        "sagex_contract_ref": {
+          "type": "string"
+        },
+        "contract_class": {
+          "type": "string",
+          "enum": [
+            "shared_contract",
+            "mapped_contract",
+            "extension_contract",
+            "adapter_contract",
+            "incompatible_contract"
+          ]
+        },
+        "semantic_owner": {
+          "$ref": "#/definitions/semanticOwner"
+        },
+        "field_mapping_ref": {
+          "type": "string"
+        },
+        "extension_rules": {
+          "type": "string"
+        },
+        "validation_rules_ref": {
+          "type": "string"
+        },
+        "compatibility_profile": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "governance_status": {
+          "type": "string",
+          "enum": [
+            "unreviewed",
+            "approved",
+            "restricted",
+            "prohibited",
+            "deprecated"
+          ]
+        },
+        "classified_by": {
+          "type": "string"
+        },
+        "classified_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    },
+    "compatibilityMatrix": {
+      "title": "Compatibility Matrix",
+      "type": "object",
+      "required": [
+        "matrix_id",
+        "profile_version",
+        "supported_isl_versions",
+        "supported_sagex_versions",
+        "updated_at"
+      ],
+      "properties": {
+        "matrix_id": {
+          "type": "string"
+        },
+        "profile_version": {
+          "type": "string"
+        },
+        "supported_isl_versions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "supported_sagex_versions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "supported_plugin_versions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "supported_contract_classes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "known_incompatibilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "migration_guidance": {
+          "type": "string"
+        },
+        "approved_by": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    },
+    "bridgeEvidenceBundle": {
+      "title": "Bridge Evidence Bundle",
+      "type": "object",
+      "required": [
+        "bridge_evidence_bundle_id",
+        "profile_version",
+        "isl_specification_ref",
+        "plugin_version",
+        "plan_refs",
+        "validation_result_refs",
+        "traceability_snapshot_ref",
+        "completion_status",
+        "created_at"
+      ],
+      "properties": {
+        "bridge_evidence_bundle_id": {
+          "type": "string"
+        },
+        "profile_version": {
+          "type": "string"
+        },
+        "isl_specification_ref": {
+          "type": "string"
+        },
+        "sagex_execution_ref": {
+          "type": "string"
+        },
+        "plugin_version": {
+          "type": "string"
+        },
+        "knowledge_unit_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "plan_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bridge_asset_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reuse_assessment_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reuse_decision_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "contract_classification_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "governance_decision_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "validation_result_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "traceability_snapshot_ref": {
+          "type": "string"
+        },
+        "artifact_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "completion_status": {
+          "type": "string",
+          "enum": [
+            "completed",
+            "completed_with_waivers",
+            "failed",
+            "blocked",
+            "cancelled"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    },
+    "semanticOwner": {
+      "type": "string",
+      "enum": [
+        "sagex_owned",
+        "isl_owned",
+        "shared_owned",
+        "isl_extension",
+        "sagex_adapter",
+        "bridge_owned"
+      ]
+    },
+    "reuseMode": {
+      "type": "string",
+      "enum": [
+        "use_as_is",
+        "wrap",
+        "extend",
+        "compose",
+        "fork",
+        "generate_new",
+        "reject",
+        "escalate"
+      ]
+    },
+    "executionMode": {
+      "type": "string",
+      "enum": [
+        "auto",
+        "autonomous",
+        "manual",
+        "guided",
+        "hybrid"
+      ],
+      "description": "Execution mode for a plan, segment, or step. auto/autonomous and manual/guided are accepted aliases."
+    },
+    "planSegment": {
+      "title": "Plan Segment",
+      "type": "object",
+      "required": [
+        "segment_id",
+        "name",
+        "step_ids"
+      ],
+      "properties": {
+        "segment_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "step_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dependency_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "execution_mode": {
+          "$ref": "#/definitions/executionMode"
+        },
+        "autonomy_policy": {
+          "$ref": "#/definitions/autonomyPolicy"
+        },
+        "governance": {
+          "$ref": "#/definitions/governance"
+        },
+        "checkpoint_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "autonomyPolicy": {
+      "title": "Autonomy Policy",
+      "type": "object",
+      "required": [
+        "scope",
+        "mode"
+      ],
+      "properties": {
+        "policy_id": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string",
+          "enum": [
+            "plan",
+            "segment",
+            "step"
+          ]
+        },
+        "scope_ref": {
+          "type": "string",
+          "description": "Plan, segment, or step identifier governed by this policy."
+        },
+        "mode": {
+          "$ref": "#/definitions/executionMode"
+        },
+        "human_input_required": {
+          "type": "boolean"
+        },
+        "approval_required": {
+          "type": "boolean"
+        },
+        "approval_roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pause_before": {
+          "type": "boolean"
+        },
+        "pause_after": {
+          "type": "boolean"
+        },
+        "allow_step_through": {
+          "type": "boolean"
+        },
+        "allow_autonomous_continuation": {
+          "type": "boolean"
+        },
+        "override_allowed": {
+          "type": "boolean"
+        },
+        "trace_required": {
+          "type": "boolean",
+          "default": true
+        },
+        "validation_required": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "anyOf": [
+    {
+      "$ref": "#/definitions/executionPlan"
+    },
+    {
+      "$ref": "#/definitions/knowledgeUnit"
+    },
+    {
+      "$ref": "#/definitions/executionStep"
+    },
+    {
+      "$ref": "#/definitions/validationResult"
+    },
+    {
+      "$ref": "#/definitions/executionState"
+    },
+    {
+      "$ref": "#/definitions/checkpoint"
+    },
+    {
+      "$ref": "#/definitions/failureRecord"
+    },
+    {
+      "$ref": "#/definitions/traceEvent"
+    },
+    {
+      "$ref": "#/definitions/capabilityRegistration"
+    },
+    {
+      "$ref": "#/definitions/capabilityInterface"
+    },
+    {
+      "$ref": "#/definitions/capabilityInvocationRequest"
+    },
+    {
+      "$ref": "#/definitions/capabilityInvocationResponse"
+    },
+    {
+      "$ref": "#/definitions/capabilityDiscoveryQuery"
+    },
+    {
+      "$ref": "#/definitions/capabilityDiscoveryResponse"
+    },
+    {
+      "$ref": "#/definitions/capabilityError"
+    },
+    {
+      "$ref": "#/definitions/governancePolicy"
+    },
+    {
+      "$ref": "#/definitions/approvalRecord"
+    },
+    {
+      "$ref": "#/definitions/overrideRecord"
+    },
+    {
+      "$ref": "#/definitions/governanceDecision"
+    },
+    {
+      "$ref": "#/definitions/controlRequest"
+    },
+    {
+      "$ref": "#/definitions/controlResponse"
+    },
+    {
+      "$ref": "#/definitions/specificationIngestionRequest"
+    },
+    {
+      "$ref": "#/definitions/specificationModel"
+    },
+    {
+      "$ref": "#/definitions/specificationPluginRegistration"
+    },
+    {
+      "$ref": "#/definitions/pluginValidationResult"
+    },
+    {
+      "$ref": "#/definitions/logEntry"
+    },
+    {
+      "$ref": "#/definitions/explanationRecord"
+    },
+    {
+      "$ref": "#/definitions/deploymentTopology"
+    },
+    {
+      "$ref": "#/definitions/serviceDescriptor"
+    },
+    {
+      "$ref": "#/definitions/securityContext"
+    },
+    {
+      "$ref": "#/definitions/accessDecision"
+    },
+    {
+      "$ref": "#/definitions/conformanceReport"
+    },
+    {
+      "$ref": "#/definitions/conformanceTestResult"
+    },
+    {
+      "$ref": "#/definitions/artifactManifest"
+    },
+    {
+      "$ref": "#/definitions/implementationTaskGraph"
+    },
+    {
+      "$ref": "#/definitions/implementationWorkPacket"
+    },
+    {
+      "$ref": "#/definitions/implementationRisk"
+    },
+    {
+      "$ref": "#/definitions/fixtureRecord"
+    },
+    {
+      "$ref": "#/definitions/implementationEvidenceBundle"
+    },
+    {
+      "$ref": "#/definitions/bridgeAssetRecord"
+    },
+    {
+      "$ref": "#/definitions/bridgeReuseAssessment"
+    },
+    {
+      "$ref": "#/definitions/bridgeReuseDecision"
+    },
+    {
+      "$ref": "#/definitions/contractClassification"
+    },
+    {
+      "$ref": "#/definitions/compatibilityMatrix"
+    },
+    {
+      "$ref": "#/definitions/bridgeEvidenceBundle"
+    },
+    {
+      "$ref": "#/definitions/planSegment"
+    },
+    {
+      "$ref": "#/definitions/autonomyPolicy"
+    }
+  ]
+}
