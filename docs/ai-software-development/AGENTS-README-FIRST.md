@@ -4,7 +4,7 @@
 
 | File | Purpose |
 |---|---|
-| `README-FIRST.md` (this file) | How to start and how to run a session |
+| `AGENTS-README-FIRST.md` (this file) | How to start and how to run a session |
 | `AGENTS.md` | Standing rules: priorities, workflow, standards, Definition of Done |
 | `docs/framework/templates.md` | Templates; open only when creating an artifact |
 
@@ -16,8 +16,62 @@
 
 ### Step 1. Install the framework (human, 5 minutes)
 
-Place the three files in the repository root as shown above, then create the folder skeleton:
+Place the three files in the repository root as shown above, then create the folder skeleton below it:
 
+```text
+docs/
+├── framework/
+├── requirements/
+│   ├── use-cases/
+│   └── user-stories/
+├── architecture/
+│   ├── conceptual/
+│   ├── logical/
+│   ├── physical/
+│   ├── security/
+│   ├── data/
+│   └── integration/
+├── backlog/
+│   └── archive/
+├── validation/
+│   ├── sprint-validation/
+│   ├── release-validation/
+│   └── pm-review/
+├── handoff/
+├── execution/
+│   ├── status-reports/
+│   ├── implementation-notes/
+│   ├── release-notes/
+│   └── lessons-learned/
+├── backlog/backlog-index.md
+├── validation/validation-index.md
+├── risks-and-dependencies.md
+└── handoff/
+    ├── current-handoff.md
+    ├── handoff-history.md
+    └── decisions-log.md
+```
+
+**No terminal needed:** create the folders and empty files above by hand in File Explorer, Finder, or your IDE's file tree. That's all Step 1 requires.
+
+**Prefer a terminal?** Pick the one that matches your system.
+
+*Windows — PowerShell:*
+```powershell
+$dirs = "framework","requirements\use-cases","requirements\user-stories",
+        "architecture\conceptual","architecture\logical","architecture\physical",
+        "architecture\security","architecture\data","architecture\integration",
+        "backlog\archive","validation\sprint-validation","validation\release-validation",
+        "validation\pm-review","handoff","execution\status-reports",
+        "execution\implementation-notes","execution\release-notes","execution\lessons-learned"
+foreach ($d in $dirs) { New-Item -ItemType Directory -Force -Path "docs\$d" | Out-Null }
+
+$files = "handoff\current-handoff.md","handoff\handoff-history.md","handoff\decisions-log.md",
+         "backlog\backlog-index.md","validation\validation-index.md","risks-and-dependencies.md"
+foreach ($f in $files) { New-Item -ItemType File -Force -Path "docs\$f" | Out-Null }
+```
+
+*macOS / Linux / Git Bash — bash:*
 ```bash
 mkdir -p docs/{framework,requirements/{use-cases,user-stories},backlog/archive,validation/{sprint-validation,release-validation,pm-review},handoff,execution/{status-reports,implementation-notes,release-notes,lessons-learned}}
 mkdir -p docs/architecture/{conceptual,logical,physical,security,data,integration}
@@ -29,7 +83,27 @@ Small project? You may merge the charter, workplan, and roadmap into one file, a
 
 ### Step 2. Choose where the backlog lives (human decision)
 
-Pick one and tell the agent: **(a)** `/docs/backlog` in the repo, or **(b)** an external tracker (Azure DevOps, Jira, GitHub Issues, etc.). Whichever you choose is the single source of truth for execution (`AGENTS.md` §4, §8). Do not run both in parallel.
+This is a one-time decision per project. It decides which system the agent treats as the single source of truth for work items (`AGENTS.md` §4, §8) — never run both at once.
+
+**Option (a): In the repo, as markdown files under `docs/backlog/`**
+Choose this if:
+- You have no project tracker yet, or don't want to pay for/administer one.
+- The team is small, or is mostly the AI agent plus one or two people.
+- You want backlog history to live in git, versioned alongside the code.
+
+How it works: the agent reads and writes `docs/backlog/backlog-index.md` and the work-item files directly, using the templates in `templates.md`. Nothing else to set up.
+
+**Option (b): An external tracker (Azure DevOps, Jira, GitHub Issues, Linear, etc.)**
+Choose this if:
+- The team already uses one of these tools for other projects.
+- Non-technical stakeholders need to view or comment on backlog items without opening the repo.
+- You need reporting, dashboards, or integrations the tracker already provides.
+
+How it works: you tell the agent which tool and give it access (e.g., a connected app or exported/synced items it can read). The agent still follows the same statuses, priorities, and item fields from `AGENTS.md` §8, just recorded in that tool instead of markdown files. `docs/backlog/backlog-index.md` is not used; if the agent cannot reach the tracker directly, it works from an export or summary you provide.
+
+**How to decide, in practice:** if you're not sure, start with (a). It requires no setup and can be exported into a tracker later if the project grows. Switching from (a) to (b) mid-project is possible but is itself a decision that should be logged (`decisions-log.md`).
+
+**How to tell the agent:** include your choice in the kickoff prompt in Step 4 — the line `Backlog location: [...]` is where this goes.
 
 ### Step 3. Gather the kickoff inputs (human)
 
@@ -48,7 +122,7 @@ The agent cannot invent these. Provide what you know; the agent will list the ga
 Paste this into the agent, filling in the brackets:
 
 ```text
-Read README-FIRST.md and AGENTS.md completely. This is a new project.
+Read AGENTS-README-FIRST.md and AGENTS.md completely. This is a new project.
 
 Project: [name]
 Problem: [...]
