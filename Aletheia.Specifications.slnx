@@ -32,12 +32,15 @@
   </Folder>
   <Folder Name="/docs/" />
   <Folder Name="/docs/ai-software-development/">
-    <File Path="docs/ai-software-development/AGENTS-README-FIRST.md" />
-    <File Path="docs/ai-software-development/AGENTS.md" />
     <File Path="docs/ai-software-development/AI COE 4-Stage_Adaptive_AI_Workflow.png" />
     <File Path="docs/ai-software-development/AI COE Operating Framework v3.docx" />
     <File Path="docs/ai-software-development/AI Human Oversight and PM Companion.docx" />
-    <File Path="docs/ai-software-development/templates.md" />
+  </Folder>
+  <Folder Name="/docs/ai-software-development/Project Initialization/">
+    <File Path="docs/ai-software-development/Porject Initialization/AGENTS-README-FIRST.md" />
+    <File Path="docs/ai-software-development/Porject Initialization/AGENTS.md" />
+    <File Path="docs/ai-software-development/Porject Initialization/project-specifications.md" />
+    <File Path="docs/ai-software-development/Porject Initialization/templates.md" />
   </Folder>
   <Folder Name="/docs/concepts/" />
   <Folder Name="/docs/diagrams/" />

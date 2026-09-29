@@ -1,7 +1,7 @@
 # AGENTS.md
 
 **Human and AI Coder Delivery Framework**
-Version 1.0 · Based on Eduardo Sobrino's AI-coding approach · 2026-09-26 Draft 2.0
+Version 1.0 · Based on Eduardo Sobrino's AI-coding approach
 
 This file is the standing instruction set for every contributor, human or AI. It is intentionally lean. Templates and detailed field lists live in [`/docs/framework/templates.md`](docs/framework/templates.md); open that file only when you need to create the artifact.
 
@@ -114,7 +114,7 @@ Applies to every request, feature, enhancement, bug, task, or requirement; depth
 3. **Backlog**: create or update items *before* implementation.
 4. **Requirements**: update business, functional, non-functional requirements, user stories, and use cases where impacted.
 5. **Architecture review**: update architecture artifacts where impacted (Section 10).
-6. **Execution**: implement from the backlog.
+6. **Execution**: implement from the backlog, using the technology, commands, and conventions recorded in `project-specifications.md`. If none are recorded, stop and ask before writing code or running commands; do not assume or invent a stack.
 7. **Validation**: validate against acceptance criteria (Section 11).
 8. **Documentation**: update affected artifacts.
 9. **Handoff**: update `current-handoff.md` (Section 14).
@@ -198,6 +198,8 @@ Technical debt MUST exist in the backlog with a risk assessment, business justif
 ## 10. Requirements, Architecture, and Decisions
 
 **Requirements** (`/docs/requirements`): business (goals, objectives, value, metrics), functional (inputs, outputs, behavior, rules), non-functional (security, availability, reliability, scalability, maintainability, compliance, accessibility, performance, observability), plus use cases and user stories.
+
+**Technology stack** (`project-specifications.md`, Technical Specifications section): language, frameworks, build/test/lint commands, package manager, repo conventions, and deployment target. This is project-specific and does not live in `AGENTS.md`. Confirm it before Execution (Section 7, Step 6).
 
 **Architecture** (`/docs/architecture` and `high-level-architecture.md`): conceptual, logical, physical, security, data, integration. The high-level document covers business, application, data, integration, security, infrastructure, and deployment architecture.
 
