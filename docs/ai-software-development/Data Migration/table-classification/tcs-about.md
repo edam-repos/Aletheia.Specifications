@@ -1,0 +1,11 @@
+TCF Framework Summary
+
+The Table Classification Framework (TCF) is a structured methodology used to inventory, analyze, and classify source-system tables before migration. Rather than treating every table as equally important, TCF evaluates metadata such as row counts, dependencies, business relevance, and usage indicators to categorize tables into migration candidates, archival candidates, reference data, staging artifacts, technical tables, or potential retirement candidates. It operates primarily from exported schema inventories and workbook-based metadata, with optional database evidence collection to improve classification confidence.
+
+The TCF Execution Process applies this framework through a series of phases that progressively enrich the analysis. Initial phases work entirely from inventory workbooks and generated metadata, producing classifications and recommendations. An optional evidence-enrichment phase can collect additional information directly from source SQL Server databases, such as dependencies, index usage, and activity metrics, to validate or refine classifications before final migration decisions are made.
+
+Value to the Migration Effort
+
+For a large RMS migration, TCF helps reduce cost, risk, and complexity by identifying what should be migrated, what can be archived, and what can potentially be retired before any data movement begins. This prevents migration teams from spending effort on empty, obsolete, duplicate, or low-value tables while ensuring that business-critical and highly dependent tables receive proper attention.
+
+The methodology is particularly valuable in phased migrations because it creates a data-driven migration sequence. Low-dependency and low-risk tables can be migrated first, allowing the team to validate tooling, conversion logic, and data quality processes before addressing highly connected operational data. The result is a more predictable migration plan, reduced project scope, better resource allocation, and greater confidence in migration decisions.
